@@ -28,7 +28,9 @@ class PluginSatisfactionAnswer extends CommonDBChild {
          $query = "CREATE TABLE `$table` (
                            `id` INT( 11 ) NOT NULL AUTO_INCREMENT,
                            `answer` TEXT collate utf8_unicode_ci default NULL,
+                           `comment` TEXT collate utf8_unicode_ci default NULL,
                            `plugin_satisfaction_surveys_id` INT( 11 ) NOT NULL,
+                           `tickets_id` INT( 11 ) NOT NULL,
                            PRIMARY KEY ( `id` )
                            ) ENGINE = MYISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
          $DB->query($query) or die($DB->error());
