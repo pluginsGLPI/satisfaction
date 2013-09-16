@@ -3,7 +3,9 @@
 function plugin_satisfaction_install() {
    $migration = new Migration("0.83+1.0");
    
-   foreach (array('PluginSatisfactionSurvey', 'PluginSatisfactionSurveyQuestion') as $itemtype) {
+   foreach (array('PluginSatisfactionSurvey', 
+                  'PluginSatisfactionSurveyQuestion', 
+                  'PluginSatisfactionSurveyAnswer') as $itemtype) {
       if ($plug=isPluginItemType($itemtype)) {
          $plugname = strtolower($plug['plugin']);
          $dir      = GLPI_ROOT . "/plugins/$plugname/inc/";
@@ -21,7 +23,9 @@ function plugin_satisfaction_install() {
 }
 
 function plugin_satisfaction_uninstall() {
-   foreach (array('PluginSatisfactionSurvey', 'PluginSatisfactionSurveyQuestion') as $itemtype) {
+   foreach (array('PluginSatisfactionSurvey', 
+                  'PluginSatisfactionSurveyQuestion', 
+                  'PluginSatisfactionSurveyAnswer') as $itemtype) {
       if ($plug=isPluginItemType($itemtype)) {
          $plugname = strtolower($plug['plugin']);
          $dir      = GLPI_ROOT . "/plugins/$plugname/inc/";
