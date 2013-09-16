@@ -45,4 +45,24 @@ class PluginSatisfactionAnswer extends CommonDBChild {
       $query = "DROP TABLE IF EXISTS `".getTableForItemType(__CLASS__)."`";
       return $DB->query($query) or die($DB->error());
    }
+
+   function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
+      // can exists for template
+      if ($item->getType() == 'Ticket') {
+            return self::getTypeName();
+      }
+      return '';
+   }
+
+
+   static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0) {
+      if ($item->getType() == 'Ticket') {
+         self::showForTicket($item, $withtemplate);
+      }
+      return true;
+   }
+
+   static function showForTicket(Ticket $item, $withtemplate = '') {
+      echo "answer";
+   }
 }
