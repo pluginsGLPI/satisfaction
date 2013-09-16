@@ -61,6 +61,8 @@ class PluginSatisfactionSurveyQuestion extends CommonDBChild {
             return self::createTabEntry(self::getTypeName(),
                                         countElementsInTable($table, $this->items_id.
                                                                      " = '".$item->getID()."'"));
+         } else {
+            return self::getTypeName();
          }
       }
       return '';
