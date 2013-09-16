@@ -55,7 +55,7 @@ class PluginSatisfactionSurveyQuestion extends CommonDBChild {
       global $LANG;
 
       // can exists for template
-      if ($item->getType() == 'PluginSatisfactionSurvey' && Session::haveRight("computer","r")) {
+      if ($item->getType() == 'PluginSatisfactionSurvey') {
          if ($_SESSION['glpishow_count_on_tabs']) {
             $table = getTableForItemType(__CLASS__);
             return self::createTabEntry(self::getTypeName(),
