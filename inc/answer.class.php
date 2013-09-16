@@ -1,6 +1,11 @@
 <?php
 
-class PluginSatisfactionAnswer extends CommonDBTM {
+class PluginSatisfactionAnswer extends CommonDBChild {
+   // From CommonDBChild
+   public $itemtype  = 'PluginSatisfactionSurvey';
+   public $items_id  = 'plugin_satisfaction_surveys_id';
+   public $dohistory = true;
+
    function canCreate() {
       return true;
    }
@@ -23,6 +28,7 @@ class PluginSatisfactionAnswer extends CommonDBTM {
          $query = "CREATE TABLE `$table` (
                            `id` INT( 11 ) NOT NULL AUTO_INCREMENT,
                            `answer` TEXT collate utf8_unicode_ci default NULL,
+                           `plugin_satisfaction_surveys_id` INT( 11 ) NOT NULL,
                            PRIMARY KEY ( `id` )
                            ) ENGINE = MYISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
          $DB->query($query) or die($DB->error());
