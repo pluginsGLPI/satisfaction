@@ -87,6 +87,14 @@ class PluginSatisfactionSurveyQuestion extends CommonDBChild {
       $tmp           = array($squestions_obj->items_id => $sID);
       $canadd        = $squestions_obj->can(-1, 'w', $tmp);
 
+      //check if answer exists to forbid edition
+      $answer = new PluginSatisfactionSurveyAnswer;
+      $found_answer = $answer->find($answer->items_id." = ".$survey->fields['id']);
+      if (count($found_answer) > 0) {
+         echo "<span style='font-weight:bold; color:red'>".$LANG['plugin_satisfaction']['survey']['error'][1]."</span>";
+         return false;
+      }
+
       echo "<div id='viewquestion" . $sID . "$rand'></div>\n";
       echo "<script type='text/javascript' >\n";
       echo "function viewAddQuestion$sID$rand() {\n";
