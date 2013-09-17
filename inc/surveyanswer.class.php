@@ -46,6 +46,7 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
       return $DB->query($query) or die($DB->error());
    }
 
+
    function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
       global $LANG;
 
@@ -95,6 +96,8 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
       //rights checks
       if ($ID > 0) {
          $sanswer_obj->check($ID,'r');
+         //get answer in array form
+         $sanswer_obj->fields['answer'] = json_decode($sanswer_obj->fields['answer'], true);
       } else {
          // Create item
          $input = array($sanswer_obj->items_id => $survey->getID());
@@ -103,6 +106,7 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
 
       //show form
       echo "<form name='form' method='post' action='".$sanswer_obj->getFormURL()."'>";
+      echo "<input type='hidden' name='tickets_id' value='".$item->getID()."'>";
       echo "<input type='hidden' name='".$sanswer_obj->items_id."' value='".
            $sanswer_obj->fields[$sanswer_obj->items_id]."'>";
       echo "<div class='spaced' id='tabsbody'>";
@@ -115,7 +119,7 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
          echo "<tr>";
          echo "<th>".$question['name']."</th>";
          echo "<td>";
-         self::showStarAnswer($question['id']);
+         self::showStarAnswer($question['id'], $sanswer_obj->fields['answer'][$question['id']]);
          echo "</td>";
          echo "</tr>";
       }
@@ -136,11 +140,11 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
 
    static function showStarAnswer($questions_id, $value = 0) {
       echo "<input type='hidden' id='answer_$questions_id' 
-                   name='answer_$questions_id' value='$value'>";
+                   name='answer[$questions_id]' value='$value'>";
       echo  "<script type='text/javascript'>\n
          Ext.onReady(function() {
             var md = new Ext.form.StarRate({
-                    hiddenName: 'answer_$questions_id',
+                    hiddenName: 'answer[$questions_id]',
                     starConfig: {
                      minValue: 0,
                      maxValue: 5,
@@ -150,5 +154,46 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
             });
          })
          </script>";
+   }
+
+   function prepareInputForAdd($input) {
+      //compute average from answers
+      $total = $nb_question = $answers_avg = 0;
+      foreach ($input['answer'] as $questions_id => $answer_value) {
+         $total+= $answer_value;
+         $nb_question++;
+      }
+      if ($nb_question > 0) {
+         $answers_avg = round($total / $nb_question);
+      }
+
+      //find ticket (for closedate)
+      $ticket = new Ticket;
+      $ticket->getFromDB($input['tickets_id']);
+
+      //add satisfaction answser in core table
+      $params = array('tickets_id'    => $input['tickets_id'], 
+                      'type'          => 2, //external survey
+                      'date_answered' => $_SESSION["glpi_currenttime"], 
+                      'satisfaction'  => $answers_avg, 
+                      'comment'       => $input['comment']);
+      $ticketsatisfaction = new TicketSatisfaction;
+      if (!$ticketsatisfaction->getFromDB($input['tickets_id'])) {
+         //satisfaction creation
+         $params['date_begin'] = $ticket->fields['closedate'];
+         $ticketsatisfaction->add($params);
+      } else {
+         //satisfaction update
+         $ticketsatisfaction->update($params);
+      }
+
+      //serialize answer array for storage in db
+      $input['answer'] = json_encode($input['answer']);
+
+      return $input;
+   }
+
+   function prepareInputForUpdate($input) {
+      return $this->prepareInputForAdd($input);
    }
 }
