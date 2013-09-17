@@ -98,6 +98,22 @@ class PluginSatisfactionSurvey extends CommonDBTM {
       return $input;
    }
 
+   function prepareInputForUpdate($input) {
+      global $CFG_GLPI;
+
+      //active external survey for entity
+      if ($input['is_active'] == 1) {
+         $entitydata = new EntityData;
+         $entitydata->update(array('entities_id' => $input['entities_id'],
+                                   'inquest_config' => 2,
+                                   'inquest_URL' => $CFG_GLPI['url_base'].
+                                                   "/front/ticket.form.php?id=[TICKET_ID]".
+                                                   "&forcetab=PluginSatisfactionSurveyAnswer$1"));
+      }
+
+      return $input;
+   }
+
    static function getObjectForEntity($entities_id, $only_active = true) {
       global $DB;
 
