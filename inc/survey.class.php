@@ -142,5 +142,6 @@ class PluginSatisfactionSurvey extends CommonDBTM {
             return $item;
          }
       }
+      return false;
    }
 }
