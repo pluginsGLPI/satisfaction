@@ -134,7 +134,7 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
 
       //close form
       if (!$preview) {
-         $sanswer_obj->showFormButtons();
+         $sanswer_obj->showFormButtons(array('candel' => false));
       }
    }
 
