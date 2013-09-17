@@ -11,3 +11,4 @@ $LANG['plugin_satisfaction']['question']['add'] = "Add a question";
 $LANG['plugin_satisfaction']['question']['none'] = "No questions for this survey";
 
 $LANG['plugin_satisfaction']['answer']['name'] = "Answer";
+$LANG['plugin_satisfaction']['answer']['preview'] = "Preview";

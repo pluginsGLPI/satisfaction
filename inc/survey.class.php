@@ -46,6 +46,7 @@ class PluginSatisfactionSurvey extends CommonDBTM {
    function defineTabs($options=array()) {
       $ong = array();
       $this->addStandardTab('PluginSatisfactionSurveyQuestion', $ong, $options);
+      $this->addStandardTab('PluginSatisfactionSurveyAnswer', $ong, $options);
       return $ong;
    }
 
@@ -95,5 +96,28 @@ class PluginSatisfactionSurvey extends CommonDBTM {
       }
 
       return $input;
+   }
+
+   static function getObjectForEntity($entities_id, $only_active = true) {
+      global $DB;
+
+      $sql_active = $only_active?"`survey`.`is_active`='1'":"1 = 1 ";
+      $query = "SELECT `survey`.`id`
+                FROM `".getTableForItemType(__CLASS__)."` as `survey`
+                LEFT JOIN `glpi_entities`
+                  ON (`glpi_entities`.`id` = `survey`.`entities_id`)
+                WHERE $sql_active ".
+                      getEntitiesRestrictRequest("AND", "survey", 'entities_id',
+                                                 $entities_id, true) ."
+                ORDER BY `glpi_entities`.`level` DESC";
+      $data = $DB->request($query);
+      if ($data === false) return false;
+      else {
+         foreach ($data as $survey) {
+            $item = new self;
+            $item->getFromDB($survey['id']);
+            return $item;
+         }
+      }
    }
 }

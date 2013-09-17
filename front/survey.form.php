@@ -17,17 +17,9 @@ if (isset($_POST["add"])) {
    Html::back();
 
 } else if (isset($_POST["delete"])) {
-
-   if (isset($_POST["item"]) && count($_POST["item"])) {
-      foreach ($_POST["item"] as $key => $val) {
-         if ($val == 1) {
-            if ($item->can($key, 'w')) {
-               $item->delete(array('id' => $key));
-            }
-         }
-      }
-   }
-   Html::back();
+   $item->check(-1, 'w', $_POST);
+   $item->delete($_POST);
+   $item->redirectToList();
 
 } else if (isset($_POST["update"])) {
    $item->check($_POST["id"],'w');

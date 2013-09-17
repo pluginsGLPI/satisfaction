@@ -11,6 +11,9 @@ function plugin_init_satisfaction() {
       //if glpi is loaded
       if (Session::getLoginUserID()) {
 
+         Plugin::registerClass('PluginSatisfactionSurveyAnswer',
+                         array('addtabon' => array('Ticket')));
+
          //current user must have config rights
          if (Session::haveRight('config', 'w')) {
             $config_page = 'front/survey.php';
