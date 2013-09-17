@@ -99,7 +99,7 @@ class PluginSatisfactionSurvey extends CommonDBTM {
    }
 
    function prepareInputForUpdate($input) {
-      global $CFG_GLPI;
+      global $CFG_GLPI, $LANG;
 
       //we must store only one survey by entity (other this one)
       $found = $this->find("entities_id = ".$input['entities_id']." AND id != ".$this->getID());
