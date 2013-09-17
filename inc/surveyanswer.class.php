@@ -119,7 +119,8 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
          echo "<tr>";
          echo "<th>".$question['name']."</th>";
          echo "<td>";
-         self::showStarAnswer($question['id'], $sanswer_obj->fields['answer'][$question['id']]);
+         $value = ($ID > 0?$sanswer_obj->fields['answer'][$question['id']]:0);
+         self::showStarAnswer($question['id'], $value);
          echo "</td>";
          echo "</tr>";
       }
