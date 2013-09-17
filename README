@@ -1,0 +1,5 @@
+This plugin extends the satisfaction survey of GLPI
+
+* Different surveys (one for each entity)
+* Multiple questions stars
+* auto add external survey on activation
