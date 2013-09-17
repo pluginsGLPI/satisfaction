@@ -101,6 +101,13 @@ class PluginSatisfactionSurvey extends CommonDBTM {
    function prepareInputForUpdate($input) {
       global $CFG_GLPI;
 
+      //we must store only one survey by entity (other this one)
+      $found = $this->find("entities_id = ".$input['entities_id']." AND id != ".$this->getID());
+      if (count($found) > 0) {
+         Session::addMessageAfterRedirect($LANG['plugin_satisfaction']['survey']['error'][0]);
+         return false;
+      }
+
       //active external survey for entity
       if ($input['is_active'] == 1) {
          $entitydata = new EntityData;
