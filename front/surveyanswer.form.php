@@ -17,11 +17,6 @@ if (isset($_POST["add"])) {
    $answer->update($_POST);
    Html::back();
 
-} else if (isset($_POST["delete"])) {
-   $answer->check($_POST['id'], 'w');
-   $answer->delete($_POST);
-   Html::back();
-
 }
 
 Html::displayErrorAndDie('Lost');
