@@ -121,6 +121,23 @@ class PluginSatisfactionSurvey extends CommonDBTM {
       return $input;
    }
 
+   function pre_deleteItem() {
+      //we must delete associated questions and answers
+      $question = new PluginSatisfactionSurveyQuestion;
+      foreach ($question->find($question->items_id." = "$this->getID()) 
+               as $questions_id => $current_question) {
+         $question->delete(array('id' => $questions_id))
+      }
+
+      $answer = new PluginSatisfactionSurveyAnswer;
+      foreach ($answer->find($answer->items_id." = "$this->getID()) 
+               as $answers_id => $current_answer) {
+         $answer->delete(array('id' => $answers_id))
+      }
+
+      return true;
+   }
+
    static function getObjectForEntity($entities_id, $only_active = true) {
       global $DB;
 
