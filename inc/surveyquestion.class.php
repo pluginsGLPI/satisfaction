@@ -82,11 +82,6 @@ class PluginSatisfactionSurveyQuestion extends CommonDBChild {
       $sID = $survey->fields['id'];
       $rand = mt_rand();
 
-      $showprivate   = Session::haveRight("show_full_ticket", "1");
-      $caneditall    = Session::haveRight("update_followups", "1");
-      $tmp           = array($squestions_obj->items_id => $sID);
-      $canadd        = $squestions_obj->can(-1, 'w', $tmp);
-
       //check if answer exists to forbid edition
       $answer = new PluginSatisfactionSurveyAnswer;
       $found_answer = $answer->find($answer->items_id." = ".$survey->fields['id']);
