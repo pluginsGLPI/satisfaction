@@ -104,6 +104,11 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
          $sanswer_obj->check(-1,'w',$input);
       }
 
+      //scroll auto to survey
+      echo "<script type='text/javascript'>
+         window.scrollTo(0, document.forms['form_ticket'].scrollHeight)
+      </script>";
+
       //show form
       echo "<form name='form' method='post' action='".$sanswer_obj->getFormURL()."'>";
       echo "<input type='hidden' name='tickets_id' value='".$item->getID()."'>";
