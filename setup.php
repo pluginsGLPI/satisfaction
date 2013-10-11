@@ -14,7 +14,9 @@ function plugin_init_satisfaction() {
          Plugin::registerClass('PluginSatisfactionSurveyAnswer',
                          array('addtabon' => array('Ticket')));
 
-         $PLUGIN_HOOKS['add_javascript']['satisfaction'][] = 'scripts/tabs.js.php';
+         if (stripos($_SERVER['SCRIPT_NAME'], "ticket.form.php") != false) {
+            $PLUGIN_HOOKS['add_css']['satisfaction'][] = 'css/satisfaction.css';
+         }
 
          //current user must have config rights
          if (Session::haveRight('config', 'w')) {

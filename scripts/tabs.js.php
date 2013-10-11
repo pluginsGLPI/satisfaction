@@ -16,7 +16,7 @@ $JS = <<<JAVASCRIPT
 Ext.onReady(function() {
    // only in ticket form
    if (location.pathname.indexOf('ticket.form.php') > 0) {
-      Ext.select('#'+tabpanel.id+'__Ticket\\\\$3').remove();
+     // Ext.select('#'+tabpanel.id+'__Ticket\\\\$3').remove();
    }
 });
 JAVASCRIPT;

@@ -106,7 +106,9 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
 
       //scroll auto to survey
       echo "<script type='text/javascript'>
-         window.scrollTo(0, document.forms['form_ticket'].scrollHeight)
+         if (document.forms['form_ticket']) {
+            window.scrollTo(0, document.forms['form'].scrollHeight);
+         }
       </script>";
 
       //show form
