@@ -161,4 +161,27 @@ class PluginSatisfactionSurvey extends CommonDBTM {
       }
       return false;
    }
+
+   static function getAddSearchOptionsForTicket() {
+      $sopt = array();
+
+      //get survey for current entity
+      $survey = self::getObjectForEntity($_SESSION['glpiactive_entity']);
+      $question_obj = new PluginSatisfactionSurveyQuestion;
+      $questions = $question_obj->find("plugin_satisfaction_surveys_id = ".$survey->getID());
+
+      //for each question, define a search option
+      $opt_id = "166575";
+      foreach ($questions as $questions_id => $question) {
+         $sopt[$opt_id]['table']         = 'glpi_plugin_satisfaction_surveyanswers';
+         $sopt[$opt_id]['field']         = 'answer';
+         $sopt[$opt_id]['name']          = $question['name'];
+         $sopt[$opt_id]['questions_id']  = $question['id'];
+         $sopt[$opt_id]['massiveaction'] = false;
+         $sopt[$opt_id]['joinparams']    = array('jointype' => 'child');
+         $opt_id++;
+      }
+
+      return $sopt;
+   }
 }

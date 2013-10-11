@@ -39,4 +39,31 @@ function plugin_satisfaction_uninstall() {
    return true;
 }
 
+function plugin_satisfaction_getAddSearchOptions($itemtype) {
+   global $LANG;
+
+   if ($itemtype == 'Ticket') {
+         return PluginSatisfactionSurvey::getAddSearchOptionsForTicket();
+   }
+}
+
+function plugin_satisfaction_giveItem($type,$ID,$data,$num) {
+   $out = "";
+   $searchopt = &Search::getOptions($type);
+   $table = $searchopt[$ID]["table"];
+   $field = $searchopt[$ID]["field"];
+
+   switch ($table.'.'.$field) {
+      case "glpi_plugin_satisfaction_surveyanswers.answer" :
+         if (!empty($data["ITEM_$num"])) {
+            $answers = json_decode($data["ITEM_$num"], true);
+            $out = $answers[$searchopt[$ID]["questions_id"]];
+         }
+         
+         return $out;
+   }
+   return "";
+}
+
+
 ?>
