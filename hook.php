@@ -57,7 +57,12 @@ function plugin_satisfaction_giveItem($type,$ID,$data,$num) {
       case "glpi_plugin_satisfaction_surveyanswers.answer" :
          if (!empty($data["ITEM_$num"])) {
             $answers = json_decode($data["ITEM_$num"], true);
-            $out = $answers[$searchopt[$ID]["questions_id"]];
+            $index = $searchopt[$ID]["questions_id"];
+            if (isset($answers[$index])) {
+               $out = $answers[$index];
+            } else {
+               return " ";
+            }
          }
          
          return $out;
