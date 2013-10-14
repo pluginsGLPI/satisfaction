@@ -163,6 +163,8 @@ class PluginSatisfactionSurvey extends CommonDBTM {
    }
 
    static function getAddSearchOptionsForTicket() {
+      global $LANG;
+      
       $sopt = array();
 
       //get survey for current entity
@@ -170,17 +172,28 @@ class PluginSatisfactionSurvey extends CommonDBTM {
       $question_obj = new PluginSatisfactionSurveyQuestion;
       $questions = $question_obj->find("plugin_satisfaction_surveys_id = ".$survey->getID());
 
-      //for each question, define a search option
       $opt_id = "166575";
+
+      //add field comment
+      $sopt[$opt_id]['table']         = 'glpi_plugin_satisfaction_surveyanswers';
+      $sopt[$opt_id]['field']         = 'comment';
+      $sopt[$opt_id]['name']          = $LANG['common'][25];
+      $sopt[$opt_id]['massiveaction'] = false;
+      $sopt[$opt_id]['joinparams']    = array('jointype' => 'child');
+
+      //for each question, define a search option
+
       foreach ($questions as $questions_id => $question) {
+         $opt_id++;
          $sopt[$opt_id]['table']         = 'glpi_plugin_satisfaction_surveyanswers';
          $sopt[$opt_id]['field']         = 'answer';
          $sopt[$opt_id]['name']          = $question['name'];
          $sopt[$opt_id]['questions_id']  = $question['id'];
          $sopt[$opt_id]['massiveaction'] = false;
          $sopt[$opt_id]['joinparams']    = array('jointype' => 'child');
-         $opt_id++;
       }
+
+
 
       return $sopt;
    }
