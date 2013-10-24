@@ -51,7 +51,7 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
       global $LANG;
 
       // can exists for template
-      if ($item->getType() == 'Ticket' && $item->fields['status'] == "closed") {
+      if ($item instanceof Ticket && $item->fields['status'] == "closed") {
          // a survey is active for current entity of item
          $survey = PluginSatisfactionSurvey::getObjectForEntity($item->fields['entities_id']);
          if ($survey !== false) {
