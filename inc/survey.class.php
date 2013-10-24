@@ -178,7 +178,8 @@ class PluginSatisfactionSurvey extends CommonDBTM {
       //add field comment
       $sopt[$opt_id]['table']         = 'glpi_plugin_satisfaction_surveyanswers';
       $sopt[$opt_id]['field']         = 'comment';
-      $sopt[$opt_id]['name']          = $LANG['common'][25];
+      $sopt[$opt_id]['name']          = $LANG['plugin_satisfaction']['survey']['name']." - ".
+                                        $LANG['common'][25];
       $sopt[$opt_id]['massiveaction'] = false;
       $sopt[$opt_id]['joinparams']    = array('jointype' => 'child');
 
@@ -188,7 +189,8 @@ class PluginSatisfactionSurvey extends CommonDBTM {
          $opt_id++;
          $sopt[$opt_id]['table']         = 'glpi_plugin_satisfaction_surveyanswers';
          $sopt[$opt_id]['field']         = 'answer';
-         $sopt[$opt_id]['name']          = $question['name'];
+         $sopt[$opt_id]['name']          = $LANG['plugin_satisfaction']['survey']['name']." - ".
+                                           $question['name'];
          $sopt[$opt_id]['questions_id']  = $question['id'];
          $sopt[$opt_id]['massiveaction'] = false;
          $sopt[$opt_id]['joinparams']    = array('jointype' => 'child');
