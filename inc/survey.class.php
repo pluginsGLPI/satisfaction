@@ -95,11 +95,15 @@ class PluginSatisfactionSurvey extends CommonDBTM {
          return false;
       }
 
+      if ($input['is_active'] == 1) {
+         $this->createInquest($input['entities_id']);
+      }
+
       return $input;
    }
 
    function prepareInputForUpdate($input) {
-      global $CFG_GLPI, $LANG;
+      global $LANG;
 
       //we must store only one survey by entity (other this one)
       $found = $this->find("entities_id = ".$input['entities_id']." AND id != ".$this->getID());
@@ -110,15 +114,29 @@ class PluginSatisfactionSurvey extends CommonDBTM {
 
       //active external survey for entity
       if ($input['is_active'] == 1) {
-         $entitydata = new EntityData;
-         $entitydata->update(array('entities_id'    => $input['entities_id'],
+         $this->createInquest($input['entities_id']);
+      }
+
+      return $input;
+   }
+
+   function createInquest($entities_id) {
+      global $CFG_GLPI;
+
+      $entitydata = new EntityData;
+      if ($entitydata->getFromDB($entities_id)) {
+         $entitydata->update(array('entities_id'    => $entities_id,
+                                   'inquest_config' => 2,
+                                   'inquest_URL'    => $CFG_GLPI['url_base'].
+                                                       "/front/ticket.form.php?id=[TICKET_ID]".
+                                                       "&forcetab=PluginSatisfactionSurveyAnswer$1"));
+      } else {
+         $entitydata->add(array('entities_id'    => $entities_id,
                                    'inquest_config' => 2,
                                    'inquest_URL'    => $CFG_GLPI['url_base'].
                                                        "/front/ticket.form.php?id=[TICKET_ID]".
                                                        "&forcetab=PluginSatisfactionSurveyAnswer$1"));
       }
-
-      return $input;
    }
 
    function pre_deleteItem() {
