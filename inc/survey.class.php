@@ -169,6 +169,7 @@ class PluginSatisfactionSurvey extends CommonDBTM {
 
       //get survey for current entity
       $survey = self::getObjectForEntity($_SESSION['glpiactive_entity']);
+      if ($survey === false) return array();
       $question_obj = new PluginSatisfactionSurveyQuestion;
       $questions = $question_obj->find("plugin_satisfaction_surveys_id = ".$survey->getID());
 
