@@ -42,7 +42,7 @@ function plugin_version_satisfaction() {
 
    $author = "<a href='www.teclib.com'>TECLIB'</a>";
    return array ('name' => "I can get more ... Satisfaction",
-                 'version' => '0.83+1.0',
+                 'version' => '0.83+1.0.1',
                  'author' => $author,
                  'homepage' => 'www.teclib.com',
                  'minGlpiVersion' => '0.83.3');
