@@ -127,15 +127,11 @@ class PluginSatisfactionSurvey extends CommonDBTM {
       if ($entitydata->getFromDB($entities_id)) {
          $entitydata->update(array('entities_id'    => $entities_id,
                                    'inquest_config' => 2,
-                                   'inquest_URL'    => $CFG_GLPI['url_base'].
-                                                       "/front/ticket.form.php?id=[TICKET_ID]".
-                                                       "&forcetab=PluginSatisfactionSurveyAnswer$1"));
+                                   'inquest_URL'    => $CFG_GLPI['url_base']."/?redirect=plugin_satisfaction_[TICKET_ID]_PluginSatisfactionSurveyAnswer$1"));
       } else {
          $entitydata->add(array('entities_id'    => $entities_id,
                                    'inquest_config' => 2,
-                                   'inquest_URL'    => $CFG_GLPI['url_base'].
-                                                       "/front/ticket.form.php?id=[TICKET_ID]".
-                                                       "&forcetab=PluginSatisfactionSurveyAnswer$1"));
+                                   'inquest_URL'    => $CFG_GLPI['url_base']."/?redirect=plugin_satisfaction_[TICKET_ID]_PluginSatisfactionSurveyAnswer$1"));
       }
    }
 

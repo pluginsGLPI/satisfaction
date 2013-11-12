@@ -18,6 +18,11 @@ function plugin_init_satisfaction() {
             $PLUGIN_HOOKS['add_css']['satisfaction'][] = 'css/satisfaction.css';
          }
 
+         //manage redirection : 
+         //glpi_base_url/?redirect=plugin_satisfaction_[TICKET_ID]_PluginSatisfactionSurveyAnswer$1
+         //-> glpi_base_url/front/ticket.form.php?id=[TICKET_ID]&forcetab=PluginSatisfactionSurveyAnswer$1
+         $PLUGIN_HOOKS['redirect_page']['satisfaction']="../../front/ticket.form.php";
+
          //current user must have config rights
          if (Session::haveRight('config', 'w')) {
             $config_page = 'front/survey.php';
