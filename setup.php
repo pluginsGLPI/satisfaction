@@ -46,10 +46,11 @@ function plugin_version_satisfaction() {
    global $LANG;
 
    $author = "<a href='www.teclib.com'>TECLIB'</a>";
-   return array ('name' => "I can get more ... Satisfaction",
-                 'version' => '0.83+1.0.3',
-                 'author' => $author,
-                 'homepage' => 'www.teclib.com',
+   return array ('name'           => "I can get more ... Satisfaction",
+                 'version'        => '0.83+1.0.3',
+                 'author'         => $author,
+                 'license'        => 'LGPL 2.1',
+                 'homepage'       => 'www.teclib.com',
                  'minGlpiVersion' => '0.83.3');
 }
 
