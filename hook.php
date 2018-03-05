@@ -1,74 +1,56 @@
 <?php
 
+/**
+ * @return bool
+ */
 function plugin_satisfaction_install() {
-   $migration = new Migration("0.83+1.0");
-   
-   foreach (array('PluginSatisfactionSurvey', 
-                  'PluginSatisfactionSurveyQuestion', 
-                  'PluginSatisfactionSurveyAnswer') as $itemtype) {
-      if ($plug=isPluginItemType($itemtype)) {
-         $plugname = strtolower($plug['plugin']);
-         $dir      = GLPI_ROOT . "/plugins/$plugname/inc/";
-         $item     = strtolower($plug['class']);
-         if (file_exists("$dir$item.class.php")) {
-            include_once ("$dir$item.class.php");
-            if (!call_user_func(array($itemtype,'install'), $migration)) {
-               return false;
-            }
-         }
-      }
+   global $DB;
+
+   include_once(GLPI_ROOT . "/plugins/satisfaction/inc/profile.class.php");
+
+   if (!TableExists("glpi_plugin_satisfaction_surveys")) {
+      $DB->runFile(GLPI_ROOT . "/plugins/satisfaction/install/sql/empty-1.1.0.sql");
+   } else if (!FieldExists("glpi_plugin_satisfaction_surveyquestions", "type")) {
+      $DB->runFile(GLPI_ROOT . "/plugins/satisfaction/install/sql/update-1.1.0.sql");
    }
 
+   PluginSatisfactionProfile::initProfile();
+   PluginSatisfactionProfile::createFirstAccess($_SESSION['glpiactiveprofile']['id']);
    return true;
 }
 
+/**
+ * @return bool
+ */
 function plugin_satisfaction_uninstall() {
-   foreach (array('PluginSatisfactionSurvey', 
-                  'PluginSatisfactionSurveyQuestion', 
-                  'PluginSatisfactionSurveyAnswer') as $itemtype) {
-      if ($plug=isPluginItemType($itemtype)) {
-         $plugname = strtolower($plug['plugin']);
-         $dir      = GLPI_ROOT . "/plugins/$plugname/inc/";
-         $item     = strtolower($plug['class']);
-         if (file_exists("$dir$item.class.php")) {
-            include_once ("$dir$item.class.php");
-            call_user_func(array($itemtype, 'uninstall'));
-         }
-      }
+   global $DB;
+
+   include_once(GLPI_ROOT . "/plugins/satisfaction/inc/profile.class.php");
+   include_once(GLPI_ROOT . "/plugins/satisfaction/inc/menu.class.php");
+
+   $tables = ["glpi_plugin_satisfaction_surveys",
+                   "glpi_plugin_satisfaction_surveyquestions",
+                   "glpi_plugin_satisfaction_surveyanswers"];
+
+   foreach ($tables as $table) {
+      $DB->query("DROP TABLE IF EXISTS `$table`;");
    }
+
+   $tables_glpi = ["glpi_logs"];
+
+   foreach ($tables_glpi as $table_glpi) {
+      $DB->query("DELETE FROM `$table_glpi`
+               WHERE `itemtype` = 'PluginSatisfactionSurvey';");
+   }
+
+   //Delete rights associated with the plugin
+   $profileRight = new ProfileRight();
+   foreach (PluginSatisfactionProfile::getAllRights() as $right) {
+      $profileRight->deleteByCriteria(['name' => $right['field']]);
+   }
+   PluginSatisfactionProfile::removeRightsFromSession();
+
+   PluginSatisfactionMenu::removeRightsFromSession();
+
    return true;
 }
-
-function plugin_satisfaction_getAddSearchOptions($itemtype) {
-   global $LANG;
-
-   if ($itemtype == 'Ticket') {
-         return PluginSatisfactionSurvey::getAddSearchOptionsForTicket();
-   }
-}
-
-function plugin_satisfaction_giveItem($type,$ID,$data,$num) {
-   $out = "";
-   $searchopt = &Search::getOptions($type);
-   $table = $searchopt[$ID]["table"];
-   $field = $searchopt[$ID]["field"];
-
-   switch ($table.'.'.$field) {
-      case "glpi_plugin_satisfaction_surveyanswers.answer" :
-         if (!empty($data["ITEM_$num"])) {
-            $answers = json_decode($data["ITEM_$num"], true);
-            $index = $searchopt[$ID]["questions_id"];
-            if (isset($answers[$index])) {
-               $out = $answers[$index];
-            } else {
-               return " ";
-            }
-         }
-         
-         return $out;
-   }
-   return "";
-}
-
-
-?>

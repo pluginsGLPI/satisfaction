@@ -1,7 +1,6 @@
 <?php
 
-define('GLPI_ROOT', '../../..');
-include (GLPI_ROOT . "/inc/includes.php");
+include('../../../inc/includes.php');
 
 Session::checkLoginUser();
 
@@ -9,27 +8,30 @@ if (!isset($_GET["id"])) {
    $_GET["id"] = "";
 }
 
-$item = new PluginSatisfactionSurvey();
+$survey = new PluginSatisfactionSurvey();
 
 if (isset($_POST["add"])) {
-   $item->check(-1, 'w', $_POST);
-   $item->add($_POST);
+   $survey->check(-1, CREATE, $_POST);
+   $survey->add($_POST);
    Html::back();
 
-} else if (isset($_POST["delete"])) {
-   $item->check(-1, 'w', $_POST);
-   $item->delete($_POST);
-   $item->redirectToList();
+} else if (isset($_POST["purge"])) {
+   $survey->check($_POST['id'], PURGE);
+   $survey->delete($_POST);
+   $survey->redirectToList();
 
 } else if (isset($_POST["update"])) {
-   $item->check($_POST["id"],'w');
-   $item->update($_POST);
+   $survey->check($_POST['id'], UPDATE);
+   $survey->update($_POST);
    Html::back();
 
 } else {
-   Html::header($LANG['plugin_satisfaction']['survey']['name'],
-                $_SERVER['PHP_SELF'],"plugins","satisfaction","survey");
-   $item->showForm($_GET["id"]);
+
+   $survey->checkGlobal(READ);
+
+   Html::header(PluginSatisfactionSurvey::getTypeName(2), '', "plugins", "pluginsatisfactionmenu", "survey");
+
+   $survey->display(['id' => $_GET['id']]);
+
    Html::footer();
 }
-?>

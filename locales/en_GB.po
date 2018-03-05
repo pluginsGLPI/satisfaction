@@ -1,0 +1,85 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-02-28 09:54+0100\n"
+"PO-Revision-Date: 2018-02-28 09:57+0100\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 2.0.6\n"
+"Last-Translator: \n"
+"Language: en_GB\n"
+
+#: setup.php:48
+msgid "I can get more ... Satisfaction"
+msgstr "I can get more ... Satisfaction"
+
+#: setup.php:63
+msgid "This plugin requires GLPI >= 9.1"
+msgstr "This plugin requires GLPI >= 9.1"
+
+#: inc/menu.class.php:14 inc/profile.class.php:50 inc/survey.class.php:18
+msgid "Satisfaction survey"
+msgid_plural "Satisfaction surveys"
+msgstr[0] "Satisfaction survey"
+msgstr[1] "Satisfaction surveys"
+
+#: inc/surveyanswer.class.php:22
+msgid "Answer"
+msgid_plural "Answers"
+msgstr[0] "Answer"
+msgstr[1] "Answers"
+
+#: inc/surveyanswer.class.php:43
+msgid "Preview"
+msgstr "Preview"
+
+#: inc/surveyanswer.class.php:109
+msgid "Satisfaction"
+msgstr "Satisfaction"
+
+#: inc/survey.class.php:152 inc/survey.class.php:176
+msgid "Error : only one survey is allowed by entity"
+msgstr "Error : only one survey is allowed by entity"
+
+#: inc/surveyquestion.class.php:30
+msgid "Question"
+msgid_plural "Questions"
+msgstr[0] "Question"
+msgstr[1] "Questions"
+
+#: inc/surveyquestion.class.php:104
+msgid ""
+"You cannot edit the questions when answers exists for this survey. Disable "
+"this survey and create a new one !"
+msgstr ""
+"You cannot edit the questions when answers exists for this survey. Disable "
+"this survey and create a new one !"
+
+#: inc/surveyquestion.class.php:124 inc/surveyquestion.class.php:192
+msgid "Add a question"
+msgstr "Add a question"
+
+#: inc/surveyquestion.class.php:132
+msgid "No questions for this survey"
+msgstr "No questions for this survey"
+
+#: inc/surveyquestion.class.php:228
+msgid "Note on"
+msgstr "Note on"
+
+#: inc/surveyquestion.class.php:305 inc/surveyquestion.class.php:320
+msgid "Text"
+msgstr "Text"
+
+#: inc/surveyquestion.class.php:306 inc/surveyquestion.class.php:322
+msgid "Note"
+msgstr "Note"

@@ -1,0 +1,83 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-02-28 09:54+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: setup.php:48
+msgid "I can get more ... Satisfaction"
+msgstr ""
+
+#: setup.php:63
+msgid "This plugin requires GLPI >= 9.1"
+msgstr ""
+
+#: inc/menu.class.php:14 inc/profile.class.php:50 inc/survey.class.php:18
+msgid "Satisfaction survey"
+msgid_plural "Satisfaction surveys"
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/surveyanswer.class.php:22
+msgid "Answer"
+msgid_plural "Answers"
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/surveyanswer.class.php:43
+msgid "Preview"
+msgstr ""
+
+#: inc/surveyanswer.class.php:109
+msgid "Satisfaction"
+msgstr ""
+
+#: inc/survey.class.php:152 inc/survey.class.php:176
+msgid "Error : only one survey is allowed by entity"
+msgstr ""
+
+#: inc/surveyquestion.class.php:30
+msgid "Question"
+msgid_plural "Questions"
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/surveyquestion.class.php:104
+msgid ""
+"You cannot edit the questions when answers exists for this survey. Disable "
+"this survey and create a new one !"
+msgstr ""
+
+#: inc/surveyquestion.class.php:124 inc/surveyquestion.class.php:192
+msgid "Add a question"
+msgstr ""
+
+#: inc/surveyquestion.class.php:132
+msgid "No questions for this survey"
+msgstr ""
+
+#: inc/surveyquestion.class.php:228
+msgid "Note on"
+msgstr ""
+
+#: inc/surveyquestion.class.php:305 inc/surveyquestion.class.php:320
+msgid "Text"
+msgstr ""
+
+#: inc/surveyquestion.class.php:306 inc/surveyquestion.class.php:322
+msgid "Note"
+msgstr ""

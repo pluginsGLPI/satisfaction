@@ -1,172 +1,227 @@
 <?php
 
+/**
+ * Class PluginSatisfactionSurvey
+ */
 class PluginSatisfactionSurvey extends CommonDBTM {
-   function canCreate() {
-      return Session::haveRight('config', 'w');
+
+   static $rightname = "plugin_satisfaction";
+   public $dohistory = true;
+
+   /**
+    * Return the localized name of the current Type
+    * Should be overloaded in each new class
+    *
+    * @return string
+    **/
+   static function getTypeName($nb = 0) {
+      return _n('Satisfaction survey', 'Satisfaction surveys', $nb, 'satisfaction');
    }
 
-   function canView() {
-      return Session::haveRight('config', 'w');
-   }
+   /**
+    * Define tabs to display
+    *
+    * NB : Only called for existing object
+    *
+    * @param $options array
+    *     - withtemplate is a template view ?
+    *
+    * @return array containing the onglets
+    **/
+   function defineTabs($options = []) {
 
-   static function getTypeName() {
-      global $LANG;
-      return $LANG['plugin_satisfaction']['survey']['name'];
-   }
-
-   static function install(Migration $migration) {
-      global $DB;
-
-      //create table
-      $table = getTableForItemType(__CLASS__);
-      if (!TableExists($table)) {
-         $query = "CREATE TABLE `$table` (
-                           `id` INT( 11 ) NOT NULL AUTO_INCREMENT,
-                           `entities_id` INT( 11 ) NOT NULL DEFAULT 0,
-                           `is_recursive` TINYINT(1) NOT NULL default '0',
-                           `is_active` TINYINT(1) NOT NULL default '0',
-                           `name` VARCHAR(255) collate utf8_unicode_ci default NULL,
-                           `comment` TEXT collate utf8_unicode_ci default NULL,
-                           PRIMARY KEY ( `id` )
-                           ) ENGINE = MYISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
-         $DB->query($query) or die($DB->error());
-      }
-
-      return true;
-   }
-
-   static function uninstall() {
-      global $DB;
-      
-      $query = "DROP TABLE IF EXISTS `".getTableForItemType(__CLASS__)."`";
-      return $DB->query($query) or die($DB->error());
-   }
-
-
-   function defineTabs($options=array()) {
-      $ong = array();
+      $ong = [];
+      $this->addDefaultFormTab($ong);
       $this->addStandardTab('PluginSatisfactionSurveyQuestion', $ong, $options);
       $this->addStandardTab('PluginSatisfactionSurveyAnswer', $ong, $options);
+      $this->addStandardTab('Log', $ong, $options);
       return $ong;
    }
 
+   /**
+    * Get the Search options for the given Type
+    *
+    * @return array of search options
+    * More information on https://forge.indepnet.net/wiki/glpi/SearchEngine
+    **/
+   public function getSearchOptions() {
 
-   function showForm($ID, $options=array()) {
-      global $CFG_GLPI, $LANG;
+      $tab = [];
 
-      if (!$this->isNewID($ID)) {
-         $this->check($ID,'r');
-      } else {
-         // Create item
-         $this->check(-1,'w');
+      $tab['common'] = self::getTypeName(2);
+
+      $tab[1]['table']         = $this->getTable();
+      $tab[1]['field']         = 'name';
+      $tab[1]['name']          = __('Name');
+      $tab[1]['datatype']      = 'itemlink';
+      $tab[1]['itemlink_type'] = $this->getType();
+
+      $tab[2]['table'] = $this->getTable();
+      $tab[2]['field'] = 'is_active';
+      $tab[2]['name']  = __('Active');
+      $tab[2]['datatype'] = 'bool';
+
+      $tab[3]['table'] = $this->getTable();
+      $tab[3]['field'] = 'comment';
+      $tab[3]['name']  = __('Comments');
+      $tab[3]['datatype'] = 'text';
+
+      $tab[4]['table'] = $this->getTable();
+      $tab[4]['field'] = 'date_mod';
+      $tab[4]['name'] = __('Last update');
+      $tab[4]['massiveaction'] = false;
+      $tab[4]['datatype'] = 'datetime';
+
+      $tab[5]['table'] = $this->getTable();
+      $tab[5]['field'] = 'date_creation';
+      $tab[5]['name'] = __('Creation date');
+      $tab[5]['datatype'] = 'date';
+
+      $tab[11]['table'] = $this->getTable();
+      $tab[11]['field'] = 'is_recursive';
+      $tab[11]['name'] = __('Child entities');
+      $tab[11]['datatype'] = 'bool';
+
+      $tab[30]['table'] = $this->getTable();
+      $tab[30]['field'] = 'id';
+      $tab[30]['name'] = __('ID');
+      $tab[30]['datatype'] = 'number';
+
+      $tab[80]['table'] = 'glpi_entities';
+      $tab[80]['field'] = 'completename';
+      $tab[80]['name'] = __('Entity');
+      $tab[80]['datatype'] = 'dropdown';
+
+      return $tab;
+   }
+
+
+   /**
+    * Print survey
+    *
+    * @param       $ID
+    * @param array $options
+    *
+    * @return bool
+    */
+   function showForm($ID, $options = []) {
+
+      if (!$this->canView()) {
+         return false;
       }
-      $this->showTabs($options);
+
+      $this->initForm($ID, $options);
       $this->showFormHeader($options);
 
       echo "<tr class='tab_bg_1'>";
-      echo "<td>".$LANG['common'][16]."&nbsp;:&nbsp;</td>";
+      echo "<td>" . __('Name') . "</td>";
       echo "<td>";
       Html::autocompletionTextField($this, "name");
       echo "</td>";
-      echo "<td>".$LANG['common'][25]."&nbsp;:&nbsp;</td>";
+      echo "<td>" . __('Comments') . "</td>";
       echo "<td>";
-      echo "<textarea cols='60' rows='6' name='comment' >".$this->fields["comment"]."</textarea>";
-      echo "</td></tr>\n";
+      echo "<textarea cols='60' rows='6' name='comment' >" . $this->fields["comment"] . "</textarea>";
+      echo "</td></tr>";
 
       echo "<tr class='tab_bg_1'>";
-      echo "<td>".$LANG['common'][60]."&nbsp;:&nbsp;</td>";
+      echo "<td>" . __('Active') . "</td>";
       echo "<td>";
       Dropdown::showYesNo("is_active", $this->fields["is_active"]);
-      echo"</td></tr>\n";
+      echo "</td><td colspan='2'></td></tr>";
 
       $this->showFormButtons($options);
-      $this->addDivForTabs();
+      Html::closeForm();
 
       return true;
    }
 
+   /**
+    * Prepare input datas for adding the item
+    *
+    * @param $input datas used to add the item
+    *
+    * @return the modified $input array
+    **/
    function prepareInputForAdd($input) {
-      global $LANG;
-
-      //we must store only one survey by entity
-      $found = $this->find("entities_id = ".$input['entities_id']);
-      if (count($found) > 0) {
-         Session::addMessageAfterRedirect($LANG['plugin_satisfaction']['survey']['error'][0]);
-         return false;
-      }
 
       if ($input['is_active'] == 1) {
-         $this->createInquest($input['entities_id']);
+         //we must store only one survey by entity
+         $where     = getEntitiesRestrictRequest("AND", $this->getTable(), 'entities_id', $input['entities_id'], true);
+         $found = $this->find("`is_active` $where");
+         if (count($found) > 0) {
+            Session::addMessageAfterRedirect(__('Error : only one survey is allowed by entity', 'satisfaction'), false, ERROR);
+            return false;
+         }
       }
 
       return $input;
    }
 
+   /**
+    * Prepare input datas for updating the item
+    *
+    * @param $input datas used to update the item
+    *
+    * @return the modified $input array
+    **/
    function prepareInputForUpdate($input) {
-      global $LANG;
-
-      //we must store only one survey by entity (other this one)
-      $found = $this->find("entities_id = ".$input['entities_id']." AND id != ".$this->getID());
-      if (count($found) > 0) {
-         Session::addMessageAfterRedirect($LANG['plugin_satisfaction']['survey']['error'][0]);
-         return false;
-      }
 
       //active external survey for entity
       if ($input['is_active'] == 1) {
-         $this->createInquest($input['entities_id']);
+
+         //we must store only one survey by entity (other this one)
+         $where     = getEntitiesRestrictRequest("AND", $this->getTable(), 'entities_id', $input['entities_id'], true);
+         $found = $this->find("`is_active` AND `id` != " . $this->getID(). " $where");
+         if (count($found) > 0) {
+            Session::addMessageAfterRedirect(__('Error : only one survey is allowed by entity', 'satisfaction'), false, ERROR);
+            return false;
+         }
       }
 
       return $input;
    }
 
-   function createInquest($entities_id) {
-      global $CFG_GLPI;
-
-      $entitydata = new EntityData;
-      if ($entitydata->getFromDB($entities_id)) {
-         $entitydata->update(array('entities_id'    => $entities_id,
-                                   'inquest_config' => 2,
-                                   'inquest_URL'    => $CFG_GLPI['url_base']."/?redirect=plugin_satisfaction_[TICKET_ID]_PluginSatisfactionSurveyAnswer$1"));
-      } else {
-         $entitydata->add(array('entities_id'    => $entities_id,
-                                   'inquest_config' => 2,
-                                   'inquest_URL'    => $CFG_GLPI['url_base']."/?redirect=plugin_satisfaction_[TICKET_ID]_PluginSatisfactionSurveyAnswer$1"));
-      }
-   }
-
+   /**
+    * Actions done before the DELETE of the item in the database /
+    * Maybe used to add another check for deletion
+    *
+    * @return bool : true if item need to be deleted else false
+    **/
    function pre_deleteItem() {
       //we must delete associated questions and answers
       $question = new PluginSatisfactionSurveyQuestion;
-      foreach ($question->find($question->items_id." = ".$this->getID()) 
-               as $questions_id => $current_question) {
-         $question->delete(array('id' => $questions_id));
-      }
+      $question->deleteByCriteria([PluginSatisfactionSurveyQuestion::$items_id => $this->getID()]);
 
       $answer = new PluginSatisfactionSurveyAnswer;
-      foreach ($answer->find($answer->items_id." = ".$this->getID()) 
-               as $answers_id => $current_answer) {
-         $answer->delete(array('id' => $answers_id));
-      }
+      $answer->deleteByCriteria([PluginSatisfactionSurveyAnswer::$items_id => $this->getID()]);
 
       return true;
    }
 
-   static function getObjectForEntity($entities_id, $only_active = true) {
+   /**
+    * Return survey by entity
+    *
+    * @param $entities_id
+    *
+    * @return bool|\PluginSatisfactionSurvey
+    */
+   static function getObjectForEntity($entities_id) {
       global $DB;
 
-      $sql_active = $only_active?"`survey`.`is_active`='1'":"1 = 1 ";
+      $where = getEntitiesRestrictRequest("AND", "survey", 'entities_id', $entities_id, true);
+
       $query = "SELECT `survey`.`id`
                 FROM `".getTableForItemType(__CLASS__)."` as `survey`
                 LEFT JOIN `glpi_entities`
                   ON (`glpi_entities`.`id` = `survey`.`entities_id`)
-                WHERE $sql_active ".
-                      getEntitiesRestrictRequest("AND", "survey", 'entities_id',
-                                                 $entities_id, true) ."
-                ORDER BY `glpi_entities`.`level` DESC";
+                WHERE `is_active` $where
+                ORDER BY `glpi_entities`.`level` DESC
+                LIMIT 1";
       $data = $DB->request($query);
-      if ($data === false) return false;
-      else {
+
+      if ($data === false) {
+         return false;
+      } else {
          foreach ($data as $survey) {
             $item = new self;
             $item->getFromDB($survey['id']);
@@ -176,42 +231,120 @@ class PluginSatisfactionSurvey extends CommonDBTM {
       return false;
    }
 
-   static function getAddSearchOptionsForTicket() {
-      global $LANG;
-      
-      $sopt = array();
+   /**
+    * @see CommonDBTM::getSpecificMassiveActions()
+    **/
+   function getSpecificMassiveActions($checkitem=NULL) {
 
-      //get survey for current entity
-      $survey = self::getObjectForEntity($_SESSION['glpiactive_entity']);
-      if ($survey === false) return array();
-      $question_obj = new PluginSatisfactionSurveyQuestion;
-      $questions = $question_obj->find("plugin_satisfaction_surveys_id = ".$survey->getID());
+      $canadd = Session::haveRight(self::$rightname, CREATE);
+      $actions = parent::getSpecificMassiveActions($checkitem);
 
-      $opt_id = "166575";
+      if ($canadd) {
+         $actions[__CLASS__.MassiveAction::CLASS_ACTION_SEPARATOR.'duplicate'] = _x('button', 'Duplicate');
+      }
+      return $actions;
+   }
 
-      //add field comment
-      $sopt[$opt_id]['table']         = 'glpi_plugin_satisfaction_surveyanswers';
-      $sopt[$opt_id]['field']         = 'comment';
-      $sopt[$opt_id]['name']          = $LANG['plugin_satisfaction']['survey']['name']." - ".
-                                        $LANG['common'][25];
-      $sopt[$opt_id]['massiveaction'] = false;
-      $sopt[$opt_id]['joinparams']    = array('jointype' => 'child');
+   /**
+    * @since version 0.85
+    *
+    * @see CommonDBTM::showMassiveActionsSubForm()
+    **/
+   static function showMassiveActionsSubForm(MassiveAction $ma) {
 
-      //for each question, define a search option
+      switch ($ma->getAction()) {
+         case 'duplicate' :
+            $entity_assign = False;
+            foreach ($ma->getitems() as $itemtype => $ids) {
+               if ($item = getItemForItemtype($itemtype)) {
+                  if ($item->isEntityAssign()) {
+                     $entity_assign = true;
+                     break;
+                  }
+               }
+            }
+            if ($entity_assign) {
+               Entity::dropdown();
+            }
+            echo "<br><br>".Html::submit(_x('button', 'Duplicate'),
+                                         array('name' => 'massiveaction'));
+            return true;
 
-      foreach ($questions as $questions_id => $question) {
-         $opt_id++;
-         $sopt[$opt_id]['table']         = 'glpi_plugin_satisfaction_surveyanswers';
-         $sopt[$opt_id]['field']         = 'answer';
-         $sopt[$opt_id]['name']          = $LANG['plugin_satisfaction']['survey']['name']." - ".
-                                           $question['name'];
-         $sopt[$opt_id]['questions_id']  = $question['id'];
-         $sopt[$opt_id]['massiveaction'] = false;
-         $sopt[$opt_id]['joinparams']    = array('jointype' => 'child');
+      }
+      return parent::showMassiveActionsSubForm($ma);
+   }
+
+   /**
+    * @since version 0.85
+    *
+    * @see CommonDBTM::processMassiveActionsForOneItemtype()
+    **/
+   static function processMassiveActionsForOneItemtype(MassiveAction $ma, CommonDBTM $item,
+                                                       array $ids) {
+
+      switch ($ma->getAction()) {
+         case 'duplicate':
+            $survey = new self();
+            foreach ($ids as $id) {
+               if ($item->getFromDB($id)) {
+                  if ($survey->duplicateSurvey($id, $ma->POST['entities_id'])) {
+                     $ma->itemDone($item->getType(), $id, MassiveAction::ACTION_OK);
+                  } else {
+                     $ma->itemDone($item->getType(), $id, MassiveAction::ACTION_KO);
+                     $ma->addMessage($item->getErrorMessage(ERROR_ON_ACTION));
+                  }
+               } else {
+                  $ma->itemDone($item->getType(), $id, MassiveAction::ACTION_KO);
+                  $ma->addMessage($item->getErrorMessage(ERROR_NOT_FOUND));
+               }
+            }
+            break;
+
+      }
+      parent::processMassiveActionsForOneItemtype($ma, $item, $ids);
+   }
+
+   /**
+    * Duplicate a survey
+    *
+    * @param $ID        of the rule to duplicate
+    *
+    * @since version 0.85
+    *
+    * @return true if all ok
+    **/
+   function duplicateSurvey($ID, $entities_id) {
+
+      //duplicate survey
+      $survey = new self();
+      $survey->getFromDB($ID);
+
+      //Update fields of the new duplicate
+      $survey->fields['name']        = sprintf(__('Copy of %s'),
+                                               $survey->fields['name']);
+      $survey->fields['is_active']   = 0;
+      $survey->fields['entities_id'] = $entities_id;
+      unset($survey->fields['id']);
+
+      //add new duplicate
+      $input = toolbox::addslashes_deep($survey->fields);
+      $newID = $survey->add($input);
+      if (!$newID) {
+         return false;
+      }
+      //find and duplicate questions
+      $question_obj  = new PluginSatisfactionSurveyQuestion();
+      $questions = $question_obj->find("`plugin_satisfaction_surveys_id` = '$ID'");
+      $questions = toolbox::addslashes_deep($questions);
+      foreach ($questions as $question) {
+         $question['plugin_satisfaction_surveys_id'] = $newID;
+         unset($question['id']);
+         if (!$question_obj->add($question)) {
+            return false;
+         }
       }
 
-
-
-      return $sopt;
+      return true;
    }
+
 }

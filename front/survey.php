@@ -1,10 +1,17 @@
 <?php
 
-define('GLPI_ROOT', '../../..');
-include (GLPI_ROOT . "/inc/includes.php");
+include('../../../inc/includes.php');
 
-Html::header($LANG['plugin_satisfaction']['survey']['name'],
-             $_SERVER['PHP_SELF'],"plugins","satisfaction","survey");
-Search::show('PluginSatisfactionSurvey');
+Html::header(PluginSatisfactionSurvey::getTypeName(2), '', "plugins", "pluginsatisfactionmenu");
+
+$satisfaction = new PluginSatisfactionSurvey();
+$satisfaction->checkGlobal(READ);
+
+if ($satisfaction->canView()) {
+   Search::show('PluginSatisfactionSurvey');
+
+} else {
+   Html::displayRightError();
+}
+
 Html::footer();
-?>
