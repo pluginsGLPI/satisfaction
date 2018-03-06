@@ -2,7 +2,7 @@
 
 include('../../../inc/includes.php');
 
-Html::header(PluginSatisfactionSurvey::getTypeName(2), '', "plugins", "pluginsatisfactionmenu");
+Html::header(PluginSatisfactionSurvey::getTypeName(2), '', "admin", "pluginsatisfactionmenu");
 
 $satisfaction = new PluginSatisfactionSurvey();
 $satisfaction->checkGlobal(READ);

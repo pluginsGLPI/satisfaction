@@ -2,27 +2,27 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-28 09:54+0100\n"
-"PO-Revision-Date: 2018-02-28 09:54+0100\n"
-"Last-Translator: \n"
-"Language-Team: \n"
-"Language: fr_FR\n"
+"POT-Creation-Date: 2018-03-06 16:16+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Amandine Manceau, 2018\n"
+"Language-Team: French (France) (https://www.transifex.com/tsmr/teams/84146/fr_FR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: fr_FR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 2.0.6\n"
 
-#: setup.php:48
-msgid "I can get more ... Satisfaction"
-msgstr ""
+#: setup.php:49
+msgid "More satisfaction"
+msgstr "Plus de satisfaction"
 
-#: setup.php:63
+#: setup.php:64
 msgid "This plugin requires GLPI >= 9.1"
 msgstr "Ce plugin nécessite GLPI >= 9.1"
 
@@ -61,8 +61,8 @@ msgid ""
 "You cannot edit the questions when answers exists for this survey. Disable "
 "this survey and create a new one !"
 msgstr ""
-"Vous ne pouvez pas éditer les questions quand des réponses existent pour "
-"ce questionnaire. Désactivez ce questionnaire et créez en un nouveau !"
+"Vous ne pouvez pas éditer les questions quand des réponses existent pour ce "
+"questionnaire. Désactivez ce questionnaire et créez en un nouveau !"
 
 #: inc/surveyquestion.class.php:124 inc/surveyquestion.class.php:192
 msgid "Add a question"

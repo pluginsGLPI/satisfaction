@@ -29,7 +29,7 @@ if (isset($_POST["add"])) {
 
    $survey->checkGlobal(READ);
 
-   Html::header(PluginSatisfactionSurvey::getTypeName(2), '', "plugins", "pluginsatisfactionmenu", "survey");
+   Html::header(PluginSatisfactionSurvey::getTypeName(2), '', "admin", "pluginsatisfactionmenu", "survey");
 
    $survey->display(['id' => $_GET['id']]);
 

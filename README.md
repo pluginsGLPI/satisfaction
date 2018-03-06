@@ -21,6 +21,11 @@ Features
   - The tag "##satisfaction. question##" will allow you to add the list of questions of the plugin.
   - The tag "##satisfaction. answer##" will allow you to add the list of questions and answers of the plugin.
   
+  Translations
+  ------------
+  
+  Join us on [Transifex](https://www.transifex.com/tsmr/GLPI_satisfaction)
+
   ------------------------------------------------------------------------------------------------------------------------
 
 Introduction

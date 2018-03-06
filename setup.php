@@ -31,7 +31,7 @@ function plugin_init_satisfaction() {
             $config_page = 'front/survey.php';
             $PLUGIN_HOOKS['config_page']['satisfaction'] = $config_page;
 
-            $PLUGIN_HOOKS["menu_toadd"]['satisfaction'] = ['plugins' => 'PluginSatisfactionMenu'];
+            $PLUGIN_HOOKS["menu_toadd"]['satisfaction'] = ['admin' => 'PluginSatisfactionMenu'];
          }
       }
    }
@@ -44,13 +44,14 @@ function plugin_init_satisfaction() {
  */
 function plugin_version_satisfaction() {
 
-   $author = "<a href='www.teclib.com'>TECLIB'</a><a href='http://infotel.com/services/expertise-technique/glpi/'>Infotel</a>";
-   return ['name'           => __("I can get more ... Satisfaction", 'satisfaction'),
-                'version'        => '1.1.0',
-                'author'         => $author,
-                'license'        => 'GPLv2+',
-                'homepage'       => 'https://github.com/pluginsGLPI/satisfaction',
-                'minGlpiVersion' => '9.1'];
+   $author = "<a href='www.teclib.com'>TECLIB'</a>";
+   $author.= ", <a href='http://infotel.com/services/expertise-technique/glpi/'>Infotel</a>";
+   return ['name'           => __("More satisfaction", 'satisfaction'),
+           'version'        => '1.1.0',
+           'author'         => $author,
+           'license'        => 'GPLv2+',
+           'homepage'       => 'https://github.com/pluginsGLPI/satisfaction',
+           'minGlpiVersion' => '9.1'];
 }
 
 /**
