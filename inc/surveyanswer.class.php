@@ -168,6 +168,9 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
     * @param int $value
     */
    static function showStarAnswer($question, $value = 0) {
+      echo Html::css('lib/jqueryplugins/rateit/rateit.css');
+      Html::requireJs('rateit');
+
       $questions_id = $question['id'];
       $number = $question['number'];
 
@@ -180,6 +183,7 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
 
       echo "<div class='rateit' id='stars_$questions_id'></div>";
       echo  "<script type='text/javascript'>\n";
+      echo "$(function() {";
       echo "$('#stars_$questions_id').rateit({value: ".$value.",
                                    min : 0,
                                    max : $number,
@@ -187,7 +191,7 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
                                    backingfld: '#satisfaction_data_$questions_id',
                                    ispreset: true,
                                    resetable: false});";
-      echo "</script>";
+      echo "});</script>";
    }
 
    /**

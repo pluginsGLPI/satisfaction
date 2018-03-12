@@ -8,9 +8,9 @@ function plugin_satisfaction_install() {
 
    include_once(GLPI_ROOT . "/plugins/satisfaction/inc/profile.class.php");
 
-   if (!TableExists("glpi_plugin_satisfaction_surveys")) {
+   if (!$DB->tableExists("glpi_plugin_satisfaction_surveys")) {
       $DB->runFile(GLPI_ROOT . "/plugins/satisfaction/install/sql/empty-1.1.0.sql");
-   } else if (!FieldExists("glpi_plugin_satisfaction_surveyquestions", "type")) {
+   } else if (!$DB->fieldExists("glpi_plugin_satisfaction_surveyquestions", "type")) {
       $DB->runFile(GLPI_ROOT . "/plugins/satisfaction/install/sql/update-1.1.0.sql");
    }
 

@@ -47,11 +47,11 @@ function plugin_version_satisfaction() {
    $author = "<a href='www.teclib.com'>TECLIB'</a>";
    $author.= ", <a href='http://infotel.com/services/expertise-technique/glpi/'>Infotel</a>";
    return ['name'           => __("More satisfaction", 'satisfaction'),
-           'version'        => '1.1.0',
+           'version'        => '1.2.0',
            'author'         => $author,
            'license'        => 'GPLv2+',
            'homepage'       => 'https://github.com/pluginsGLPI/satisfaction',
-           'minGlpiVersion' => '9.1'];
+           'minGlpiVersion' => '9.2'];
 }
 
 /**
@@ -60,8 +60,8 @@ function plugin_version_satisfaction() {
  * @return bool
  */
 function plugin_satisfaction_check_prerequisites() {
-   if (version_compare(GLPI_VERSION, '9.1', 'lt') || version_compare(GLPI_VERSION, '9.2', 'ge')) {
-      echo __('This plugin requires GLPI >= 9.1', 'satisfaction');
+   if (version_compare(GLPI_VERSION, '9.2', 'lt') || version_compare(GLPI_VERSION, '9.3', 'ge')) {
+      echo __('This plugin requires GLPI >= 9.2', 'satisfaction');
       return false;
    }
    return true;
