@@ -288,7 +288,6 @@ class PluginSatisfactionSurveyQuestion extends CommonDBChild {
          echo "</script>\n";
       }
 
-
       echo "<td class='left'>" . nl2br($this->fields["name"]) . "</td>";
       echo "<td class='left'>" . self::getQuestionType($this->fields["type"]) . "</td>";
       echo "</tr>";

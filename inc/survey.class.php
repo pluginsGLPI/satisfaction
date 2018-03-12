@@ -234,7 +234,7 @@ class PluginSatisfactionSurvey extends CommonDBTM {
    /**
     * @see CommonDBTM::getSpecificMassiveActions()
     **/
-   function getSpecificMassiveActions($checkitem=NULL) {
+   function getSpecificMassiveActions($checkitem = null) {
 
       $canadd = Session::haveRight(self::$rightname, CREATE);
       $actions = parent::getSpecificMassiveActions($checkitem);
@@ -254,7 +254,7 @@ class PluginSatisfactionSurvey extends CommonDBTM {
 
       switch ($ma->getAction()) {
          case 'duplicate' :
-            $entity_assign = False;
+            $entity_assign = false;
             foreach ($ma->getitems() as $itemtype => $ids) {
                if ($item = getItemForItemtype($itemtype)) {
                   if ($item->isEntityAssign()) {
@@ -267,7 +267,7 @@ class PluginSatisfactionSurvey extends CommonDBTM {
                Entity::dropdown();
             }
             echo "<br><br>".Html::submit(_x('button', 'Duplicate'),
-                                         array('name' => 'massiveaction'));
+                                         ['name' => 'massiveaction']);
             return true;
 
       }
