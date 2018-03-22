@@ -8,10 +8,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-06 16:16+0100\n"
+"POT-Creation-Date: 2018-03-22 09:41+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Amandine Manceau, 2018\n"
-"Language-Team: French (France) (https://www.transifex.com/tsmr/teams/84146/fr_FR/)\n"
+"Language-Team: French (France) (https://www.transifex.com/tsmr/teams/84420/fr_FR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -23,8 +23,8 @@ msgid "More satisfaction"
 msgstr "Plus de satisfaction"
 
 #: setup.php:64
-msgid "This plugin requires GLPI >= 9.1"
-msgstr "Ce plugin nécessite GLPI >= 9.1"
+msgid "This plugin requires GLPI >= 9.2"
+msgstr "Ce plugin nécessite GLPI >= 9.2"
 
 #: inc/menu.class.php:14 inc/profile.class.php:50 inc/survey.class.php:18
 msgid "Satisfaction survey"
@@ -76,10 +76,10 @@ msgstr "Pas de questions pour ce questionnaire"
 msgid "Note on"
 msgstr "Note sur"
 
-#: inc/surveyquestion.class.php:305 inc/surveyquestion.class.php:320
+#: inc/surveyquestion.class.php:304 inc/surveyquestion.class.php:319
 msgid "Text"
 msgstr "Texte"
 
-#: inc/surveyquestion.class.php:306 inc/surveyquestion.class.php:322
+#: inc/surveyquestion.class.php:305 inc/surveyquestion.class.php:321
 msgid "Note"
 msgstr "Note"

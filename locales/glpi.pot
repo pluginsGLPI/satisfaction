@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-06 16:16+0100\n"
+"POT-Creation-Date: 2018-03-22 09:41+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,7 +23,7 @@ msgid "More satisfaction"
 msgstr ""
 
 #: setup.php:64
-msgid "This plugin requires GLPI >= 9.1"
+msgid "This plugin requires GLPI >= 9.2"
 msgstr ""
 
 #: inc/menu.class.php:14 inc/profile.class.php:50 inc/survey.class.php:18
@@ -74,10 +74,10 @@ msgstr ""
 msgid "Note on"
 msgstr ""
 
-#: inc/surveyquestion.class.php:305 inc/surveyquestion.class.php:320
+#: inc/surveyquestion.class.php:304 inc/surveyquestion.class.php:319
 msgid "Text"
 msgstr ""
 
-#: inc/surveyquestion.class.php:306 inc/surveyquestion.class.php:322
+#: inc/surveyquestion.class.php:305 inc/surveyquestion.class.php:321
 msgid "Note"
 msgstr ""
