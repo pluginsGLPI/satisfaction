@@ -278,42 +278,45 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
             $plugin_satisfaction_surveys_id = $sanswer_obj->getField('plugin_satisfaction_surveys_id');
          } else {
 
-            $survey = PluginSatisfactionSurvey::getObjectForEntity($entities_id);
+            if ($survey = PluginSatisfactionSurvey::getObjectForEntity($entities_id) !== false) {
 
-            $plugin_satisfaction_surveys_id = $survey->getID();
+               $plugin_satisfaction_surveys_id = $survey->getID();
+            }
          }
 
-         $squestion_obj = new PluginSatisfactionSurveyQuestion;
-         $questions     = $squestion_obj->find(PluginSatisfactionSurveyQuestion::$items_id ." = $plugin_satisfaction_surveys_id");
+         if (isset($plugin_satisfaction_surveys_id)) {
+            $squestion_obj = new PluginSatisfactionSurveyQuestion;
+            $questions     = $squestion_obj->find(PluginSatisfactionSurveyQuestion::$items_id . " = $plugin_satisfaction_surveys_id");
 
-         switch ($event) {
-            case 'satisfaction':
-               $data = '';
-               foreach ($questions as $question) {
-                  $data .= $question['name'] . "\n\n";
-               }
-               $target->datas['##satisfaction.question##'] = $data;
-               break;
-
-            case 'replysatisfaction':
-
-               $data = '';
-               foreach ($questions as $question) {
-
-                  if (isset($sanswer_obj->fields['answer'][$question['id']])) {
-                     $value = $sanswer_obj->fields['answer'][$question['id']];
-                  } else {
-                     if ($question['type'] == PluginSatisfactionSurveyQuestion::TEXTAREA) {
-                        $value = '';
-                     } else {
-                        $value = 0;
-                     }
+            switch ($event) {
+               case 'satisfaction':
+                  $data = '';
+                  foreach ($questions as $question) {
+                     $data .= $question['name'] . "\n\n";
                   }
-                  $data .= $question['name'] . " : " . self::getAnswer($question, $value) . "\n\n";
-               }
-               $target->datas['##satisfaction.answer##'] = $data;
+                  $target->datas['##satisfaction.question##'] = $data;
+                  break;
 
-               break;
+               case 'replysatisfaction':
+
+                  $data = '';
+                  foreach ($questions as $question) {
+
+                     if (isset($sanswer_obj->fields['answer'][$question['id']])) {
+                        $value = $sanswer_obj->fields['answer'][$question['id']];
+                     } else {
+                        if ($question['type'] == PluginSatisfactionSurveyQuestion::TEXTAREA) {
+                           $value = '';
+                        } else {
+                           $value = 0;
+                        }
+                     }
+                     $data .= $question['name'] . " : " . self::getAnswer($question, $value) . "\n\n";
+                  }
+                  $target->datas['##satisfaction.answer##'] = $data;
+
+                  break;
+            }
          }
       }
 
