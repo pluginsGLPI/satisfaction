@@ -82,6 +82,8 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
          if ($sanswer_obj->getFromDBByQuery("WHERE `ticketsatisfactions_id` = " . $item->getField('id'))) {
             $survey = new PluginSatisfactionSurvey();
             $survey->getFromDB($sanswer_obj->fields['plugin_satisfaction_surveys_id']);
+
+            $plugin_satisfaction_surveys_id = $survey->getID();
          } else {
             $ticket = new Ticket();
             $ticket->getFromDB($item->getField('tickets_id'));
@@ -95,7 +97,8 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
          return false;
       }
 
-      if ($plugin_satisfaction_surveys_id === false) {
+      if (!isset($plugin_satisfaction_surveys_id)
+         || $plugin_satisfaction_surveys_id === false) {
          return false;
       }
 
