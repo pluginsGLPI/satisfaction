@@ -217,16 +217,12 @@ class PluginSatisfactionSurvey extends CommonDBTM {
                 WHERE `is_active` $where
                 ORDER BY `glpi_entities`.`level` DESC
                 LIMIT 1";
-      $data = $DB->request($query);
 
-      if ($data === false) {
+      $result = $DB->query($query);
+      if (($id = $DB->result($result,0,"id")) === NULL) {
          return false;
       } else {
-         foreach ($data as $survey) {
-            $item = new self;
-            $item->getFromDB($survey['id']);
-            return $item;
-         }
+         return $id;
       }
       return false;
    }
