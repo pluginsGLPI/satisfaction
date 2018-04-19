@@ -85,14 +85,17 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
          } else {
             $ticket = new Ticket();
             $ticket->getFromDB($item->getField('tickets_id'));
-            $survey = PluginSatisfactionSurvey::getObjectForEntity($ticket->fields['entities_id']);
+
+            $plugin_satisfaction_surveys_id = PluginSatisfactionSurvey::getObjectForEntity($ticket->fields['entities_id']);
          }
 
+      } else if($item instanceof PluginSatisfactionSurvey) {
+         $plugin_satisfaction_surveys_id = $item->getID();
       } else {
-         $survey = $item;
+         return false;
       }
 
-      if ($survey === false) {
+      if ($plugin_satisfaction_surveys_id === false) {
          return false;
       }
 
@@ -101,7 +104,7 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
          $sanswer_obj->fields['answer'] = importArrayFromDB($sanswer_obj->fields['answer']);
       }
 
-      echo "<input type='hidden' name='plugin_satisfaction_surveys_id' value='". $survey->getID(). "'>";
+      echo "<input type='hidden' name='plugin_satisfaction_surveys_id' value='$plugin_satisfaction_surveys_id'>";
 
       if ($preview) {
          echo "<div class='spaced' id='tabsbody'>";
@@ -111,7 +114,7 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
 
       //list survey questions
       $squestion_obj = new PluginSatisfactionSurveyQuestion;
-      foreach ($squestion_obj->find(PluginSatisfactionSurveyQuestion::$items_id . " = " . $survey->getID()) as $question) {
+      foreach ($squestion_obj->find(PluginSatisfactionSurveyQuestion::$items_id . " = " . $plugin_satisfaction_surveys_id) as $question) {
          echo "<tr class=\"tab_bg_2\">";
          echo "<td>" . nl2br($question['name']) . "</td>";
          echo "<td>";
