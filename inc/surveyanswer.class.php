@@ -278,9 +278,9 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
             $plugin_satisfaction_surveys_id = $sanswer_obj->getField('plugin_satisfaction_surveys_id');
          } else {
 
-            if ($survey = PluginSatisfactionSurvey::getObjectForEntity($entities_id) !== false) {
+            if (($survey = PluginSatisfactionSurvey::getObjectForEntity($entities_id)) !== false) {
 
-               $plugin_satisfaction_surveys_id = $survey->getID();
+               $plugin_satisfaction_surveys_id = $survey;
             }
          }
 
