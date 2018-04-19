@@ -10,76 +10,80 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-22 09:41+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Amandine Manceau, 2018\n"
-"Language-Team: French (France) (https://www.transifex.com/tsmr/teams/84146/fr_FR/)\n"
+"Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>, 2018\n"
+"Language-Team: Czech (Czech Republic) (https://www.transifex.com/tsmr/teams/84146/cs_CZ/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fr_FR\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Language: cs_CZ\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
 #: setup.php:49
 msgid "More satisfaction"
-msgstr "Plus de satisfaction"
+msgstr "Více o spokojenosti"
 
 #: setup.php:64
 msgid "This plugin requires GLPI >= 9.2"
-msgstr "Ce plugin nécessite GLPI >= 9.2"
+msgstr "Tento zásuvný modul vyžaduje GLPI verze 9.2 a novější"
 
 #: inc/menu.class.php:14 inc/profile.class.php:50 inc/survey.class.php:18
 msgid "Satisfaction survey"
 msgid_plural "Satisfaction surveys"
-msgstr[0] "Enquête de satisfaction"
-msgstr[1] "Enquêtes de satisfactions"
+msgstr[0] "Průzkum spokojenosti"
+msgstr[1] "Průzkumy spokojenosti"
+msgstr[2] "Průzkumů spokojenosti"
 
 #: inc/surveyanswer.class.php:22
 msgid "Answer"
 msgid_plural "Answers"
-msgstr[0] "Réponse"
-msgstr[1] "Réponses"
+msgstr[0] "Odpověď"
+msgstr[1] "Odpovědi"
+msgstr[2] "Odpovědí"
 
 #: inc/surveyanswer.class.php:43
 msgid "Preview"
-msgstr "Prévisualisation"
+msgstr "Náhled"
 
 #: inc/surveyanswer.class.php:109
 msgid "Satisfaction"
-msgstr "Satisfaction"
+msgstr "Spokojenost"
 
 #: inc/survey.class.php:152 inc/survey.class.php:176
 msgid "Error : only one survey is allowed by entity"
-msgstr "Erreur : un seul questionnaire par entité est autorisé"
+msgstr "Chyba: entita umožňuje pouze jeden průzkum"
 
 #: inc/surveyquestion.class.php:30
 msgid "Question"
 msgid_plural "Questions"
-msgstr[0] "Question"
-msgstr[1] "Questions"
+msgstr[0] "Otázka"
+msgstr[1] "Otázky"
+msgstr[2] "Otázek"
 
 #: inc/surveyquestion.class.php:104
 msgid ""
 "You cannot edit the questions when answers exists for this survey. Disable "
 "this survey and create a new one !"
 msgstr ""
-"Vous ne pouvez pas éditer les questions quand des réponses existent pour ce "
-"questionnaire. Désactivez ce questionnaire et créez en un nouveau !"
+"Pokud na otázky v rámci tohoto průzkumu už někdo odpověděl, není možné je "
+"dodatečně měnit. Pokud je to třeba, nezbývá než stávající průzkum zrušit a "
+"vytvořit nový!"
 
 #: inc/surveyquestion.class.php:124 inc/surveyquestion.class.php:192
 msgid "Add a question"
-msgstr "Ajouter une question"
+msgstr "Přidat otázku"
 
 #: inc/surveyquestion.class.php:132
 msgid "No questions for this survey"
-msgstr "Pas de questions pour ce questionnaire"
+msgstr "Žádné otázky pro tento průzkum"
 
 #: inc/surveyquestion.class.php:228
 msgid "Note on"
-msgstr "Note sur"
+msgstr "Poznámka k"
 
 #: inc/surveyquestion.class.php:304 inc/surveyquestion.class.php:319
 msgid "Text"
-msgstr "Texte"
+msgstr "Text"
 
 #: inc/surveyquestion.class.php:305 inc/surveyquestion.class.php:321
 msgid "Note"
-msgstr "Note"
+msgstr "Poznámka"
