@@ -303,7 +303,7 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
                foreach ($questions as $question) {
                   $data .= $question['name'] . "\n\n";
                }
-               $target->datas['##satisfaction.question##'] = $data;
+               $target->data['##satisfaction.question##'] = $data;
                break;
 
             case 'replysatisfaction':
@@ -322,7 +322,7 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
                   }
                   $data .= $question['name'] . " : " . self::getAnswer($question, $value) . "\n\n";
                }
-               $target->datas['##satisfaction.answer##'] = $data;
+               $target->data['##satisfaction.answer##'] = $data;
 
                break;
          }
