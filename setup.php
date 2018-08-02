@@ -33,6 +33,8 @@ function plugin_init_satisfaction() {
 
             $PLUGIN_HOOKS["menu_toadd"]['satisfaction'] = ['admin' => 'PluginSatisfactionMenu'];
          }
+
+         $PLUGIN_HOOKS['add_javascript']['satisfaction'] = ["satisfaction.js"];
       }
    }
 }
@@ -47,7 +49,7 @@ function plugin_version_satisfaction() {
    $author = "<a href='www.teclib.com'>TECLIB'</a>";
    $author.= ", <a href='http://infotel.com/services/expertise-technique/glpi/'>Infotel</a>";
    return ['name'           => __("More satisfaction", 'satisfaction'),
-           'version'        => '1.2.1',
+           'version'        => '1.2.2',
            'author'         => $author,
            'license'        => 'GPLv2+',
            'homepage'       => 'https://github.com/pluginsGLPI/satisfaction',

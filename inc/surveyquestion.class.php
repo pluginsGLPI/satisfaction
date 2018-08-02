@@ -170,6 +170,7 @@ class PluginSatisfactionSurveyQuestion extends CommonDBChild {
     * @return bool
     */
    function showForm($ID, $options = []) {
+      global $CFG_GLPI;
 
       if (isset($options['parent']) && !empty($options['parent'])) {
          $survey = $options['parent'];
@@ -208,7 +209,7 @@ class PluginSatisfactionSurveyQuestion extends CommonDBChild {
       echo "<td>";
       $array = self::getQuestionTypeList();
       Dropdown::showFromArray('type', $array, ['value'     => $surveyquestion->fields['type'],
-                                                    'on_change' => "plugin_satisfaction_loadtype(this.value, \"" . self::NOTE . "\");"]);
+                                               'on_change' => "plugin_satisfaction_loadtype(this.value, \"" . self::NOTE . "\");"]);
 
       $script = "function plugin_satisfaction_loadtype(val, note){";
       $script .= "if(val == note) {
@@ -230,9 +231,25 @@ class PluginSatisfactionSurveyQuestion extends CommonDBChild {
       echo "<td>";
       Dropdown::showNumber('number', ['max'   => 10,
                                       'min'   => 2,
-                                      'value' => $surveyquestion->fields['number']]);
+                                      'value' => $surveyquestion->fields['number'],
+                                      'on_change' => "plugin_satisfaction_load_defaultvalue(\"" . $CFG_GLPI['root_doc'] . "\", this.value);"]);
       echo "</td>";
-      echo "<td colspan='2'></td>";
+
+      if (!empty($surveyquestion->fields['number'])) {
+         $max_default_value = $surveyquestion->fields['number'];
+      } else {
+         $max_default_value = 2;
+      }
+
+      echo "<td>";
+      echo __('Default value');
+      echo "</td>";
+      echo "<td id='default_value'>";
+      Dropdown::showNumber('default_value', ['max'   => $max_default_value,
+                                      'min'   => 1,
+                                      'value' => $surveyquestion->fields['default_value']]);
+
+      echo "</td>";
       echo "</tr>";
 
       echo "<tr>";

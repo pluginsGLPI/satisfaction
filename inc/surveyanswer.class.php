@@ -126,6 +126,8 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
          } else {
             if ($question['type'] == PluginSatisfactionSurveyQuestion::TEXTAREA) {
                $value = '';
+            } else if($question['type'] == PluginSatisfactionSurveyQuestion::NOTE) {
+               $value = $question['default_value'];
             } else {
                $value = 0;
             }
@@ -316,6 +318,8 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
                   } else {
                      if ($question['type'] == PluginSatisfactionSurveyQuestion::TEXTAREA) {
                         $value = '';
+                     } else if($question['type'] == PluginSatisfactionSurveyQuestion::NOTE) {
+                        $value = $question['default_value'];
                      } else {
                         $value = 0;
                      }
