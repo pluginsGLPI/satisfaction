@@ -17,7 +17,7 @@ CREATE TABLE `glpi_plugin_satisfaction_surveyquestions` (
   `type` varchar(255) collate utf8_unicode_ci default NULL,
   `comment` text collate utf8_unicode_ci default NULL,
   `number` int(11) NOT NULL DEFAULT 0,
-  `default_value` int(11) NOT NULL DEFAULT 0,
+  `default_value` int(11) NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`)
 ) ENGINE = MYISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
