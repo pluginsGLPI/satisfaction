@@ -10,83 +10,82 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-22 09:41+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>, 2018\n"
-"Language-Team: Czech (Czech Republic) (https://www.transifex.com/tsmr/teams/84146/cs_CZ/)\n"
+"Last-Translator: Kirill Lavrik <kirill.lavrik@gmail.com>, 2018\n"
+"Language-Team: Russian (Russia) (https://www.transifex.com/tsmr/teams/84146/ru_RU/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: cs_CZ\n"
-"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"Language: ru_RU\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #: setup.php:49
 msgid "More satisfaction"
-msgstr "Více o spokojenosti"
+msgstr "Больше вопросов для оценки удовлетворения"
 
 #: setup.php:64
 msgid "This plugin requires GLPI >= 9.2"
-msgstr "Tento zásuvný modul vyžaduje GLPI verze 9.2 a novější"
+msgstr "Этот плагин требует GLPI >= 9.2"
 
 #: inc/menu.class.php:14 inc/profile.class.php:50 inc/survey.class.php:18
 msgid "Satisfaction survey"
 msgid_plural "Satisfaction surveys"
-msgstr[0] "Průzkum spokojenosti"
-msgstr[1] "Průzkumy spokojenosti"
-msgstr[2] "Průzkumů spokojenosti"
-msgstr[3] "Průzkumy spokojenosti"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
 
 #: inc/surveyanswer.class.php:22
 msgid "Answer"
 msgid_plural "Answers"
-msgstr[0] "Odpověď"
-msgstr[1] "Odpovědi"
-msgstr[2] "Odpovědí"
-msgstr[3] "Odpovědi"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
 
 #: inc/surveyanswer.class.php:43
 msgid "Preview"
-msgstr "Náhled"
+msgstr "Предварительный просмотр"
 
 #: inc/surveyanswer.class.php:109
 msgid "Satisfaction"
-msgstr "Spokojenost"
+msgstr "Удовлетворенность"
 
 #: inc/survey.class.php:152 inc/survey.class.php:176
 msgid "Error : only one survey is allowed by entity"
-msgstr "Chyba: na entitu je možné mít pouze jeden průzkum"
+msgstr "Ошибка: разрешено только одно обследование"
 
 #: inc/surveyquestion.class.php:30
 msgid "Question"
 msgid_plural "Questions"
-msgstr[0] "Otázka"
-msgstr[1] "Otázky"
-msgstr[2] "Otázek"
-msgstr[3] "Otázky"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
 
 #: inc/surveyquestion.class.php:104
 msgid ""
 "You cannot edit the questions when answers exists for this survey. Disable "
 "this survey and create a new one !"
 msgstr ""
-"Pokud na otázky v rámci tohoto průzkumu už někdo odpověděl, není možné je "
-"dodatečně měnit. Pokud je to třeba, nezbývá než stávající průzkum zrušit a "
-"vytvořit nový!"
+"Вы не можете редактировать вопросы, когда ответы существуют для этого "
+"опроса. Отключите этот опрос и создайте новый!"
 
 #: inc/surveyquestion.class.php:124 inc/surveyquestion.class.php:192
 msgid "Add a question"
-msgstr "Přidat otázku"
+msgstr "Добавить вопрос"
 
 #: inc/surveyquestion.class.php:132
 msgid "No questions for this survey"
-msgstr "Žádné otázky pro tento průzkum"
+msgstr "Нет вопросов для этого опроса"
 
 #: inc/surveyquestion.class.php:228
 msgid "Note on"
-msgstr "Poznámka k"
+msgstr "Обратите внимание на"
 
 #: inc/surveyquestion.class.php:304 inc/surveyquestion.class.php:319
 msgid "Text"
-msgstr "Text"
+msgstr "Текст"
 
 #: inc/surveyquestion.class.php:305 inc/surveyquestion.class.php:321
 msgid "Note"
-msgstr "Poznámka"
+msgstr "Отметить"
