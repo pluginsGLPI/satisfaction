@@ -6,10 +6,49 @@
     <logo>https://raw.githubusercontent.com/pluginsGLPI/satisfaction/master/satisfaction.png</logo>
     <description>
         <short>
-            <fr><![CDATA[Plus de satisfaction]]></fr>
+            <cs><![CDATA[Více ke spokojenosti]]></cs>
             <en><![CDATA[More satisfaction]]></en>
+            <fr><![CDATA[Plus de satisfaction]]></fr>
         </short>
         <long>
+            <cs>
+                Spokojenost je zásuvný modul který umožňuje přidávat do průzkumu o spokojenosti další otázky.
+
+                Funkce:
+                ---------------
+
+                 - Různé průzkumy (jeden pro každou entitu)
+
+                 - Vícero dotazů třech typů
+                        + Rozbalovací nabídka Ano/Ne
+                        + Textový box – Textový box
+                        + Pozn.: Bude možné nastavit celkový počet hvězdiček.
+
+                - Tento zásuvný modul zásuvný modul umožnuje přidat všechny v něm nastavené otázky ke dvěma otázkám základního GLPI v průzkumu spokojenosti.
+
+                - Tento modul přidá dva nové štítky k oznámením pro události „Průzkum spokojenosti“ a „Odpověď v průzkumu spokojenosti".
+                        + Štítek „##satisfaction. question##“ umožňí přidat seznam otázek zásuvného modulu.
+                        + Štítek „##satisfaction. answer##“ umožňí přidat seznam otázek a odpovědí zásuvného modulu..
+            </cs>
+            <en>
+                Satisfaction is a plugin which allows you to add questions to the satisfaction survey.
+
+                Features:
+                ---------------
+
+                 - Different surveys (one for each entity)
+
+                 - Multiple questions with three types:
+                        + Yes / No dropdown list
+                        + Text box - Text box
+                        + Note: It will be possible to configure the total number of stars.
+
+                - This plugin will allow you to add all the questions configured in the plugin with the two questions of the GLPI core in the satisfaction survey.
+
+                - This plugin will add two new tags to the notifications for "Satisfaction survey" and "Satisfaction survey answer" events.
+                        + The tag "##satisfaction. question##" will allow you to add the list of questions of the plugin.
+                        + The tag "##satisfaction. answer##" will allow you to add the list of questions and answers of the plugin.
+            </en>
             <fr>
                 Satisfaction est un plugin qui vous permet d'ajouter des questions à l'enquête de satisfaction.
 
@@ -30,25 +69,6 @@
                     + La balise « ##satisfaction.answer## » va permettre d’ajouter la liste des questions et réponses du plugin.
 
             </fr>
-            <en>
-                Satisfaction is a plugin which allows you to add questions to the satisfaction survey.
-
-                Features:
-                ---------------
-
-                 - Different surveys (one for each entity)
-
-                 - Multiple questions with three types:
-                        + Yes / No dropdown list
-                        + Text box - Text box
-                        + Note: It will be possible to configure the total number of stars.
-
-                - This plugin will allow you to add all the questions configured in the plugin with the two questions of the GLPI core in the satisfaction survey.
-
-                - This plugin will add two new tags to the notifications for "Satisfaction survey" and "Satisfaction survey answer" events.
-                        + The tag "##satisfaction. question##" will allow you to add the list of questions of the plugin.
-                        + The tag "##satisfaction. answer##" will allow you to add the list of questions and answers of the plugin.
-            </en>
  </long>
     </description>
     <homepage>https://github.com/pluginsGLPI/satisfaction</homepage>
@@ -89,15 +109,20 @@
     </langs>
     <license><![CDATA[GPL v2+]]></license>
     <tags>
-        <fr>
-            <tag>Satisfaction</tag>
-            <tag>Questions</tag>
-            <tag>Réponses</tag>
-        </fr>
+        <cs>
+            <tag>Spokojenost</tag>
+            <tag>Otázky</tag>
+            <tag>Odpovědi</tag>
+        </cs>
         <en>
             <tag>Satisfaction</tag>
             <tag>Questions</tag>
             <tag>Answers</tag>
         </en>
+        <fr>
+            <tag>Satisfaction</tag>
+            <tag>Questions</tag>
+            <tag>Réponses</tag>
+        </fr>
     </tags>
 </root>
