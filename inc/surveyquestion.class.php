@@ -48,10 +48,11 @@ class PluginSatisfactionSurveyQuestion extends CommonDBChild {
       // can exists for template
       if ($item->getType() == 'PluginSatisfactionSurvey') {
          if ($_SESSION['glpishow_count_on_tabs']) {
-            $table = getTableForItemType(__CLASS__);
+            $dbu = new DbUtils();
+            $table = $dbu->getTableForItemType(__CLASS__);
             return self::createTabEntry(self::getTypeName(),
-                                        countElementsInTable($table, self::$items_id .
-                                                                     " = '" . $item->getID() . "'"));
+                                        $dbu->countElementsInTable($table,
+                                                                   [self::$items_id => $item->getID()]));
          }
          return self::getTypeName();
       }

@@ -34,63 +34,97 @@ class PluginSatisfactionSurvey extends CommonDBTM {
       $this->addDefaultFormTab($ong);
       $this->addStandardTab('PluginSatisfactionSurveyQuestion', $ong, $options);
       $this->addStandardTab('PluginSatisfactionSurveyAnswer', $ong, $options);
+      $this->addStandardTab('PluginSatisfactionSurveyResult', $ong, $options);
       $this->addStandardTab('Log', $ong, $options);
       return $ong;
    }
 
    /**
-    * Get the Search options for the given Type
-    *
-    * @return array of search options
-    * More information on https://forge.indepnet.net/wiki/glpi/SearchEngine
-    **/
-   public function getSearchOptions() {
+    * @return array
+    */
+   function rawSearchOptions() {
 
       $tab = [];
 
-      $tab['common'] = self::getTypeName(2);
+      $tab[] = [
+         'id'                 => 'common',
+         'name'               => self::getTypeName(2)
+      ];
 
-      $tab[1]['table']         = $this->getTable();
-      $tab[1]['field']         = 'name';
-      $tab[1]['name']          = __('Name');
-      $tab[1]['datatype']      = 'itemlink';
-      $tab[1]['itemlink_type'] = $this->getType();
+      $tab[] = [
+         'id'                 => '1',
+         'table'              => $this->getTable(),
+         'field'              => 'name',
+         'name'               => __('Name'),
+         'datatype'           => 'itemlink',
+         'itemlink_type'      => $this->getType(),
+         'massiveaction'      => false
+      ];
 
-      $tab[2]['table'] = $this->getTable();
-      $tab[2]['field'] = 'is_active';
-      $tab[2]['name']  = __('Active');
-      $tab[2]['datatype'] = 'bool';
+      $tab[] = [
+         'id'                 => '2',
+         'table'              => $this->getTable(),
+         'field'              => 'is_active',
+         'name'               => __('Active'),
+         'datatype'           => 'bool'
+      ];
 
-      $tab[3]['table'] = $this->getTable();
-      $tab[3]['field'] = 'comment';
-      $tab[3]['name']  = __('Comments');
-      $tab[3]['datatype'] = 'text';
+      $tab[] = [
+         'id'                 => '3',
+         'table'              => $this->getTable(),
+         'field'              => 'comment',
+         'name'               => __('Comments'),
+         'datatype'           => 'text'
+      ];
 
-      $tab[4]['table'] = $this->getTable();
-      $tab[4]['field'] = 'date_mod';
-      $tab[4]['name'] = __('Last update');
-      $tab[4]['massiveaction'] = false;
-      $tab[4]['datatype'] = 'datetime';
+      $tab[] = [
+         'id'                 => '4',
+         'table'              => $this->getTable(),
+         'field'              => 'date_mod',
+         'name'               => __('Last update'),
+         'massiveaction'      => false,
+         'datatype'           => 'datetime'
+      ];
 
-      $tab[5]['table'] = $this->getTable();
-      $tab[5]['field'] = 'date_creation';
-      $tab[5]['name'] = __('Creation date');
-      $tab[5]['datatype'] = 'date';
+      $tab[] = [
+         'id'                 => '5',
+         'table'              => $this->getTable(),
+         'field'              => 'date_creation',
+         'name'               => __('Creation date'),
+         'datatype'           => 'date'
+      ];
 
-      $tab[11]['table'] = $this->getTable();
-      $tab[11]['field'] = 'is_recursive';
-      $tab[11]['name'] = __('Child entities');
-      $tab[11]['datatype'] = 'bool';
+      $tab[] = [
+         'id'                 => '11',
+         'table'              => $this->getTable(),
+         'field'              => 'is_recursive',
+         'name'               => __('Child entities'),
+         'datatype'           => 'bool'
+      ];
 
-      $tab[30]['table'] = $this->getTable();
-      $tab[30]['field'] = 'id';
-      $tab[30]['name'] = __('ID');
-      $tab[30]['datatype'] = 'number';
+      $tab[] = [
+         'id'                 => '30',
+         'table'              => $this->getTable(),
+         'field'              => 'id',
+         'name'               => __('ID'),
+         'datatype'           => 'number'
+      ];
 
-      $tab[80]['table'] = 'glpi_entities';
-      $tab[80]['field'] = 'completename';
-      $tab[80]['name'] = __('Entity');
-      $tab[80]['datatype'] = 'dropdown';
+      $tab[] = [
+         'id'                 => '80',
+         'table'              => 'glpi_entities',
+         'field'              => 'completename',
+         'name'               => __('Entity'),
+         'datatype'           => 'dropdown'
+      ];
+
+      $tab[] = [
+         'id'                 => '86',
+         'table'              => $this->getTable(),
+         'field'              => 'is_recursive',
+         'name'               => __('Child entities'),
+         'datatype'           => 'bool'
+      ];
 
       return $tab;
    }
@@ -145,9 +179,11 @@ class PluginSatisfactionSurvey extends CommonDBTM {
    function prepareInputForAdd($input) {
 
       if ($input['is_active'] == 1) {
+         $dbu = new DbUtils();
          //we must store only one survey by entity
-         $where     = getEntitiesRestrictRequest("AND", $this->getTable(), 'entities_id', $input['entities_id'], true);
-         $found = $this->find("`is_active` $where");
+         $where     = $dbu->getEntitiesRestrictRequest("AND", $this->getTable(),
+                                                       'entities_id', $input['entities_id'], true);
+         $found = $this->find("is_active = 1 $where");
          if (count($found) > 0) {
             Session::addMessageAfterRedirect(__('Error : only one survey is allowed by entity', 'satisfaction'), false, ERROR);
             return false;
@@ -168,12 +204,14 @@ class PluginSatisfactionSurvey extends CommonDBTM {
 
       //active external survey for entity
       if ($input['is_active'] == 1) {
-
+         $dbu = new DbUtils();
          //we must store only one survey by entity (other this one)
-         $where     = getEntitiesRestrictRequest("AND", $this->getTable(), 'entities_id', $input['entities_id'], true);
-         $found = $this->find("`is_active` AND `id` != " . $this->getID(). " $where");
+         $where     = $dbu->getEntitiesRestrictRequest("AND", $this->getTable(), 'entities_id',
+                                                       $input['entities_id'], true);
+         $found = $this->find("`is_active` = 1 AND `id` != " . $this->getID(). " $where");
          if (count($found) > 0) {
-            Session::addMessageAfterRedirect(__('Error : only one survey is allowed by entity', 'satisfaction'), false, ERROR);
+            Session::addMessageAfterRedirect(__('Error : only one survey is allowed by entity',
+                                                'satisfaction'), false, ERROR);
             return false;
          }
       }
@@ -207,14 +245,14 @@ class PluginSatisfactionSurvey extends CommonDBTM {
     */
    static function getObjectForEntity($entities_id) {
       global $DB;
-
-      $where = getEntitiesRestrictRequest("AND", "survey", 'entities_id', $entities_id, true);
+      $dbu = new DbUtils();
+      $where = $dbu->getEntitiesRestrictRequest("AND", "survey", 'entities_id', $entities_id, true);
 
       $query = "SELECT `survey`.`id`
-                FROM `".getTableForItemType(__CLASS__)."` as `survey`
+                FROM `".$dbu->getTableForItemType(__CLASS__)."` as `survey`
                 LEFT JOIN `glpi_entities`
                   ON (`glpi_entities`.`id` = `survey`.`entities_id`)
-                WHERE `is_active` $where
+                WHERE `is_active` = 1 $where
                 ORDER BY `glpi_entities`.`level` DESC
                 LIMIT 1";
 
@@ -251,8 +289,9 @@ class PluginSatisfactionSurvey extends CommonDBTM {
       switch ($ma->getAction()) {
          case 'duplicate' :
             $entity_assign = false;
+            $dbu = new DbUtils();
             foreach ($ma->getitems() as $itemtype => $ids) {
-               if ($item = getItemForItemtype($itemtype)) {
+               if ($item = $dbu->getItemForItemtype($itemtype)) {
                   if ($item->isEntityAssign()) {
                      $entity_assign = true;
                      break;

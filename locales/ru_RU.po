@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-22 09:41+0100\n"
+"POT-Creation-Date: 2018-08-30 10:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Kirill Lavrik <kirill.lavrik@gmail.com>, 2018\n"
 "Language-Team: Russian (Russia) (https://www.transifex.com/tsmr/teams/84146/ru_RU/)\n"
@@ -18,13 +18,13 @@ msgstr ""
 "Language: ru_RU\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 
-#: setup.php:49
+#: setup.php:51
 msgid "More satisfaction"
 msgstr "Больше вопросов для оценки удовлетворения"
 
-#: setup.php:64
-msgid "This plugin requires GLPI >= 9.2"
-msgstr "Этот плагин требует GLPI >= 9.2"
+#: setup.php:66
+msgid "This plugin requires GLPI >= 9.3"
+msgstr ""
 
 #: inc/menu.class.php:14 inc/profile.class.php:50 inc/survey.class.php:18
 msgid "Satisfaction survey"
@@ -46,11 +46,11 @@ msgstr[3] ""
 msgid "Preview"
 msgstr "Предварительный просмотр"
 
-#: inc/surveyanswer.class.php:109
+#: inc/surveyanswer.class.php:116
 msgid "Satisfaction"
 msgstr "Удовлетворенность"
 
-#: inc/survey.class.php:152 inc/survey.class.php:176
+#: inc/survey.class.php:188 inc/survey.class.php:213
 msgid "Error : only one survey is allowed by entity"
 msgstr "Ошибка: разрешено только одно обследование"
 
@@ -62,7 +62,7 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: inc/surveyquestion.class.php:104
+#: inc/surveyquestion.class.php:105
 msgid ""
 "You cannot edit the questions when answers exists for this survey. Disable "
 "this survey and create a new one !"
@@ -70,22 +70,38 @@ msgstr ""
 "Вы не можете редактировать вопросы, когда ответы существуют для этого "
 "опроса. Отключите этот опрос и создайте новый!"
 
-#: inc/surveyquestion.class.php:124 inc/surveyquestion.class.php:192
+#: inc/surveyquestion.class.php:125 inc/surveyquestion.class.php:194
 msgid "Add a question"
 msgstr "Добавить вопрос"
 
-#: inc/surveyquestion.class.php:132
+#: inc/surveyquestion.class.php:133
 msgid "No questions for this survey"
 msgstr "Нет вопросов для этого опроса"
 
-#: inc/surveyquestion.class.php:228
+#: inc/surveyquestion.class.php:230
 msgid "Note on"
 msgstr "Обратите внимание на"
 
-#: inc/surveyquestion.class.php:304 inc/surveyquestion.class.php:319
+#: inc/surveyquestion.class.php:322 inc/surveyquestion.class.php:337
 msgid "Text"
 msgstr "Текст"
 
-#: inc/surveyquestion.class.php:305 inc/surveyquestion.class.php:321
+#: inc/surveyquestion.class.php:323 inc/surveyquestion.class.php:339
 msgid "Note"
 msgstr "Отметить"
+
+#: inc/surveyresult.class.php:22
+msgid "Result of the survey"
+msgid_plural "Results of the survey"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#: inc/surveyresult.class.php:43
+msgid "Result"
+msgstr ""
+
+#: inc/surveyresult.class.php:86
+msgid "No result of the survey"
+msgstr ""

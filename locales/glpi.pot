@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-22 09:41+0100\n"
+"POT-Creation-Date: 2018-08-30 10:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,12 +18,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: setup.php:49
+#: setup.php:51
 msgid "More satisfaction"
 msgstr ""
 
-#: setup.php:64
-msgid "This plugin requires GLPI >= 9.2"
+#: setup.php:66
+msgid "This plugin requires GLPI >= 9.3"
 msgstr ""
 
 #: inc/menu.class.php:14 inc/profile.class.php:50 inc/survey.class.php:18
@@ -42,11 +42,11 @@ msgstr[1] ""
 msgid "Preview"
 msgstr ""
 
-#: inc/surveyanswer.class.php:109
+#: inc/surveyanswer.class.php:116
 msgid "Satisfaction"
 msgstr ""
 
-#: inc/survey.class.php:152 inc/survey.class.php:176
+#: inc/survey.class.php:188 inc/survey.class.php:213
 msgid "Error : only one survey is allowed by entity"
 msgstr ""
 
@@ -56,28 +56,42 @@ msgid_plural "Questions"
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/surveyquestion.class.php:104
+#: inc/surveyquestion.class.php:105
 msgid ""
 "You cannot edit the questions when answers exists for this survey. Disable "
 "this survey and create a new one !"
 msgstr ""
 
-#: inc/surveyquestion.class.php:124 inc/surveyquestion.class.php:192
+#: inc/surveyquestion.class.php:125 inc/surveyquestion.class.php:194
 msgid "Add a question"
 msgstr ""
 
-#: inc/surveyquestion.class.php:132
+#: inc/surveyquestion.class.php:133
 msgid "No questions for this survey"
 msgstr ""
 
-#: inc/surveyquestion.class.php:228
+#: inc/surveyquestion.class.php:230
 msgid "Note on"
 msgstr ""
 
-#: inc/surveyquestion.class.php:304 inc/surveyquestion.class.php:319
+#: inc/surveyquestion.class.php:322 inc/surveyquestion.class.php:337
 msgid "Text"
 msgstr ""
 
-#: inc/surveyquestion.class.php:305 inc/surveyquestion.class.php:321
+#: inc/surveyquestion.class.php:323 inc/surveyquestion.class.php:339
 msgid "Note"
+msgstr ""
+
+#: inc/surveyresult.class.php:22
+msgid "Result of the survey"
+msgid_plural "Results of the survey"
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/surveyresult.class.php:43
+msgid "Result"
+msgstr ""
+
+#: inc/surveyresult.class.php:86
+msgid "No result of the survey"
 msgstr ""

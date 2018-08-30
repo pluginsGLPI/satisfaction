@@ -79,7 +79,7 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
       $sanswer_obj = new self();
 
       if ($item instanceof TicketSatisfaction) {
-         if ($sanswer_obj->getFromDBByQuery("WHERE `ticketsatisfactions_id` = " . $item->getField('id'))) {
+         if ($sanswer_obj->getFromDBByCrit(["ticketsatisfactions_id" => $item->getField('id')])) {
             $survey = new PluginSatisfactionSurvey();
             $survey->getFromDB($sanswer_obj->fields['plugin_satisfaction_surveys_id']);
 
@@ -103,8 +103,9 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
       }
 
       if (!empty($sanswer_obj->fields['answer'])) {
+         $dbu = new DbUtils();
          //get answer in array form
-         $sanswer_obj->fields['answer'] = importArrayFromDB($sanswer_obj->fields['answer']);
+         $sanswer_obj->fields['answer'] = $dbu->importArrayFromDB($sanswer_obj->fields['answer']);
       }
 
       echo "<input type='hidden' name='plugin_satisfaction_surveys_id' value='$plugin_satisfaction_surveys_id'>";
@@ -232,17 +233,17 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
    static function preUpdateSatisfaction(TicketSatisfaction $ticketSatisfaction) {
 
       $surveyanswer = new self();
-
-      if ($surveyanswer->getFromDBByQuery("WHERE `ticketsatisfactions_id` = ".$ticketSatisfaction->getField('id'))) {
+      $dbu          = new DbUtils();
+      if ($surveyanswer->getFromDBByCrit(["ticketsatisfactions_id" => $ticketSatisfaction->getField('id')])) {
 
          $input = ['id'     => $surveyanswer->getID(),
-                   'answer' => addslashes(exportArrayToDB($ticketSatisfaction->input['answer']))];
+                   'answer' => addslashes($dbu->exportArrayToDB($ticketSatisfaction->input['answer']))];
 
          $surveyanswer->update($input);
       } else {
          $input = ['plugin_satisfaction_surveys_id' => $ticketSatisfaction->input['plugin_satisfaction_surveys_id'],
                    'ticketsatisfactions_id'         => $ticketSatisfaction->getField('id'),
-                   'answer'                         => addslashes(exportArrayToDB($ticketSatisfaction->input['answer']))];
+                   'answer'                         => addslashes($dbu->exportArrayToDB($ticketSatisfaction->input['answer']))];
 
          $surveyanswer->add($input);
       }
@@ -280,12 +281,12 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
       $entities_id  = $target->obj->fields['entities_id'];
 
       $ticketSatisfaction = new TicketSatisfaction();
-      if ($ticketSatisfaction->getFromDBByQuery("WHERE `tickets_id` = $tickets_id")) {
+      if ($ticketSatisfaction->getFromDBByCrit(["tickets_id" => $tickets_id])) {
 
          $sanswer_obj = new self();
-         if ($sanswer_obj->getFromDBByQuery("WHERE `ticketsatisfactions_id` = " . $ticketSatisfaction->getField('id'))) {
-
-            $sanswer_obj->fields['answer'] = importArrayFromDB($sanswer_obj->fields['answer']);
+         if ($sanswer_obj->getFromDBByCrit(["ticketsatisfactions_id" => $ticketSatisfaction->getField('id')])) {
+            $dbu = new DbUtils();
+            $sanswer_obj->fields['answer'] = $dbu->importArrayFromDB($sanswer_obj->fields['answer']);
 
             $plugin_satisfaction_surveys_id = $sanswer_obj->getField('plugin_satisfaction_surveys_id');
          } else {
