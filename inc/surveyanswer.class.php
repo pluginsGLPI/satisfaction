@@ -281,11 +281,12 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
          $tickets_id  = $target->obj->fields['id'];
          $entities_id = $target->obj->fields['entities_id'];
 
-         $ticketSatisfaction = new TicketSatisfaction();
-         if ($ticketSatisfaction->getFromDBByCrit(["tickets_id" => $tickets_id])) {
+         $ticket_satisfaction = new TicketSatisfaction();
+         if ($ticket_satisfaction->getFromDBByRequest(['WHERE' =>
+                                                      ["tickets_id" => $tickets_id]])) {
 
             $sanswer_obj = new self();
-            if ($sanswer_obj->getFromDBByCrit(["ticketsatisfactions_id" => $ticketSatisfaction->getField('id')])) {
+            if ($sanswer_obj->getFromDBByCrit(["ticketsatisfactions_id" => $ticket_satisfaction->getField('id')])) {
                $dbu                           = new DbUtils();
                $sanswer_obj->fields['answer'] = $dbu->importArrayFromDB($sanswer_obj->fields['answer']);
 
