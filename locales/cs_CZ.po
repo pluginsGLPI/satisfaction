@@ -24,7 +24,7 @@ msgstr "Více o spokojenosti"
 
 #: setup.php:66
 msgid "This plugin requires GLPI >= 9.3"
-msgstr ""
+msgstr "Tento zásuvný modul vyžaduje GLPI verze 9.3 a novější"
 
 #: inc/menu.class.php:14 inc/profile.class.php:50 inc/survey.class.php:18
 msgid "Satisfaction survey"
@@ -94,15 +94,15 @@ msgstr "Poznámka"
 #: inc/surveyresult.class.php:22
 msgid "Result of the survey"
 msgid_plural "Results of the survey"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "Výsledek průzkumu"
+msgstr[1] "Výsledky průzkumu"
+msgstr[2] "Výsledků průzkumu"
+msgstr[3] "Výsledky průzkumu"
 
 #: inc/surveyresult.class.php:43
 msgid "Result"
-msgstr ""
+msgstr "Výsledek"
 
 #: inc/surveyresult.class.php:86
 msgid "No result of the survey"
-msgstr ""
+msgstr "Žádný výsledek průzkumu"
