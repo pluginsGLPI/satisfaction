@@ -1,0 +1,99 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-08-30 10:18+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Emperium EmperiuM <real.emperium@gmail.com>, 2018\n"
+"Language-Team: Portuguese (Portugal) (https://www.transifex.com/tsmr/teams/84146/pt_PT/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: pt_PT\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: setup.php:51
+msgid "More satisfaction"
+msgstr "Mais satisfação"
+
+#: setup.php:66
+msgid "This plugin requires GLPI >= 9.3"
+msgstr "Este plugin requer GLPI>=9.3"
+
+#: inc/menu.class.php:14 inc/profile.class.php:50 inc/survey.class.php:18
+msgid "Satisfaction survey"
+msgid_plural "Satisfaction surveys"
+msgstr[0] "Avaliação de satisfação"
+msgstr[1] "Avaliações de satisfação"
+
+#: inc/surveyanswer.class.php:22
+msgid "Answer"
+msgid_plural "Answers"
+msgstr[0] "Resposta"
+msgstr[1] "Respostas"
+
+#: inc/surveyanswer.class.php:43
+msgid "Preview"
+msgstr "Visualização "
+
+#: inc/surveyanswer.class.php:116
+msgid "Satisfaction"
+msgstr "Satisfação "
+
+#: inc/survey.class.php:188 inc/survey.class.php:213
+msgid "Error : only one survey is allowed by entity"
+msgstr "Erro : Apenas uma avaliação é permitida pela entidade "
+
+#: inc/surveyquestion.class.php:30
+msgid "Question"
+msgid_plural "Questions"
+msgstr[0] "Pergunta"
+msgstr[1] "Perguntas"
+
+#: inc/surveyquestion.class.php:105
+msgid ""
+"You cannot edit the questions when answers exists for this survey. Disable "
+"this survey and create a new one !"
+msgstr ""
+"Não pode editar as perguntas quando já existem respostas para esta "
+"avaliação.  Desactive esta avaliação e crie uma nova!"
+
+#: inc/surveyquestion.class.php:125 inc/surveyquestion.class.php:194
+msgid "Add a question"
+msgstr "Insira uma pergunta"
+
+#: inc/surveyquestion.class.php:133
+msgid "No questions for this survey"
+msgstr "Sem perguntas para esta avaliação"
+
+#: inc/surveyquestion.class.php:230
+msgid "Note on"
+msgstr "Nota sobre"
+
+#: inc/surveyquestion.class.php:322 inc/surveyquestion.class.php:337
+msgid "Text"
+msgstr "Texto"
+
+#: inc/surveyquestion.class.php:323 inc/surveyquestion.class.php:339
+msgid "Note"
+msgstr "Nota"
+
+#: inc/surveyresult.class.php:22
+msgid "Result of the survey"
+msgid_plural "Results of the survey"
+msgstr[0] "Resultado da avaliação"
+msgstr[1] "Resultados da avaliação"
+
+#: inc/surveyresult.class.php:43
+msgid "Result"
+msgstr "Resultado"
+
+#: inc/surveyresult.class.php:86
+msgid "No result of the survey"
+msgstr "Sem resultado da avaliação "
