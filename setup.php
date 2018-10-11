@@ -49,7 +49,7 @@ function plugin_version_satisfaction() {
    $author = "<a href='www.teclib.com'>TECLIB'</a>";
    $author.= ", <a href='http://infotel.com/services/expertise-technique/glpi/'>Infotel</a>";
    return ['name'           => __("More satisfaction", 'satisfaction'),
-           'version'        => '1.3.0',
+           'version'        => '1.3.1',
            'author'         => $author,
            'license'        => 'GPLv2+',
            'homepage'       => 'https://github.com/pluginsGLPI/satisfaction',
