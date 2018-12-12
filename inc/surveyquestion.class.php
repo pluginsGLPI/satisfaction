@@ -100,7 +100,7 @@ class PluginSatisfactionSurveyQuestion extends CommonDBChild {
 
       //check if answer exists to forbid edition
       $answer       = new PluginSatisfactionSurveyAnswer;
-      $found_answer = $answer->find(self::$items_id . " = " . $survey->fields['id']);
+      $found_answer = $answer->find([self::$items_id => $survey->fields['id']]);
       if (count($found_answer) > 0) {
          echo "<span style='font-weight:bold; color:red'>" . __('You cannot edit the questions when answers exists for this survey. Disable this survey and create a new one !', 'satisfaction') . "</span>";
          $canedit  = false;
@@ -127,7 +127,7 @@ class PluginSatisfactionSurveyQuestion extends CommonDBChild {
       }
 
       // Display existing questions
-      $questions = $squestions_obj->find(self::$items_id . " = " . $sID, 'id');
+      $questions = $squestions_obj->find([self::$items_id => $sID], 'id');
       if (count($questions) == 0) {
          echo "<table class='tab_cadre_fixe'><tr class='tab_bg_2'>";
          echo "<th class='b'>" . __('No questions for this survey', 'satisfaction') . "</th>";

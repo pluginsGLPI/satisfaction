@@ -3,6 +3,9 @@
 /**
  * Init the hooks of the plugins -Needed
  */
+
+define('PLUGIN_SATISFACTION_VERSION', '1.4.0');
+
 function plugin_init_satisfaction() {
    global $PLUGIN_HOOKS;
 
@@ -49,11 +52,17 @@ function plugin_version_satisfaction() {
    $author = "<a href='www.teclib.com'>TECLIB'</a>";
    $author.= ", <a href='http://infotel.com/services/expertise-technique/glpi/'>Infotel</a>";
    return ['name'           => __("More satisfaction", 'satisfaction'),
-           'version'        => '1.3.1',
+           'version'        => PLUGIN_SATISFACTION_VERSION,
            'author'         => $author,
            'license'        => 'GPLv2+',
            'homepage'       => 'https://github.com/pluginsGLPI/satisfaction',
-           'minGlpiVersion' => '9.3'];
+           'requirements'   => [
+              'glpi' => [
+                 'min' => '9.4',
+                 'dev' => false
+              ]
+           ]
+   ];
 }
 
 /**
@@ -62,8 +71,11 @@ function plugin_version_satisfaction() {
  * @return bool
  */
 function plugin_satisfaction_check_prerequisites() {
-   if (version_compare(GLPI_VERSION, '9.3', 'lt') || version_compare(GLPI_VERSION, '9.4', 'ge')) {
-      echo __('This plugin requires GLPI >= 9.3', 'satisfaction');
+   if (version_compare(GLPI_VERSION, '9.4', 'lt')
+       || version_compare(GLPI_VERSION, '9.5', 'ge')) {
+      if (method_exists('Plugin', 'messageIncompatible')) {
+         echo Plugin::messageIncompatible('core', '9.4');
+      }
       return false;
    }
    return true;

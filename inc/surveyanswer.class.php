@@ -118,7 +118,7 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
 
       //list survey questions
       $squestion_obj = new PluginSatisfactionSurveyQuestion;
-      foreach ($squestion_obj->find(PluginSatisfactionSurveyQuestion::$items_id . " = " . $plugin_satisfaction_surveys_id) as $question) {
+      foreach ($squestion_obj->find([PluginSatisfactionSurveyQuestion::$items_id => $plugin_satisfaction_surveys_id]) as $question) {
          echo "<tr class=\"tab_bg_2\">";
          echo "<td>" . nl2br($question['name']) . "</td>";
          echo "<td>";
@@ -301,7 +301,7 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
 
             if (isset($plugin_satisfaction_surveys_id)) {
                $squestion_obj = new PluginSatisfactionSurveyQuestion;
-               $questions     = $squestion_obj->find(PluginSatisfactionSurveyQuestion::$items_id . " = $plugin_satisfaction_surveys_id");
+               $questions     = $squestion_obj->find([PluginSatisfactionSurveyQuestion::$items_id => $plugin_satisfaction_surveys_id]);
 
                switch ($event) {
                   case 'satisfaction':

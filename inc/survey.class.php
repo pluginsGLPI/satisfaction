@@ -181,9 +181,9 @@ class PluginSatisfactionSurvey extends CommonDBTM {
       if ($input['is_active'] == 1) {
          $dbu = new DbUtils();
          //we must store only one survey by entity
-         $where     = $dbu->getEntitiesRestrictRequest("AND", $this->getTable(),
-                                                       'entities_id', $input['entities_id'], true);
-         $found = $this->find("is_active = 1 $where");
+         $condition  = ['is_active' => 1]
+                        + $dbu->getEntitiesRestrictCriteria($this->getTable(), 'entities_id', $input['entities_id'], true);
+         $found = $this->find($condition);
          if (count($found) > 0) {
             Session::addMessageAfterRedirect(__('Error : only one survey is allowed by entity', 'satisfaction'), false, ERROR);
             return false;
@@ -206,9 +206,10 @@ class PluginSatisfactionSurvey extends CommonDBTM {
       if ($input['is_active'] == 1) {
          $dbu = new DbUtils();
          //we must store only one survey by entity (other this one)
-         $where     = $dbu->getEntitiesRestrictRequest("AND", $this->getTable(), 'entities_id',
-                                                       $input['entities_id'], true);
-         $found = $this->find("`is_active` = 1 AND `id` != " . $this->getID(). " $where");
+         $condition  = ['is_active' => 1,
+                        ['NOT' => ['id' => $this->getID()]]]
+                       + $dbu->getEntitiesRestrictCriteria($this->getTable(), 'entities_id', $input['entities_id'], true);
+         $found = $this->find($condition);
          if (count($found) > 0) {
             Session::addMessageAfterRedirect(__('Error : only one survey is allowed by entity',
                                                 'satisfaction'), false, ERROR);
@@ -369,7 +370,7 @@ class PluginSatisfactionSurvey extends CommonDBTM {
       }
       //find and duplicate questions
       $question_obj  = new PluginSatisfactionSurveyQuestion();
-      $questions = $question_obj->find("`plugin_satisfaction_surveys_id` = '$ID'");
+      $questions = $question_obj->find(['plugin_satisfaction_surveys_id' => $ID]);
       $questions = toolbox::addslashes_deep($questions);
       foreach ($questions as $question) {
          $question['plugin_satisfaction_surveys_id'] = $newID;

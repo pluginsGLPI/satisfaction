@@ -100,7 +100,7 @@ class PluginSatisfactionSurveyResult extends CommonDBChild {
          echo "<th>" . __('Ticket') . "</th>";
 
          $squestion_obj = new PluginSatisfactionSurveyQuestion;
-         foreach ($squestion_obj->find(PluginSatisfactionSurveyQuestion::$items_id . " = " . $item->getID()) as $question) {
+         foreach ($squestion_obj->find([PluginSatisfactionSurveyQuestion::$items_id => $item->getID()]) as $question) {
             echo "<th>" . nl2br($question['name']) . "</th>";
          }
          echo "</tr>";
