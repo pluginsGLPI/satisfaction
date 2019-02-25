@@ -50,7 +50,7 @@ function plugin_init_satisfaction() {
 function plugin_version_satisfaction() {
 
    $author = "<a href='www.teclib.com'>TECLIB'</a>";
-   $author.= ", <a href='http://infotel.com/services/expertise-technique/glpi/'>Infotel</a>";
+   $author.= ", <a href='http://blogglpi.infotel.com/'>Infotel</a>";
    return ['name'           => __("More satisfaction", 'satisfaction'),
            'version'        => PLUGIN_SATISFACTION_VERSION,
            'author'         => $author,
