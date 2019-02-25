@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-30 10:18+0200\n"
+"POT-Creation-Date: 2019-02-25 09:27+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,12 +18,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: setup.php:51
+#: setup.php:54
 msgid "More satisfaction"
-msgstr ""
-
-#: setup.php:66
-msgid "This plugin requires GLPI >= 9.3"
 msgstr ""
 
 #: inc/menu.class.php:14 inc/profile.class.php:50 inc/survey.class.php:18
@@ -46,7 +42,7 @@ msgstr ""
 msgid "Satisfaction"
 msgstr ""
 
-#: inc/survey.class.php:188 inc/survey.class.php:213
+#: inc/survey.class.php:188 inc/survey.class.php:214
 msgid "Error : only one survey is allowed by entity"
 msgstr ""
 

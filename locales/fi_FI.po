@@ -3,97 +3,101 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+# Translators:
+# Markku Vepsä, 2018
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-08-30 10:18+0200\n"
 "PO-Revision-Date: 2019-02-25 09:31+0100\n"
+"Last-Translator: Markku Vepsä, 2018\n"
+"Language-Team: Finnish (Finland) (https://www.transifex.com/tsmr/"
+"teams/84146/fi_FI/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: en_GB\n"
+"Language: fi_FI\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"Last-Translator: \n"
-"Language-Team: \n"
 "X-Generator: Poedit 2.0.9\n"
 
 #: setup.php:51
 msgid "More satisfaction"
-msgstr "More satisfaction"
+msgstr "Lisää tyytyväisyyttä"
 
 #: setup.php:66
 msgid "This plugin requires GLPI >= 9.3"
-msgstr "This plugin requires GLPI >= 9.3"
+msgstr "Tämä liitännäinen vaatii GLPI> = 9.3"
 
 #: inc/menu.class.php:14 inc/profile.class.php:50 inc/survey.class.php:18
 msgid "Satisfaction survey"
 msgid_plural "Satisfaction surveys"
-msgstr[0] "Satisfaction survey"
-msgstr[1] "Satisfaction surveys"
+msgstr[0] "Tyytyväisyyskysely"
+msgstr[1] "Tyytyväisyyskyselyt"
 
 #: inc/surveyanswer.class.php:22
 msgid "Answer"
 msgid_plural "Answers"
-msgstr[0] "Answer"
-msgstr[1] "Answers"
+msgstr[0] "Vastaus"
+msgstr[1] "Vastaukset"
 
 #: inc/surveyanswer.class.php:43
 msgid "Preview"
-msgstr "Preview"
+msgstr "Esikatselu"
 
 #: inc/surveyanswer.class.php:116
 msgid "Satisfaction"
-msgstr "Satisfaction"
+msgstr "Tyytyväisyys"
 
 #: inc/survey.class.php:188 inc/survey.class.php:213
 msgid "Error : only one survey is allowed by entity"
-msgstr "Error : only one survey is allowed by entity"
+msgstr "Virhe : vain yksi kysely yksikköä kohden on sallittu"
 
 #: inc/surveyquestion.class.php:30
 msgid "Question"
 msgid_plural "Questions"
-msgstr[0] "Question"
-msgstr[1] "Questions"
+msgstr[0] "Kysymys"
+msgstr[1] "Kysymykset"
 
 #: inc/surveyquestion.class.php:105
 msgid ""
 "You cannot edit the questions when answers exists for this survey. Disable "
 "this survey and create a new one !"
 msgstr ""
-"You cannot edit the questions when answers exists for this survey. Disable "
-"this survey and create a new one !"
+"Et voi muokata kysymyksiä, kun vastauksia on olemassa tässä kyselyssä. "
+"Poista tämä kysely käytöstä ja luo uusi!"
 
 #: inc/surveyquestion.class.php:125 inc/surveyquestion.class.php:194
 msgid "Add a question"
-msgstr "Add a question"
+msgstr "Lisää kysymys"
 
 #: inc/surveyquestion.class.php:133
 msgid "No questions for this survey"
-msgstr "No questions for this survey"
+msgstr "Ei kysymyksiä tätä kyselyä varten"
 
 #: inc/surveyquestion.class.php:230
 msgid "Note on"
-msgstr "Note on"
+msgstr "Huomautus"
 
 #: inc/surveyquestion.class.php:322 inc/surveyquestion.class.php:337
 msgid "Text"
-msgstr "Text"
+msgstr "Teksti"
 
 #: inc/surveyquestion.class.php:323 inc/surveyquestion.class.php:339
 msgid "Note"
-msgstr "Note"
+msgstr "Huomautus"
 
 #: inc/surveyresult.class.php:22
 msgid "Result of the survey"
 msgid_plural "Results of the survey"
-msgstr[0] "Result of the survey"
-msgstr[1] "Results of the survey"
+msgstr[0] "Kyselyn tulos"
+msgstr[1] "Kyselyn tulokset"
 
 #: inc/surveyresult.class.php:43
 msgid "Result"
-msgstr "Result"
+msgstr "Tulos"
 
 #: inc/surveyresult.class.php:86
 msgid "No result of the survey"
-msgstr "No result of the survey"
+msgstr "Ei kyselyn tulos"

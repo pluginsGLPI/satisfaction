@@ -3,97 +3,102 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+# Translators:
+# Paulo Renato <paulo.renato.jr@gmail.com>, 2018
+# Elton Pereira Rosa <eltoncarbo@gmail.com>, 2018
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-08-30 10:18+0200\n"
 "PO-Revision-Date: 2019-02-25 09:31+0100\n"
+"Last-Translator: Elton Pereira Rosa <eltoncarbo@gmail.com>, 2018\n"
+"Language-Team: Portuguese (Brazil) (https://www.transifex.com/tsmr/"
+"teams/84146/pt_BR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: en_GB\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"Language: pt_BR\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 2.0.9\n"
 
 #: setup.php:51
 msgid "More satisfaction"
-msgstr "More satisfaction"
+msgstr "Mais satisfação"
 
 #: setup.php:66
 msgid "This plugin requires GLPI >= 9.3"
-msgstr "This plugin requires GLPI >= 9.3"
+msgstr "Esse pluguin só funciona na versão GLPI>=9.3"
 
 #: inc/menu.class.php:14 inc/profile.class.php:50 inc/survey.class.php:18
 msgid "Satisfaction survey"
 msgid_plural "Satisfaction surveys"
-msgstr[0] "Satisfaction survey"
-msgstr[1] "Satisfaction surveys"
+msgstr[0] "Pesquisas de Satisfação"
+msgstr[1] "Pesquisas de Satisfação"
 
 #: inc/surveyanswer.class.php:22
 msgid "Answer"
 msgid_plural "Answers"
-msgstr[0] "Answer"
-msgstr[1] "Answers"
+msgstr[0] "Resposta"
+msgstr[1] "Respostas"
 
 #: inc/surveyanswer.class.php:43
 msgid "Preview"
-msgstr "Preview"
+msgstr "Visualizar"
 
 #: inc/surveyanswer.class.php:116
 msgid "Satisfaction"
-msgstr "Satisfaction"
+msgstr "Satisfação"
 
 #: inc/survey.class.php:188 inc/survey.class.php:213
 msgid "Error : only one survey is allowed by entity"
-msgstr "Error : only one survey is allowed by entity"
+msgstr "Erro: apenas uma pesquisa é permitida pela entidade"
 
 #: inc/surveyquestion.class.php:30
 msgid "Question"
 msgid_plural "Questions"
-msgstr[0] "Question"
-msgstr[1] "Questions"
+msgstr[0] "Questão"
+msgstr[1] "Questões"
 
 #: inc/surveyquestion.class.php:105
 msgid ""
 "You cannot edit the questions when answers exists for this survey. Disable "
 "this survey and create a new one !"
 msgstr ""
-"You cannot edit the questions when answers exists for this survey. Disable "
-"this survey and create a new one !"
+"Você não pode editar as perguntas quando houver respostas para essa "
+"pesquisa. Desative esta pesquisa e crie uma nova!"
 
 #: inc/surveyquestion.class.php:125 inc/surveyquestion.class.php:194
 msgid "Add a question"
-msgstr "Add a question"
+msgstr "Adicionar a questão"
 
 #: inc/surveyquestion.class.php:133
 msgid "No questions for this survey"
-msgstr "No questions for this survey"
+msgstr "Nenhuma pergunta para esta pesquisa"
 
 #: inc/surveyquestion.class.php:230
 msgid "Note on"
-msgstr "Note on"
+msgstr "Nota sobre"
 
 #: inc/surveyquestion.class.php:322 inc/surveyquestion.class.php:337
 msgid "Text"
-msgstr "Text"
+msgstr "Texto"
 
 #: inc/surveyquestion.class.php:323 inc/surveyquestion.class.php:339
 msgid "Note"
-msgstr "Note"
+msgstr "Nota"
 
 #: inc/surveyresult.class.php:22
 msgid "Result of the survey"
 msgid_plural "Results of the survey"
-msgstr[0] "Result of the survey"
-msgstr[1] "Results of the survey"
+msgstr[0] "Resultado da pesquisa"
+msgstr[1] "Resultados da pesquisa"
 
 #: inc/surveyresult.class.php:43
 msgid "Result"
-msgstr "Result"
+msgstr "Resultado"
 
 #: inc/surveyresult.class.php:86
 msgid "No result of the survey"
-msgstr "No result of the survey"
+msgstr "Nenhum resultado da pesquisa"
