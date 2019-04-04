@@ -120,7 +120,13 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
       $squestion_obj = new PluginSatisfactionSurveyQuestion;
       foreach ($squestion_obj->find([PluginSatisfactionSurveyQuestion::$items_id => $plugin_satisfaction_surveys_id]) as $question) {
          echo "<tr class=\"tab_bg_2\">";
-         echo "<td>" . nl2br($question['name']) . "</td>";
+
+         $name = $question['name'];
+         if(PluginSatisfactionSurveyTranslation::hasTranslation($question["plugin_satisfaction_surveys_id"], $question["id"])){
+            $name = PluginSatisfactionSurveyTranslation::getTranslation($question["plugin_satisfaction_surveys_id"], $question["id"]);
+         }
+
+         echo "<td>" . nl2br($name) . "</td>";
          echo "<td>";
          if (isset($sanswer_obj->fields['answer'][$question['id']])) {
             $value = $sanswer_obj->fields['answer'][$question['id']];

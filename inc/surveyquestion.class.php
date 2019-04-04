@@ -136,6 +136,7 @@ class PluginSatisfactionSurveyQuestion extends CommonDBChild {
 
          $rand = mt_rand();
          if ($canpurge) {
+            //TODO : Detect delete to update history
             Html::openMassiveActionsForm('mass' . __CLASS__ . $rand);
             $massiveactionparams = ['item' => __CLASS__, 'container' => 'mass' . __CLASS__ . $rand];
             Html::showMassiveActions($massiveactionparams);
@@ -306,7 +307,9 @@ class PluginSatisfactionSurveyQuestion extends CommonDBChild {
          echo "</script>\n";
       }
 
-      echo "<td class='left'>" . nl2br($this->fields["name"]) . "</td>";
+      $name = $this->fields["name"];
+
+      echo "<td class='left'>" . nl2br($name) . "</td>";
       echo "<td class='left'>" . self::getQuestionType($this->fields["type"]) . "</td>";
       echo "</tr>";
    }
