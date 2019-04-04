@@ -306,7 +306,12 @@ class PluginSatisfactionSurveyQuestion extends CommonDBChild {
          echo "</script>\n";
       }
 
-      echo "<td class='left'>" . nl2br($this->fields["name"]) . "</td>";
+      $name = $this->fields["name"];
+      if(PluginSatisfactionSurveyTranslation::hasTranslation($this->fields["plugin_satisfaction_surveys_id"], $this->fields["id"])){
+         $name = PluginSatisfactionSurveyTranslation::getTranslation($this->fields["plugin_satisfaction_surveys_id"], $this->fields["id"]);
+      }
+
+      echo "<td class='left'>" . nl2br($name) . "</td>";
       echo "<td class='left'>" . self::getQuestionType($this->fields["type"]) . "</td>";
       echo "</tr>";
    }
