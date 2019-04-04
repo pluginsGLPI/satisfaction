@@ -39,20 +39,22 @@ if (!isset($_POST['survey_id']) || !isset($_POST['action'])) {
 global $CFG_GLPI;
 $redirection = $CFG_GLPI["root_doc"]."/plugins/satisfaction/front/survey.form.php?id=";
 
+$translation = new PluginSatisfactionSurveyTranslation();
+
 switch($_POST['action']){
    case 'GET':
       header("Content-Type: text/html; charset=UTF-8");
       Html::header_nocache();
       Session::checkLoginUser();
-      PluginSatisfactionSurveyTranslation::showForm($_POST);
+      $translation->showForm($_POST);
       Html::ajaxFooter();
       break;
    case 'NEW':
-      PluginSatisfactionSurveyTranslation::newSurveyTranslation($_POST);
+      $translation->newSurveyTranslation($_POST);
       Html::redirect($redirection.$_POST['survey_id']);
       break;
    case 'EDIT':
-      PluginSatisfactionSurveyTranslation::editSurveyTranslation($_POST);
+      $translation->editSurveyTranslation($_POST);
       Html::redirect($redirection.$_POST['survey_id']);
       break;
 }

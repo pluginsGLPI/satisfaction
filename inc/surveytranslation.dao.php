@@ -116,7 +116,11 @@ class PluginSatisfactionSurveyTranslationDAO{
       $query .= " (`plugin_satisfaction_surveys_id`, `glpi_plugin_satisfaction_surveyquestions_id`, `language`, `value`)";
       $query .= " VALUES(".$surveyId.",".$questionId.",'".$language."','".$value."')";
 
-      return ($DB->query($query));
+      if($DB->query($query)){
+         return $DB->insert_id();
+      }else{
+         return null;
+      }
    }
 
    static function editSurveyTranslation($id, $value){

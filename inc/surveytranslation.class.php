@@ -66,6 +66,20 @@ class PluginSatisfactionSurveyTranslation extends CommonDBChild {
    }
 
    /**
+    * Get the standard massive actions which are forbidden
+    *
+    * @since version 0.84
+    *
+    * @return an array of massive actions
+    **/
+   public function getForbiddenStandardMassiveAction() {
+
+      $forbidden = parent::getForbiddenStandardMassiveAction();
+      $forbidden[] = 'update';
+      return $forbidden;
+   }
+
+   /**
     * Check if an item can be translated
     * It be translated if translation if globally on and item is an instance of CommonDropdown
     * or CommonTreeDropdown and if translation is enabled for this class
@@ -146,7 +160,7 @@ class PluginSatisfactionSurveyTranslation extends CommonDBChild {
          // TODO Remove edit action
          if ($canedit) {
             Html::openMassiveActionsForm('mass'.__CLASS__.$rand);
-            $massiveactionparams = ['container' => 'mass'.__CLASS__.$rand];
+            $massiveactionparams = ['item' => __CLASS__, 'container' => 'mass'.__CLASS__.$rand];
             Html::showMassiveActions($massiveactionparams);
          }
          // ** MASS ACTION **
@@ -229,7 +243,7 @@ class PluginSatisfactionSurveyTranslation extends CommonDBChild {
 
    }
 
-   static function showForm($options){
+   function showForm($options){
       global $CFG_GLPI;
       $surveyId = Toolbox::cleanInteger($options['survey_id']);
 
@@ -245,7 +259,7 @@ class PluginSatisfactionSurveyTranslation extends CommonDBChild {
 
       $tdBaseStyle="style='text-align:center;'";
       $rand = mt_rand();
-      echo self::getFormHeader($options['id'], $surveyId);
+      echo $this->getFormHeader($options['id'], $surveyId);
 
       echo "<tr>";
       // Edit Translation
@@ -261,6 +275,7 @@ class PluginSatisfactionSurveyTranslation extends CommonDBChild {
          echo "<td $tdBaseStyle>";
          echo "<input type='hidden' name='language' value='".$surveyTranslationData['language']."'>";
          echo "<input type='hidden' name='id' value='".$options['id']."'>";
+         echo "<input type='hidden' name='question_id' value='".$surveyQuestion->getID()."'>";
 
          echo Dropdown::getLanguageName($surveyTranslationData['language']);
          echo "</td>";
@@ -299,7 +314,7 @@ class PluginSatisfactionSurveyTranslation extends CommonDBChild {
          echo "</td>";
 
          // Question
-         echo "<td $tdBaseStyle>".self::getQuestionDropdown($surveyId)."</td>";
+         echo "<td $tdBaseStyle>".$this->getQuestionDropdown($surveyId)."</td>";
 
          // Value
          echo "<td $tdBaseStyle><input type='text' name='value' size='50'></td>";
@@ -316,7 +331,7 @@ class PluginSatisfactionSurveyTranslation extends CommonDBChild {
       echo Html::closeForm(false);
    }
 
-   static function getQuestionDropdown($surveyId){
+   function getQuestionDropdown($surveyId){
 
       $item = new PluginSatisfactionSurveyQuestion();
       $datas = $item->find(['plugin_satisfaction_surveys_id' => $surveyId]);
@@ -336,7 +351,7 @@ class PluginSatisfactionSurveyTranslation extends CommonDBChild {
       return Dropdown::showFromArray($params['name'], $temp, $params);
    }
 
-   static function getFormHeader($translationID, $surveyID){
+   function getFormHeader($translationID, $surveyID){
 
       global $CFG_GLPI;
       $target = $CFG_GLPI["root_doc"]."/plugins/satisfaction/ajax/surveytranslation.form.php";
@@ -363,7 +378,7 @@ class PluginSatisfactionSurveyTranslation extends CommonDBChild {
       return $result;
    }
 
-   static function newSurveyTranslation($options){
+   function newSurveyTranslation($options){
       global $CFG_GLPI;
       $crit = [
          'plugin_satisfaction_surveys_id' => $options['survey_id'],
@@ -380,17 +395,32 @@ class PluginSatisfactionSurveyTranslation extends CommonDBChild {
       }
       // Translation ready to insert
       else{
-         PluginSatisfactionSurveyTranslationDAO::newSurveyTranslation(
+         $newInsertId = PluginSatisfactionSurveyTranslationDAO::newSurveyTranslation(
             $options['survey_id'],
             $options['question_id'],
             $options['language'],
             $options['value']
          );
-         Session::addMessageAfterRedirect(__("Translation successfully created."), true, INFO);
+         if($newInsertId != null){
+            Session::addMessageAfterRedirect(__("Translation successfully created."), true, INFO);
+
+            if ($this->dohistory) {
+               $changes = [
+                  $newInsertId,
+                  '',
+                  $options['value']
+               ];
+               Log::history($options['survey_id'], PluginSatisfactionSurvey::class, $changes, $this->getType(),
+                  static::$log_history_add);
+            }
+         }else{
+            Session::addMessageAfterRedirect(__("Translation creation failed"), true, ERROR);
+         }
       }
    }
 
-   static function editSurveyTranslation($options){
+   function editSurveyTranslation($options){
+      global $CFG_GLPI;
       $crit = [
          'id' => $options['id']
       ];
@@ -404,10 +434,22 @@ class PluginSatisfactionSurveyTranslation extends CommonDBChild {
       }
       // Translation ready to update
       else{
-         PluginSatisfactionSurveyTranslationDAO::editSurveyTranslation($options['id'],
-            $options['value']
-         );
+         $surveyTranslationData = PluginSatisfactionSurveyTranslationDAO::getSurveyTranslationByID($options['id']);
+
+         PluginSatisfactionSurveyTranslationDAO::editSurveyTranslation($options['id'],$options['value']);
+
          Session::addMessageAfterRedirect(__("Translation successfully edited."), true, INFO);
+
+         if ($this->dohistory) {
+
+            $changes = [
+               $options['id'],
+               $surveyTranslationData['value'],
+               $options['value']
+            ];
+            Log::history($options['survey_id'], PluginSatisfactionSurvey::class, $changes, $this->getType(),
+               static::$log_history_update);
+         }
       }
    }
 
