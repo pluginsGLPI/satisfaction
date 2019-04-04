@@ -237,7 +237,7 @@ class PluginSatisfactionSurveyTranslation extends CommonDBChild {
 
       } else {
          echo "<table class='tab_cadre_fixe'><tr class='tab_bg_2'>";
-         echo "<th class='b'>" . __("No translation found")."</th></tr></table>";
+         echo "<th class='b'>" . __("No translation found", "satisfaction")."</th></tr></table>";
       }
       return true;
 
@@ -389,7 +389,7 @@ class PluginSatisfactionSurveyTranslation extends CommonDBChild {
       // Translation already exist
       if(PluginSatisfactionSurveyTranslationDAO::countSurveyTranslationByCrit($crit)){
          Session::addMessageAfterRedirect(
-            sprintf(__("An %s translation for this Question already exist."), $CFG_GLPI['languages'][$options["language"]][0]),
+            sprintf(__("An %s translation for this Question already exist.", "satisfaction"), $CFG_GLPI['languages'][$options["language"]][0]),
             true,
             WARNING);
       }
@@ -402,7 +402,7 @@ class PluginSatisfactionSurveyTranslation extends CommonDBChild {
             $options['value']
          );
          if($newInsertId != null){
-            Session::addMessageAfterRedirect(__("Translation successfully created."), true, INFO);
+            Session::addMessageAfterRedirect(__("Translation successfully created.", "satisfaction"), true, INFO);
 
             if ($this->dohistory) {
                $changes = [
@@ -414,7 +414,7 @@ class PluginSatisfactionSurveyTranslation extends CommonDBChild {
                   static::$log_history_add);
             }
          }else{
-            Session::addMessageAfterRedirect(__("Translation creation failed"), true, ERROR);
+            Session::addMessageAfterRedirect(__("Translation creation failed", "satisfaction"), true, ERROR);
          }
       }
    }
@@ -428,7 +428,7 @@ class PluginSatisfactionSurveyTranslation extends CommonDBChild {
       // Translation doesn't exist
       if(!PluginSatisfactionSurveyTranslationDAO::countSurveyTranslationByCrit($crit)){
          Session::addMessageAfterRedirect(
-            __("The translation you want to edit does not exist."),
+            __("The translation you want to edit does not exist.", "satisfaction"),
             true,
             WARNING);
       }
@@ -438,7 +438,7 @@ class PluginSatisfactionSurveyTranslation extends CommonDBChild {
 
          PluginSatisfactionSurveyTranslationDAO::editSurveyTranslation($options['id'],$options['value']);
 
-         Session::addMessageAfterRedirect(__("Translation successfully edited."), true, INFO);
+         Session::addMessageAfterRedirect(__("Translation successfully edited.", "satisfaction"), true, INFO);
 
          if ($this->dohistory) {
 

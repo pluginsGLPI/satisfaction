@@ -5,35 +5,36 @@
 # 
 # Translators:
 # Amandine Manceau, 2018
+# Mathieu Templier <mathieu.templier@infotel.com>, 2019
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-30 10:18+0200\n"
+"POT-Creation-Date: 2019-04-04 15:38+0200\n"
 "PO-Revision-Date: 2018-03-14 08:28+0000\n"
-"Last-Translator: Amandine Manceau, 2018\n"
-"Language-Team: French (France) (https://www.transifex.com/tsmr/teams/84146/fr_FR/)\n"
+"Last-Translator: Mathieu Templier <mathieu.templier@infotel.com>, 2019\n"
+"Language-Team: French (France) (https://www.transifex.com/infotelGLPI/teams/84146/fr_FR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: fr_FR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: setup.php:51
+#: setup.php:54
 msgid "More satisfaction"
 msgstr "Plus de satisfaction"
 
-#: setup.php:66
-msgid "This plugin requires GLPI >= 9.3"
-msgstr "Ce plugin nécessite GLPI >= 9.3"
-
-#: inc/menu.class.php:14 inc/profile.class.php:50 inc/survey.class.php:18
+#: inc/menu.class.php:14 inc/profile.class.php:50 inc/survey.class.php:24
 msgid "Satisfaction survey"
 msgid_plural "Satisfaction surveys"
 msgstr[0] "Enquête de satisfaction"
 msgstr[1] "Enquêtes de satisfactions"
+
+#: inc/survey.class.php:222 inc/survey.class.php:248
+msgid "Error : only one survey is allowed by entity"
+msgstr "Erreur : un seul questionnaire par entité est autorisé"
 
 #: inc/surveyanswer.class.php:22
 msgid "Answer"
@@ -49,10 +50,6 @@ msgstr "Prévisualisation"
 msgid "Satisfaction"
 msgstr "Satisfaction"
 
-#: inc/survey.class.php:188 inc/survey.class.php:213
-msgid "Error : only one survey is allowed by entity"
-msgstr "Erreur : un seul questionnaire par entité est autorisé"
-
 #: inc/surveyquestion.class.php:30
 msgid "Question"
 msgid_plural "Questions"
@@ -67,7 +64,7 @@ msgstr ""
 "Vous ne pouvez pas éditer les questions quand des réponses existent pour ce "
 "questionnaire. Désactivez ce questionnaire et créez en un nouveau !"
 
-#: inc/surveyquestion.class.php:125 inc/surveyquestion.class.php:194
+#: inc/surveyquestion.class.php:125 inc/surveyquestion.class.php:195
 msgid "Add a question"
 msgstr "Ajouter une question"
 
@@ -75,15 +72,15 @@ msgstr "Ajouter une question"
 msgid "No questions for this survey"
 msgstr "Pas de questions pour ce questionnaire"
 
-#: inc/surveyquestion.class.php:230
+#: inc/surveyquestion.class.php:231
 msgid "Note on"
 msgstr "Note sur"
 
-#: inc/surveyquestion.class.php:322 inc/surveyquestion.class.php:337
+#: inc/surveyquestion.class.php:325 inc/surveyquestion.class.php:340
 msgid "Text"
 msgstr "Texte"
 
-#: inc/surveyquestion.class.php:323 inc/surveyquestion.class.php:339
+#: inc/surveyquestion.class.php:326 inc/surveyquestion.class.php:342
 msgid "Note"
 msgstr "Note"
 
@@ -100,3 +97,28 @@ msgstr "Résultat"
 #: inc/surveyresult.class.php:86
 msgid "No result of the survey"
 msgstr "Pas de résultat pour ce questionnaire"
+
+#: inc/surveytranslation.class.php:240
+msgid "No translation found"
+msgstr "Pas de traductions trouvées"
+
+#: inc/surveytranslation.class.php:392
+#, php-format
+msgid "An %s translation for this Question already exist."
+msgstr "Une traduction en %s pour cette Question existe déjà."
+
+#: inc/surveytranslation.class.php:405
+msgid "Translation successfully created."
+msgstr "Traduction crée avec succès."
+
+#: inc/surveytranslation.class.php:417
+msgid "Translation creation failed"
+msgstr "La création de la Traduction a échoué."
+
+#: inc/surveytranslation.class.php:431
+msgid "The translation you want to edit does not exist."
+msgstr "La traduction que vous voulez éditer n'existe pas."
+
+#: inc/surveytranslation.class.php:441
+msgid "Translation successfully edited."
+msgstr "Traduction mise à jour avec succès."
