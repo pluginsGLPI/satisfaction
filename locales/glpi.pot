@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-25 09:27+0100\n"
+"POT-Creation-Date: 2019-04-04 15:38+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,11 +22,15 @@ msgstr ""
 msgid "More satisfaction"
 msgstr ""
 
-#: inc/menu.class.php:14 inc/profile.class.php:50 inc/survey.class.php:18
+#: inc/menu.class.php:14 inc/profile.class.php:50 inc/survey.class.php:24
 msgid "Satisfaction survey"
 msgid_plural "Satisfaction surveys"
 msgstr[0] ""
 msgstr[1] ""
+
+#: inc/survey.class.php:222 inc/survey.class.php:248
+msgid "Error : only one survey is allowed by entity"
+msgstr ""
 
 #: inc/surveyanswer.class.php:22
 msgid "Answer"
@@ -42,10 +46,6 @@ msgstr ""
 msgid "Satisfaction"
 msgstr ""
 
-#: inc/survey.class.php:188 inc/survey.class.php:214
-msgid "Error : only one survey is allowed by entity"
-msgstr ""
-
 #: inc/surveyquestion.class.php:30
 msgid "Question"
 msgid_plural "Questions"
@@ -58,7 +58,7 @@ msgid ""
 "this survey and create a new one !"
 msgstr ""
 
-#: inc/surveyquestion.class.php:125 inc/surveyquestion.class.php:194
+#: inc/surveyquestion.class.php:125 inc/surveyquestion.class.php:195
 msgid "Add a question"
 msgstr ""
 
@@ -66,15 +66,15 @@ msgstr ""
 msgid "No questions for this survey"
 msgstr ""
 
-#: inc/surveyquestion.class.php:230
+#: inc/surveyquestion.class.php:231
 msgid "Note on"
 msgstr ""
 
-#: inc/surveyquestion.class.php:322 inc/surveyquestion.class.php:337
+#: inc/surveyquestion.class.php:325 inc/surveyquestion.class.php:340
 msgid "Text"
 msgstr ""
 
-#: inc/surveyquestion.class.php:323 inc/surveyquestion.class.php:339
+#: inc/surveyquestion.class.php:326 inc/surveyquestion.class.php:342
 msgid "Note"
 msgstr ""
 
@@ -90,4 +90,29 @@ msgstr ""
 
 #: inc/surveyresult.class.php:86
 msgid "No result of the survey"
+msgstr ""
+
+#: inc/surveytranslation.class.php:240
+msgid "No translation found"
+msgstr ""
+
+#: inc/surveytranslation.class.php:392
+#, php-format
+msgid "An %s translation for this Question already exist."
+msgstr ""
+
+#: inc/surveytranslation.class.php:405
+msgid "Translation successfully created."
+msgstr ""
+
+#: inc/surveytranslation.class.php:417
+msgid "Translation creation failed"
+msgstr ""
+
+#: inc/surveytranslation.class.php:431
+msgid "The translation you want to edit does not exist."
+msgstr ""
+
+#: inc/surveytranslation.class.php:441
+msgid "Translation successfully edited."
 msgstr ""
