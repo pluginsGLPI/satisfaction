@@ -4,29 +4,29 @@
  * Init the hooks of the plugins -Needed
  */
 
-define('PLUGIN_SATISFACTION_VERSION', '1.4.1');
+define('PLUGIN_SATISFACTION_VERSION', '1.4.2');
 
 function plugin_init_satisfaction() {
    global $PLUGIN_HOOKS;
 
    $PLUGIN_HOOKS['csrf_compliant']['satisfaction'] = true;
-   $PLUGIN_HOOKS['change_profile']['satisfaction'] = ['PluginSatisfactionProfile', 'initProfile'];
+   $PLUGIN_HOOKS['change_profile']['satisfaction'] = [PluginSatisfactionProfile::class, 'initProfile'];
 
    $plugin = new Plugin();
    if ($plugin->isInstalled('satisfaction') && $plugin->isActivated('satisfaction')) {
 
-      $PLUGIN_HOOKS['item_get_datas']['satisfaction'] = ['NotificationTargetTicket' => ['PluginSatisfactionSurveyAnswer',
+      $PLUGIN_HOOKS['item_get_datas']['satisfaction'] = [NotificationTargetTicket::class => [PluginSatisfactionSurveyAnswer::class,
                                                                                         'addNotificationDatas']];
 
       //if glpi is loaded
       if (Session::getLoginUserID()) {
 
-         Plugin::registerClass('PluginSatisfactionProfile',
-                               ['addtabon' => 'Profile']);
+         Plugin::registerClass(PluginSatisfactionProfile::class,
+                               ['addtabon' => Profile::class]);
 
-         $PLUGIN_HOOKS['pre_item_form']['satisfaction'] = ['PluginSatisfactionSurveyAnswer', 'displaySatisfaction'];
+         $PLUGIN_HOOKS['pre_item_form']['satisfaction'] = [PluginSatisfactionSurveyAnswer::class, 'displaySatisfaction'];
 
-         $PLUGIN_HOOKS['pre_item_update']['satisfaction']['TicketSatisfaction'] = ['PluginSatisfactionSurveyAnswer',
+         $PLUGIN_HOOKS['pre_item_update']['satisfaction'][TicketSatisfaction::class] = [PluginSatisfactionSurveyAnswer::class,
                                                                                         'preUpdateSatisfaction'];
 
          //current user must have config rights
@@ -34,10 +34,14 @@ function plugin_init_satisfaction() {
             $config_page = 'front/survey.php';
             $PLUGIN_HOOKS['config_page']['satisfaction'] = $config_page;
 
-            $PLUGIN_HOOKS["menu_toadd"]['satisfaction'] = ['admin' => 'PluginSatisfactionMenu'];
+            $PLUGIN_HOOKS["menu_toadd"]['satisfaction'] = ['admin' => PluginSatisfactionMenu::class];
          }
 
          $PLUGIN_HOOKS['add_javascript']['satisfaction'] = ["satisfaction.js"];
+
+         if (class_exists('PluginMydashboardMenu')) {
+            $PLUGIN_HOOKS['mydashboard']['satisfaction'] = [PluginSatisfactionDashboard::class];
+         }
       }
    }
 }
