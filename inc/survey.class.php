@@ -38,12 +38,13 @@ class PluginSatisfactionSurvey extends CommonDBTM {
 
       $ong = [];
       $this->addDefaultFormTab($ong);
-      $this->addStandardTab('PluginSatisfactionSurveyQuestion', $ong, $options);
-      $this->addStandardTab('PluginSatisfactionSurveyAnswer', $ong, $options);
-      $this->addStandardTab('PluginSatisfactionSurveyResult', $ong, $options);
-      $this->addStandardTab('PluginSatisfactionSurveyTranslation', $ong, $options);
+      $this->addStandardTab(PluginSatisfactionSurveyQuestion::class, $ong, $options);
+      $this->addStandardTab(PluginSatisfactionSurveyAnswer::class, $ong, $options);
+      $this->addStandardTab(PluginSatisfactionSurveyResult::class, $ong, $options);
+      $this->addStandardTab(PluginSatisfactionSurveyTranslation::class, $ong, $options);
+      $this->addStandardTab(PluginSatisfactionSurveyReminder::class, $ong, $options);
 
-      $this->addStandardTab('Log', $ong, $options);
+      $this->addStandardTab(Log::class, $ong, $options);
       return $ong;
    }
 

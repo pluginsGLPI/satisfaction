@@ -4,7 +4,7 @@
  * Init the hooks of the plugins -Needed
  */
 
-define('PLUGIN_SATISFACTION_VERSION', '1.4.2');
+define('PLUGIN_SATISFACTION_VERSION', '1.4.3');
 
 function plugin_init_satisfaction() {
    global $PLUGIN_HOOKS;
@@ -14,9 +14,6 @@ function plugin_init_satisfaction() {
 
    $plugin = new Plugin();
    if ($plugin->isInstalled('satisfaction') && $plugin->isActivated('satisfaction')) {
-
-      $PLUGIN_HOOKS['item_get_datas']['satisfaction'] = [NotificationTargetTicket::class => [PluginSatisfactionSurveyAnswer::class,
-                                                                                        'addNotificationDatas']];
 
       //if glpi is loaded
       if (Session::getLoginUserID()) {
@@ -28,6 +25,8 @@ function plugin_init_satisfaction() {
 
          $PLUGIN_HOOKS['pre_item_update']['satisfaction'][TicketSatisfaction::class] = [PluginSatisfactionSurveyAnswer::class,
                                                                                         'preUpdateSatisfaction'];
+
+         $PLUGIN_HOOKS['item_get_events']['satisfaction'] = [NotificationTargetTicket::class => 'plugin_satisfaction_get_events'];
 
          //current user must have config rights
          if (Session::haveRight('plugin_satisfaction', READ)) {
@@ -43,6 +42,9 @@ function plugin_init_satisfaction() {
             $PLUGIN_HOOKS['mydashboard']['satisfaction'] = [PluginSatisfactionDashboard::class];
          }
       }
+
+      $PLUGIN_HOOKS['item_get_datas']['satisfaction'] = [NotificationTargetTicket::class => [PluginSatisfactionSurveyAnswer::class,
+         'addNotificationDatas']];
    }
 }
 
