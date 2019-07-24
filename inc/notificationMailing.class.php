@@ -34,7 +34,7 @@ if (!defined('GLPI_ROOT')) {
 /**
  * Class PluginResourcesNotification
  */
-class PluginSatisfactionNotification extends CommonDBTM {
+class PluginSatisfactionNotificationMailing extends CommonDBTM {
 
    static $rightname = 'plugin_satisfaction';
 
@@ -192,6 +192,5 @@ class PluginSatisfactionNotification extends CommonDBTM {
       $temp = new self();
       $temp->deleteByCriteria(['tickets_id' => $ticket->getField("id")]);
    }
-
 }
 

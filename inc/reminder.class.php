@@ -69,7 +69,7 @@ class PluginSatisfactionReminder extends CommonDBTM {
       self::deleteObsoleteReminders();
 
       // Send reminder survey when date == today
-      self::createNotificationsFromReminders();
+      self::sendRemindersNotifications();
    }
 
    static function deleteObsoleteReminders(){
@@ -93,7 +93,7 @@ class PluginSatisfactionReminder extends CommonDBTM {
       }
    }
 
-   static function createNotificationsFromReminders(){
+   static function sendRemindersNotifications(){
       global $DB;
 
       $selectQuery = "SELECT sa.*";
@@ -107,7 +107,11 @@ class PluginSatisfactionReminder extends CommonDBTM {
 
       if ($DB->numrows($result)) {
          while ($data = $DB->fetch_assoc($result)) {
-            PluginSatisfactionNotificationTargetTicket::sendReminder($data);
+
+            $t = new Ticket();
+            $t->getFromDB($data['tickets_id']);
+
+            PluginSatisfactionNotificationTargetTicket::sendReminder($t);
          }
       }
 

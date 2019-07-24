@@ -35,8 +35,10 @@ if (!defined('GLPI_ROOT')) {
  */
 class PluginSatisfactionNotificationTargetTicket extends NotificationTarget {
 
+   const SURVEY_REMINDER_NOTIFICATION = "survey_reminder";
+
    function getEvents(){
-      return ['survey_reminder' => __('Survey Reminder', 'satisfaction')];
+      return [self::SURVEY_REMINDER_NOTIFICATION => __('Survey Reminder', 'satisfaction')];
    }
 
    function getDatasForTemplate($event, $options = []) {
@@ -47,7 +49,7 @@ class PluginSatisfactionNotificationTargetTicket extends NotificationTarget {
    }
 
    public static function sendReminder($item){
-      NotificationEvent::raiseEvent('survey_reminder', $item, []);
+      NotificationEvent::raiseEvent(self::SURVEY_REMINDER_NOTIFICATION, $item);
    }
 
    function getTags() {
@@ -85,26 +87,6 @@ class PluginSatisfactionNotificationTargetTicket extends NotificationTarget {
             'comment'                  => "Created by the plugin Satisfaction"
          ]);
       }
-
-//      $notificationtargets = new NotificationTarget();
-//
-//      $requester_group_id = 999999;
-//
-//      $crit = [
-//         'items_id' => $requester_group_id,
-//         "notifications_id" => $notificationDBTM->getField('id')
-//      ];
-//
-//      if(!$notificationtargets->getFromDBByCrit($crit)){
-//
-//         $input = [
-//            'items_id' => $requester_group_id,
-//            'type' => Notification::REQUESTER_GROUP,
-//            'notifications_id' =>$notificationDBTM->getField('id')
-//         ];
-//
-//         $notificationtargets->add($input);
-//      }
    }
 
    static function uninstall(){
