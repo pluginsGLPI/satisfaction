@@ -48,8 +48,12 @@ class PluginSatisfactionNotificationTargetTicket extends NotificationTarget {
 
    }
 
-   public static function sendReminder($item){
-      NotificationEvent::raiseEvent(self::SURVEY_REMINDER_NOTIFICATION, $item);
+   public static function sendReminder($tickets_id){
+
+      $ticketDBTM = new Ticket();
+      if($ticketDBTM->getFromDB($tickets_id)){
+         NotificationEvent::raiseEvent(self::SURVEY_REMINDER_NOTIFICATION, $ticketDBTM);
+      }
    }
 
    function getTags() {
@@ -83,7 +87,7 @@ class PluginSatisfactionNotificationTargetTicket extends NotificationTarget {
             'is_recursive'             => 1,
             'is_active'                => 1,
             'itemtype'                 => 'Ticket',
-            'event'                    => "survey_reminder",
+            'event'                    => self::SURVEY_REMINDER_NOTIFICATION,
             'comment'                  => "Created by the plugin Satisfaction"
          ]);
       }

@@ -11,7 +11,8 @@ CREATE TABLE `glpi_plugin_satisfaction_surveyreminders` (
 
 CREATE TABLE `glpi_plugin_satisfaction_reminders` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `ticketsatisfactions_id` int(11) NOT NULL,
+  'type' int(11) NOT NULL DEFAULT '0',
+  `tickets_id` int(11) NOT NULL,
   `date` date default NULL,
   PRIMARY KEY (`id`)
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

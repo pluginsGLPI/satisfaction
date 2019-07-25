@@ -1,3 +1,5 @@
+# noinspection SqlNoDataSourceInspectionForFile
+
 CREATE TABLE `glpi_plugin_satisfaction_surveys` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `entities_id` int(11) NOT NULL DEFAULT 0,
@@ -30,8 +32,6 @@ CREATE TABLE `glpi_plugin_satisfaction_surveyanswers` (
   PRIMARY KEY (`id`)
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-### Dump table glpi_plugin_satisfaction_surveytranslations
-
 DROP TABLE IF EXISTS `glpi_plugin_satisfaction_surveytranslations`;
 CREATE TABLE `glpi_plugin_satisfaction_surveytranslations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -60,7 +60,9 @@ CREATE TABLE `glpi_plugin_satisfaction_surveyreminders` (
 DROP TABLE IF EXISTS `glpi_plugin_satisfaction_reminders`;
 CREATE TABLE `glpi_plugin_satisfaction_reminders` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `ticketsatisfactions_id` int(11) NOT NULL,
+  `type` int(11) NOT NULL DEFAULT '0',
+  `tickets_id` int(11) NOT NULL,
   `date` date default NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unicity` (`tickets_id`)
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
