@@ -269,6 +269,9 @@ class PluginSatisfactionSurvey extends CommonDBTM {
       $answer = new PluginSatisfactionSurveyAnswer;
       $answer->deleteByCriteria([PluginSatisfactionSurveyAnswer::$items_id => $this->getID()]);
 
+      $reminder = new PluginSatisfactionSurveyReminder();
+      $reminder->deleteByCriteria([PluginSatisfactionSurveyReminder::$items_id => $this->getID()]);
+
       return true;
    }
 

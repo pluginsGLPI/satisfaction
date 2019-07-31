@@ -12,8 +12,6 @@ function plugin_satisfaction_install() {
    if (!$DB->tableExists("glpi_plugin_satisfaction_surveys")) {
       $DB->runFile(GLPI_ROOT . "/plugins/satisfaction/install/sql/empty-1.4.3.sql");
 
-      PluginSatisfactionNotificationTargetTicket::install();
-
    } else {
       if (!$DB->fieldExists("glpi_plugin_satisfaction_surveyquestions", "type")) {
          $DB->runFile(GLPI_ROOT . "/plugins/satisfaction/install/sql/update-1.1.0.sql");
@@ -33,6 +31,7 @@ function plugin_satisfaction_install() {
       }
    }
 
+   PluginSatisfactionNotificationTargetTicket::install();
    PluginSatisfactionProfile::initProfile();
    PluginSatisfactionProfile::createFirstAccess($_SESSION['glpiactiveprofile']['id']);
 
@@ -52,7 +51,9 @@ function plugin_satisfaction_uninstall() {
    $tables = [
       "glpi_plugin_satisfaction_surveys",
       "glpi_plugin_satisfaction_surveyquestions",
-      "glpi_plugin_satisfaction_surveyanswers"
+      "glpi_plugin_satisfaction_surveyanswers",
+      "glpi_plugin_satisfaction_surveyreminders",
+      "glpi_plugin_satisfaction_surveytranslations"
    ];
 
    foreach ($tables as $table) {

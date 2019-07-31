@@ -28,6 +28,8 @@ function plugin_init_satisfaction() {
 
          $PLUGIN_HOOKS['item_get_events']['satisfaction'] = [NotificationTargetTicket::class => 'plugin_satisfaction_get_events'];
 
+         $PLUGIN_HOOKS['item_delete']['satisfaction'] = ['Ticket' => ['PluginSatisfactionReminder', 'deleteItem']];
+
          //current user must have config rights
          if (Session::haveRight('plugin_satisfaction', READ)) {
             $config_page = 'front/survey.php';

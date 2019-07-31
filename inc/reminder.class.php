@@ -46,6 +46,13 @@ class PluginSatisfactionReminder extends CommonDBTM {
       return [];
    }
 
+   public function deleteItem(Ticket $ticket){
+      $reminder = new Self;
+      if($reminder->getFromDBByCrit(['tickets_id'=>$ticket->fields['id']])){
+         $reminder->delete(['id' => $reminder->fields["id"]]);
+      }
+   }
+
    /**
     * Cron action
     *
@@ -69,7 +76,7 @@ class PluginSatisfactionReminder extends CommonDBTM {
    }
 
    static function sendReminders(){
-
+      //TODO ENTITIES_id
       $entityDBTM = new Entity();
       $ticketSatisfactionDBTM = new TicketSatisfaction();
 
@@ -90,8 +97,7 @@ class PluginSatisfactionReminder extends CommonDBTM {
          // Ticket Satisfaction
          $crit = [
             'date_begin' => ['>', $max_close_date],
-            'date_answered' => null,
-            'type' => $survey['entities_id']
+            'date_answered' => null
          ];
          $ticketSatisfactions = $ticketSatisfactionDBTM->find($crit);
 
@@ -152,10 +158,13 @@ class PluginSatisfactionReminder extends CommonDBTM {
                   $potentialReminderTypes[$date] = $reminder['type'];
                   $potentialReminderIndexes[$date] = $reminder['id'];
                }
+               $types = $surveyReminder['id'];
             }
 
-            function date_sort($a, $b) {
-               return strtotime($a) - strtotime($b);
+            if(!function_exists("date_sort")){
+               function date_sort($a, $b) {
+                  return strtotime($a) - strtotime($b);
+               }
             }
 
             // Order dates
@@ -183,7 +192,7 @@ class PluginSatisfactionReminder extends CommonDBTM {
                      ]);
                   }else{
                      self::addReminderForTicket([
-                        'type' => $potentialReminderTypes[$potentialReminderToSendDate],
+                        'type' => $types,
                         'tickets_id' => $ticketSatisfaction['tickets_id'],
                         'date' => $potentialReminderToSendDate
                      ]);
