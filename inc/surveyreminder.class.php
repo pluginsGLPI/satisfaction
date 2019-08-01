@@ -266,7 +266,7 @@ class PluginSatisfactionSurveyReminder extends CommonDBChild {
          // Duration line 3
          echo "<tr class='tab_bg_1'>";
          echo "<td>" . self::getColumnTitles(self::COLUMN_DURATION) . "</td>";
-         echo "<td>";
+         echo "<td colspan='3'>";
          echo '<input type="number" name="'.self::COLUMN_DURATION.'" min="1" value="'.$surveyReminder->fields[self::COLUMN_DURATION].'">';
          echo "</td>";
          echo "</tr>";
@@ -478,7 +478,32 @@ class PluginSatisfactionSurveyReminder extends CommonDBChild {
       return $input;
    }
 
+   /**
+    * Verify survey remindr can be updated only if a column is different
+    *
+    * @param $input
+    * @return array|bool
+    */
    function prepareInputForUpdate($input){
-      return $this->prepareInputForAdd($input);
+      $crit = [
+         self::COLUMN_DURATION_TYPE => $input[self::COLUMN_DURATION_TYPE],
+         self::COLUMN_DURATION => $input[self::COLUMN_DURATION],
+         self::COLUMN_IS_ACTIVE => $input[self::COLUMN_IS_ACTIVE],
+         self::COLUMN_NAME => $input[self::COLUMN_NAME],
+         self::COLUMN_COMMENT => $input[self::COLUMN_COMMENT]
+      ];
+
+      $items = $this->find($crit);
+
+      if(count($items)){
+
+         $item = array_pop($items);
+
+         $errorMessage = __('There are nothing to save', 'satisfaction');
+
+         Session::addMessageAfterRedirect(sprintf($errorMessage, $item['name']), false, ERROR);
+         return false;
+      }
+      return $input;
    }
 }
