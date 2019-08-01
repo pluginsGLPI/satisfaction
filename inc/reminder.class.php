@@ -75,10 +75,32 @@ class PluginSatisfactionReminder extends CommonDBTM {
       self::sendReminders();
    }
 
+   static function getTicketSatisfaction($date_begin, $date_answered, $entities_id){
+
+      $ticketSatisfactions = [];
+
+      global $DB;
+
+      $query =  "SELECT ts.* FROM ".TicketSatisfaction::getTable() . " as ts";
+      $query .= " INNER JOIN ".Ticket::getTable() . " as t";
+      $query .= " ON ts.tickets_id = t.id";
+      $query .= " WHERE t.entities_id = ".$entities_id;
+      $query .= " AND ts.date_begin > DATE('".$date_begin."')";
+      $query .= " AND ts.date_answered ".(($date_answered == null)? " IS NULL" : " = DATE('".$date_answered."')");
+
+      $result = $DB->query($query);
+
+      if ($DB->numrows($result)) {
+         while ($data = $DB->fetch_assoc($result)) {
+            $ticketSatisfactions[] = $data;
+         }
+      }
+      return $ticketSatisfactions;
+   }
+
    static function sendReminders(){
       //TODO ENTITIES_id
       $entityDBTM = new Entity();
-      $ticketSatisfactionDBTM = new TicketSatisfaction();
 
       $pluginSatisfactionSurveyDBTM = new PluginSatisfactionSurvey();
       $pluginSatisfactionSurveyReminderDBTM = new PluginSatisfactionSurveyReminder();
@@ -95,11 +117,7 @@ class PluginSatisfactionReminder extends CommonDBTM {
          $max_close_date = date('Y-m-d', strtotime($entityDBTM->getField('max_closedate')));
 
          // Ticket Satisfaction
-         $crit = [
-            'date_begin' => ['>', $max_close_date],
-            'date_answered' => null
-         ];
-         $ticketSatisfactions = $ticketSatisfactionDBTM->find($crit);
+         $ticketSatisfactions = self::getTicketSatisfaction($max_close_date, null, $survey['entities_id']);
 
          foreach($ticketSatisfactions as $ticketSatisfaction){
 
@@ -188,13 +206,13 @@ class PluginSatisfactionReminder extends CommonDBTM {
                         'id' => $potentialReminderIndexes['id'],
                         'type' => $potentialReminderTypes[$potentialReminderToSendDate],
                         'tickets_id' => $ticketSatisfaction['tickets_id'],
-                        'date' => $potentialReminderToSendDate
+                        'date' => $dateNow
                      ]);
                   }else{
                      self::addReminderForTicket([
                         'type' => $types,
                         'tickets_id' => $ticketSatisfaction['tickets_id'],
-                        'date' => $potentialReminderToSendDate
+                        'date' => $dateNow
                      ]);
                   }
                   break;
