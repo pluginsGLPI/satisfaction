@@ -272,7 +272,7 @@ class PluginSatisfactionSurveyTranslation extends CommonDBChild {
          $surveyQuestion->getFromDB($surveyTranslationData['glpi_plugin_satisfaction_surveyquestions_id']);
 
          // Language
-         echo "<td $tdBaseStyle>";
+         echo "<td width='10%' $tdBaseStyle>";
          echo "<input type='hidden' name='language' value='".$surveyTranslationData['language']."'>";
          echo "<input type='hidden' name='id' value='".$options['id']."'>";
          echo "<input type='hidden' name='question_id' value='".$surveyQuestion->getID()."'>";
@@ -280,9 +280,10 @@ class PluginSatisfactionSurveyTranslation extends CommonDBChild {
          echo Dropdown::getLanguageName($surveyTranslationData['language']);
          echo "</td>";
          // Question
-         echo "<td $tdBaseStyle>".$surveyQuestion->getName()."</td>";
+         echo "<td width='45%' $tdBaseStyle>".$surveyQuestion->getName()."</td>";
          // Value
-         echo "<td $tdBaseStyle><input type='text' name='value' value='".$surveyTranslationData['value']."' size='50'></td>";
+         echo "<td width='45%' $tdBaseStyle><textarea style='position:relative; width:90%; height:60px' type='textarea' name='value'>";
+         echo $surveyTranslationData['value']."</textarea></td>";
          echo "</tr>";
 
          // Save button
@@ -295,7 +296,7 @@ class PluginSatisfactionSurveyTranslation extends CommonDBChild {
          echo "<input type='hidden' name='action' value='NEW'>";
 
          // Language
-         echo "<td $tdBaseStyle>";
+         echo "<td width='10%' $tdBaseStyle>";
          $rand   = Dropdown::showLanguages(
             "language",
             ['display_none' => true, 'value' => $_SESSION['glpilanguage']]);
@@ -314,10 +315,13 @@ class PluginSatisfactionSurveyTranslation extends CommonDBChild {
          echo "</td>";
 
          // Question
-         echo "<td $tdBaseStyle>".$this->getQuestionDropdown($surveyId)."</td>";
+         echo "<td width='30%' $tdBaseStyle>".$this->getQuestionDropdown($surveyId)."</td>";
 
          // Value
-         echo "<td $tdBaseStyle><input type='text' name='value' size='50'></td>";
+
+         echo "<td width='60%' $tdBaseStyle><textarea style='position:relative; width:90%; height:60px' type='textarea' name='value'>";
+         echo "</textarea></td>";
+
          echo "</tr>";
 
          // Add button
