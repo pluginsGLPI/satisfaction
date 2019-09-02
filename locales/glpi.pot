@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-04 15:38+0200\n"
+"POT-Creation-Date: 2019-07-17 14:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,15 +18,64 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: setup.php:54
+#: setup.php:58
 msgid "More satisfaction"
 msgstr ""
 
-#: inc/menu.class.php:14 inc/profile.class.php:50 inc/survey.class.php:24
+#: inc/dashboard.class.php:76 inc/menu.class.php:14 inc/profile.class.php:50
+#: inc/survey.class.php:24
 msgid "Satisfaction survey"
 msgid_plural "Satisfaction surveys"
 msgstr[0] ""
 msgstr[1] ""
+
+#: inc/dashboard.class.php:99
+msgid "First Trimester"
+msgstr ""
+
+#: inc/dashboard.class.php:100
+msgid "Second Trimester"
+msgstr ""
+
+#: inc/dashboard.class.php:101
+msgid "Third Trimester"
+msgstr ""
+
+#: inc/dashboard.class.php:102
+msgid "Fourth Trimester"
+msgstr ""
+
+#: inc/dashboard.class.php:103
+msgid "Year"
+msgstr ""
+
+#: inc/dashboard.class.php:196
+msgid "There are no survey for current entity"
+msgstr ""
+
+#: inc/dashboard.class.php:309
+msgid "Number of surveys"
+msgstr ""
+
+#: inc/dashboard.class.php:314
+msgid "Number of concerned tickets"
+msgstr ""
+
+#: inc/dashboard.class.php:319
+msgid "Survey not answered"
+msgstr ""
+
+#: inc/dashboard.class.php:324
+msgid "Survey answered"
+msgstr ""
+
+#: inc/dashboard.class.php:329
+msgid "Global satisfaction"
+msgstr ""
+
+#: inc/dashboard.class.php:371
+msgid "Periods"
+msgstr ""
 
 #: inc/survey.class.php:222 inc/survey.class.php:248
 msgid "Error : only one survey is allowed by entity"
