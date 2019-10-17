@@ -235,7 +235,7 @@ class PluginSatisfactionSurveyReminder extends CommonDBChild {
 
          echo "<tr class='tab_bg_1' rowspan='10'>";
 
-         echo "<td>" . __('Predefined Reminders') . "</td>";
+         echo "<td>" . __('Predefined Reminders', "satisfaction") . "</td>";
          echo "<td>" .self::getPresetReminderDropdown(self::PREDEFINED_REMINDER_OPTION_NAME) . "</td>";
          echo "</tr>";
 
