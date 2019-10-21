@@ -39,7 +39,7 @@ class PluginSatisfactionSurveyTranslationDAO{
    static $tablename = "glpi_plugin_satisfaction_surveytranslations";
 
    static function getSurveyTranslationByCrit($crit = []){
-      ²
+      global $DB;
       $datas = [];
 
       $query = "SELECT * FROM `".self::$tablename."`";
