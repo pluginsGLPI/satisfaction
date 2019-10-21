@@ -4,7 +4,7 @@
  * Init the hooks of the plugins -Needed
  */
 
-define('PLUGIN_SATISFACTION_VERSION', '1.4.3');
+define('PLUGIN_SATISFACTION_VERSION', '1.4.4');
 
 function plugin_init_satisfaction() {
    global $PLUGIN_HOOKS;
