@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-17 10:04+0200\n"
+"POT-Creation-Date: 2019-10-21 15:44+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -107,6 +107,10 @@ msgstr[1] ""
 msgid "Send automaticaly survey reminders and delete old"
 msgstr ""
 
+#: inc/survey.class.php:223 inc/survey.class.php:249
+msgid "Error : only one survey is allowed by entity"
+msgstr ""
+
 #: inc/surveyanswer.class.php:22
 msgid "Answer"
 msgid_plural "Answers"
@@ -119,10 +123,6 @@ msgstr ""
 
 #: inc/surveyanswer.class.php:116
 msgid "Satisfaction"
-msgstr ""
-
-#: inc/survey.class.php:223 inc/survey.class.php:249
-msgid "Error : only one survey is allowed by entity"
 msgstr ""
 
 #: inc/surveyquestion.class.php:30
@@ -178,6 +178,10 @@ msgstr ""
 
 #: inc/surveyreminder.class.php:226
 msgid "Choose a predefined reminder"
+msgstr ""
+
+#: inc/surveyreminder.class.php:238
+msgid "Predefined Reminders"
 msgstr ""
 
 #: inc/surveyreminder.class.php:369

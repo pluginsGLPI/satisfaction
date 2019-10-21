@@ -2,26 +2,27 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 # Translators:
 # Amandine Manceau, 2018
 # Mathieu Templier <mathieu.templier@infotel.com>, 2019
 # guillaume GUIBOUX <guillaume.guiboux@infotel.com>, 2019
-# 
-#, fuzzy
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-17 10:04+0200\n"
-"PO-Revision-Date: 2018-03-14 08:28+0000\n"
+"POT-Creation-Date: 2019-10-21 15:44+0200\n"
+"PO-Revision-Date: 2019-10-21 15:48+0200\n"
 "Last-Translator: guillaume GUIBOUX <guillaume.guiboux@infotel.com>, 2019\n"
-"Language-Team: French (France) (https://www.transifex.com/infotelGLPI/teams/84146/fr_FR/)\n"
+"Language-Team: French (France) (https://www.transifex.com/infotelGLPI/"
+"teams/84146/fr_FR/)\n"
+"Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fr_FR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 2.2.4\n"
 
 #: hook.php:87
 msgid "Ticket Satisfaction Reminder"
@@ -112,6 +113,10 @@ msgstr[1] "Rappels de satisfaction"
 msgid "Send automaticaly survey reminders and delete old"
 msgstr "Envoyer automatiquement un rappel d'enquête et supprimer l'ancien"
 
+#: inc/survey.class.php:223 inc/survey.class.php:249
+msgid "Error : only one survey is allowed by entity"
+msgstr "Erreur : un seul questionnaire par entité est autorisé"
+
 #: inc/surveyanswer.class.php:22
 msgid "Answer"
 msgid_plural "Answers"
@@ -125,10 +130,6 @@ msgstr "Prévisualisation"
 #: inc/surveyanswer.class.php:116
 msgid "Satisfaction"
 msgstr "Satisfaction"
-
-#: inc/survey.class.php:223 inc/survey.class.php:249
-msgid "Error : only one survey is allowed by entity"
-msgstr "Erreur : un seul questionnaire par entité est autorisé"
 
 #: inc/surveyquestion.class.php:30
 msgid "Question"
@@ -187,6 +188,10 @@ msgstr "Aucun rappel pour cette enquête"
 msgid "Choose a predefined reminder"
 msgstr "Choisir un nombre prédéfini"
 
+#: inc/surveyreminder.class.php:238
+msgid "Predefined Reminders"
+msgstr "Rappels prédéfinis"
+
 #: inc/surveyreminder.class.php:369
 msgid "Month"
 msgstr "Mois"
@@ -214,8 +219,8 @@ msgstr "Durée"
 #: inc/surveyreminder.class.php:473
 #, php-format
 msgid ""
-"You already have a reminder with the same duration type and duration named :"
-" %s"
+"You already have a reminder with the same duration type and duration named : "
+"%s"
 msgstr "Vous avez déjà un rappel avec le même type et nom de durée : %s"
 
 #: inc/surveyreminder.class.php:502
