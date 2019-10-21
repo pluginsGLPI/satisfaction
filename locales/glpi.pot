@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-17 14:18+0200\n"
+"POT-Creation-Date: 2019-10-17 10:04+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: setup.php:58
+#: hook.php:87
+msgid "Ticket Satisfaction Reminder"
+msgstr ""
+
+#: setup.php:62
 msgid "More satisfaction"
 msgstr ""
 
@@ -49,36 +53,58 @@ msgstr ""
 msgid "Year"
 msgstr ""
 
-#: inc/dashboard.class.php:196
+#: inc/dashboard.class.php:199
 msgid "There are no survey for current entity"
 msgstr ""
 
-#: inc/dashboard.class.php:309
+#: inc/dashboard.class.php:312
 msgid "Number of surveys"
 msgstr ""
 
-#: inc/dashboard.class.php:314
+#: inc/dashboard.class.php:317
 msgid "Number of concerned tickets"
 msgstr ""
 
-#: inc/dashboard.class.php:319
+#: inc/dashboard.class.php:322
 msgid "Survey not answered"
 msgstr ""
 
-#: inc/dashboard.class.php:324
+#: inc/dashboard.class.php:327
 msgid "Survey answered"
 msgstr ""
 
-#: inc/dashboard.class.php:329
+#: inc/dashboard.class.php:332
 msgid "Global satisfaction"
 msgstr ""
 
-#: inc/dashboard.class.php:371
+#: inc/dashboard.class.php:374
 msgid "Periods"
 msgstr ""
 
-#: inc/survey.class.php:222 inc/survey.class.php:248
-msgid "Error : only one survey is allowed by entity"
+#: inc/notificationMailing.class.php:51
+msgid "Notification satisfaction reminder"
+msgstr ""
+
+#: inc/notificationMailing.class.php:180
+msgid "Resource creation"
+msgstr ""
+
+#: inc/notificationMailing.class.php:181
+msgid "Other"
+msgstr ""
+
+#: inc/notificationtargetticket.class.php:41
+msgid "Survey Reminder"
+msgstr ""
+
+#: inc/reminder.class.php:30
+msgid "Satisfaction reminder"
+msgid_plural "Satisfaction reminders"
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/reminder.class.php:43
+msgid "Send automaticaly survey reminders and delete old"
 msgstr ""
 
 #: inc/surveyanswer.class.php:22
@@ -93,6 +119,10 @@ msgstr ""
 
 #: inc/surveyanswer.class.php:116
 msgid "Satisfaction"
+msgstr ""
+
+#: inc/survey.class.php:223 inc/survey.class.php:249
+msgid "Error : only one survey is allowed by entity"
 msgstr ""
 
 #: inc/surveyquestion.class.php:30
@@ -127,6 +157,64 @@ msgstr ""
 msgid "Note"
 msgstr ""
 
+#: inc/surveyreminder.class.php:45 inc/surveyreminder.class.php:65
+#: inc/surveyreminder.class.php:429
+msgid "Reminder"
+msgid_plural "Reminders"
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/surveyreminder.class.php:143 inc/surveyreminder.class.php:229
+msgid "Add a reminder"
+msgstr ""
+
+#: inc/surveyreminder.class.php:147
+msgid "Add a predefined reminder"
+msgstr ""
+
+#: inc/surveyreminder.class.php:155
+msgid "No reminders for this survey"
+msgstr ""
+
+#: inc/surveyreminder.class.php:226
+msgid "Choose a predefined reminder"
+msgstr ""
+
+#: inc/surveyreminder.class.php:369
+msgid "Month"
+msgstr ""
+
+#: inc/surveyreminder.class.php:384
+msgid "One Week"
+msgstr ""
+
+#: inc/surveyreminder.class.php:385
+msgid "Two Week"
+msgstr ""
+
+#: inc/surveyreminder.class.php:386
+msgid "One Month"
+msgstr ""
+
+#: inc/surveyreminder.class.php:400
+msgid "Duration Type"
+msgstr ""
+
+#: inc/surveyreminder.class.php:401
+msgid "Duration"
+msgstr ""
+
+#: inc/surveyreminder.class.php:473
+#, php-format
+msgid ""
+"You already have a reminder with the same duration type and duration named : "
+"%s"
+msgstr ""
+
+#: inc/surveyreminder.class.php:502
+msgid "There are nothing to save"
+msgstr ""
+
 #: inc/surveyresult.class.php:22
 msgid "Result of the survey"
 msgid_plural "Results of the survey"
@@ -145,23 +233,23 @@ msgstr ""
 msgid "No translation found"
 msgstr ""
 
-#: inc/surveytranslation.class.php:392
+#: inc/surveytranslation.class.php:396
 #, php-format
 msgid "An %s translation for this Question already exist."
 msgstr ""
 
-#: inc/surveytranslation.class.php:405
+#: inc/surveytranslation.class.php:409
 msgid "Translation successfully created."
 msgstr ""
 
-#: inc/surveytranslation.class.php:417
+#: inc/surveytranslation.class.php:421
 msgid "Translation creation failed"
 msgstr ""
 
-#: inc/surveytranslation.class.php:431
+#: inc/surveytranslation.class.php:435
 msgid "The translation you want to edit does not exist."
 msgstr ""
 
-#: inc/surveytranslation.class.php:441
+#: inc/surveytranslation.class.php:445
 msgid "Translation successfully edited."
 msgstr ""
