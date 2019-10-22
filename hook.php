@@ -35,6 +35,7 @@ function plugin_satisfaction_install() {
    PluginSatisfactionProfile::initProfile();
    PluginSatisfactionProfile::createFirstAccess($_SESSION['glpiactiveprofile']['id']);
 
+   CronTask::Register(PluginSatisfactionReminder::class, PluginSatisfactionReminder::CRON_TASK_NAME, DAY_TIMESTAMP);
    return true;
 }
 
