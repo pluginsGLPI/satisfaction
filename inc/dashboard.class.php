@@ -128,12 +128,12 @@ class PluginSatisfactionDashboard extends CommonGLPI {
             $interval['end'] = $year.'-03-31';
             break;
          case self::SECOND_TRIMESTER_PERIOD:
-            $interval['begin'] = $year.'-01-04';
-            $interval['end'] = $year.'-06-31';
+            $interval['begin'] = $year.'-04-01';
+            $interval['end'] = $year.'-06-30';
             break;
          case self::THIRD_TRIMESTER_PERIOD:
             $interval['begin'] = $year.'-07-01';
-            $interval['end'] = $year.'-09-31';
+            $interval['end'] = $year.'-09-30';
             break;
          case self::FOURTH_TRIMESTER_PERIOD:
             $interval['begin'] = $year.'-10-01';
