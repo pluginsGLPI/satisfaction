@@ -46,7 +46,7 @@ class PluginSatisfactionReminder extends CommonDBTM {
       return [];
    }
 
-   public function deleteItem(Ticket $ticket){
+   public static function deleteItem(Ticket $ticket){
       $reminder = new Self;
       if($reminder->getFromDBByCrit(['tickets_id'=>$ticket->fields['id']])){
          $reminder->delete(['id' => $reminder->fields["id"]]);
