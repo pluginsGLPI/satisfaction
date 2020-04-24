@@ -124,9 +124,9 @@ class PluginSatisfactionReminder extends CommonDBTM {
 
          // Don't get tickets satisfaction with date older than max_close_date
 //                           $max_close_date = date('Y-m-d', strtotime($entityDBTM->getField('max_closedate')));
-         //TODO add Setup
+         $nb_days = $survey['reminders_days'];
          $dt             = date("Y-m-d");
-         $max_close_date = date('Y-m-d', strtotime("$dt - 60 day"));
+         $max_close_date = date('Y-m-d', strtotime("$dt - ".$nb_days." day"));
 
          // Ticket Satisfaction
          $ticketSatisfactions = self::getTicketSatisfaction($max_close_date, null, $survey['entities_id']);
