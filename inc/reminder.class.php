@@ -126,6 +126,18 @@ class PluginSatisfactionReminder extends CommonDBTM {
             // Date when glpi satisfaction was sended for the first time
             $lastSurveySendDate = date('Y-m-d', strtotime($ticketSatisfaction['date_begin']));
 
+            // check inquest duration
+            $inquest_duration = $entityDBTM->getField('inquest_duration');
+            $today = date('Y-m-d');
+            $creation_date = new DateTime($lastSurveySendDate);
+            $today_date = new DateTime($today);
+            $diff = $creation_date->diff($today_date);
+            $interval = $diff->format('%a');
+            if($interval > $inquest_duration){
+               // Inquest duration expired, we don't send it
+               continue;
+            }
+
             $reminder = null;
 
             // Update lastSurvey with last sended reminder date
