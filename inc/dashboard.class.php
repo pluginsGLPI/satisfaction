@@ -124,25 +124,25 @@ class PluginSatisfactionDashboard extends CommonGLPI {
 
       switch($idPeriod){
          case self::FIRST_TRIMESTER_PERIOD:
-            $interval['begin'] = $year.'-01-01';
-            $interval['end'] = $year.'-03-31';
+            $interval['begin'] = $year.'-01-01 00:00:00';
+            $interval['end'] = $year.'-03-31 00:00:00';
             break;
          case self::SECOND_TRIMESTER_PERIOD:
-            $interval['begin'] = $year.'-04-01';
-            $interval['end'] = $year.'-06-30';
+            $interval['begin'] = $year.'-04-01 00:00:00';
+            $interval['end'] = $year.'-06-30 00:00:00';
             break;
          case self::THIRD_TRIMESTER_PERIOD:
-            $interval['begin'] = $year.'-07-01';
-            $interval['end'] = $year.'-09-30';
+            $interval['begin'] = $year.'-07-01 00:00:00';
+            $interval['end'] = $year.'-09-30 00:00:00';
             break;
          case self::FOURTH_TRIMESTER_PERIOD:
-            $interval['begin'] = $year.'-10-01';
-            $interval['end'] = $year.'-12-31';
+            $interval['begin'] = $year.'-10-01 00:00:00';
+            $interval['end'] = $year.'-12-31 00:00:00';
             break;
          case self::YEAR_PERIOD:
          case null:
-            $interval['begin'] = $year.'-01-01';
-            $interval['end'] = $year.'-12-31';
+            $interval['begin'] = $year.'-01-01 00:00:00';
+            $interval['end'] = $year.'-12-31 00:00:00';
       }
       return $interval;
    }
@@ -196,7 +196,7 @@ class PluginSatisfactionDashboard extends CommonGLPI {
       ])) {
          $content.= '<div class="center">';
          $content.= '<br><br>';
-         $content.= '<h3>'.__("There are no survey for current entity", "satisfaction").'</h3>';
+         $content.= '<h4>'.__("There are no survey for current entity", "satisfaction").'</h4>';
          $content.= '</div>';
       } else {
 
@@ -289,13 +289,13 @@ class PluginSatisfactionDashboard extends CommonGLPI {
 
          function displayElement($color, $icon, $title, $value){
             $elem = '<div class="nb" style="color:'.$color.'">';
-            $elem.= '<a style="color:'.$color.'" target="_blank" href="" title="'.$title.'">';
+            //$elem.= '<a style="color:'.$color.'" target="_blank" href="" title="'.$title.'">';
             $elem.= '<i style="color:'.$color.';font-size:34px" class="fa '.$icon.' fa-3x fa-border"></i>';
             $elem.= '<h3>';
             $elem.= '<span class="counter count-number">'.$value.'</span>';
             $elem.= '</h3>';
             $elem.= '<p class="count-text ">'.$title.'</p>';
-            $elem.= '</a>';
+            //$elem.= '</a>';
             $elem.= '</div>';
 
             return $elem;

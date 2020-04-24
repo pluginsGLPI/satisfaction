@@ -35,10 +35,8 @@ if (!defined('GLPI_ROOT')) {
  */
 class PluginSatisfactionNotificationTargetTicket extends NotificationTarget {
 
-   const SURVEY_REMINDER_NOTIFICATION = "survey_reminder";
-
    function getEvents(){
-      return [self::SURVEY_REMINDER_NOTIFICATION => __('Survey Reminder', 'satisfaction')];
+      return ["survey_reminder" => __('Survey Reminder', 'satisfaction')];
    }
 
    function getDatasForTemplate($event, $options = []) {
@@ -52,7 +50,7 @@ class PluginSatisfactionNotificationTargetTicket extends NotificationTarget {
 
       $ticketDBTM = new Ticket();
       if($ticketDBTM->getFromDB($tickets_id)){
-         NotificationEvent::raiseEvent(self::SURVEY_REMINDER_NOTIFICATION, $ticketDBTM);
+         NotificationEvent::raiseEvent("survey_reminder", $ticketDBTM);
       }
    }
 
@@ -87,7 +85,7 @@ class PluginSatisfactionNotificationTargetTicket extends NotificationTarget {
             'is_recursive'             => 1,
             'is_active'                => 1,
             'itemtype'                 => 'Ticket',
-            'event'                    => self::SURVEY_REMINDER_NOTIFICATION,
+            'event'                    => "survey_reminder",
             'comment'                  => "Created by the plugin Satisfaction"
          ]);
       }
