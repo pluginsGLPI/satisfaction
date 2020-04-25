@@ -148,6 +148,20 @@ class PluginSatisfactionSurveyReminder extends CommonDBChild {
          echo "</div><br>";
       }
 
+      // Dispaly an option to setup 
+      echo "<form name='form' method='post' action='/glpi/plugins/satisfaction/front/survey.form.php'>";
+      echo "<table class='tab_cadre_fixe'><tr class='tab_bg_2'>";
+      echo "<th class='b' colspan='2'>" . __('Setup maximum number of days to send reminder', 'satisfaction') . "</th>";
+      echo "<tr calss='b'><td>". __('Maximum number of days to send reminder', 'satisfaction') ."</td>";
+      echo "<td><input type='text' id='reminders_days' name='reminders_days' minlength='1' value='". $survey->fields['reminders_days'] ."'></td></tr>";
+      echo "<tr>";
+      echo "<td class='tab_bg_2 center' colspan='4'>";
+      echo Html::hidden('id', ['value' => $sID]);
+      echo "<input type='submit' name='update' class='submit' value='" . _sx('button', 'Save') . "' >";
+      echo "</td>";
+      echo "</tr></table>";
+      Html::closeForm();
+
       // Display existing questions
       $remminders = $surveyReminder->find([self::$items_id => $sID], 'id');
       if (count($remminders) == 0) {
