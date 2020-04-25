@@ -24,7 +24,7 @@ Features
   Translations
   ------------
   
-  Join us on [Transifex](https://www.transifex.com/tsmr/GLPI_satisfaction)
+  Join us on [Transifex](https://www.transifex.com/InfotelGLPI/GLPI_satisfaction)
 
   ------------------------------------------------------------------------------------------------------------------------
 
