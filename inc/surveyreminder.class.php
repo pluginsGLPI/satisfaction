@@ -14,24 +14,24 @@ class PluginSatisfactionSurveyReminder extends CommonDBChild {
    public static $items_id = 'plugin_satisfaction_surveys_id';
 
    // Durations
-   const DURATION_DAY = 0;
+   const DURATION_DAY   = 0;
    const DURATION_MONTH = 1;
 
    // Is active
    const ACTIVE_OFF = 0;
-   const ACTIVE_ON = 1;
+   const ACTIVE_ON  = 1;
 
    // Columns names
-   const COLUMN_NAME = 'name';
+   const COLUMN_NAME          = 'name';
    const COLUMN_DURATION_TYPE = 'duration_type';
-   const COLUMN_DURATION = 'duration';
-   const COLUMN_IS_ACTIVE = 'is_active';
-   const COLUMN_COMMENT = 'comment';
+   const COLUMN_DURATION      = 'duration';
+   const COLUMN_IS_ACTIVE     = 'is_active';
+   const COLUMN_COMMENT       = 'comment';
 
    // Predefined reminders
-   const PREDEFINED_1_WEEK = 0;
-   const PREDEFINED_2_WEEK = 1;
-   const PREDEFINED_1_MONTH = 2;
+   const PREDEFINED_1_WEEK               = 0;
+   const PREDEFINED_2_WEEK               = 1;
+   const PREDEFINED_1_MONTH              = 2;
    const PREDEFINED_REMINDER_OPTION_NAME = 'presetreminder';
 
 
@@ -51,13 +51,13 @@ class PluginSatisfactionSurveyReminder extends CommonDBChild {
     * NB : Only called for existing object
     *      Must check right on what will be displayed + template
     *
-    * @since version 0.83
-    *
     * @param $item                     CommonDBTM object for which the tab need to be displayed
     * @param $withtemplate    boolean  is a template object ? (default 0)
     *
-    *  @return string tab name
-    **/
+    * @return string tab name
+    **@since version 0.83
+    *
+    */
    function getTabNameForItem(CommonGLPI $item, $withtemplate = 0) {
 
       // can exists for template
@@ -71,14 +71,14 @@ class PluginSatisfactionSurveyReminder extends CommonDBChild {
    /**
     * show Tab content
     *
-    * @since version 0.83
-    *
     * @param $item                  CommonGLPI object for which the tab need to be displayed
     * @param $tabnum       integer  tab number (default 1)
     * @param $withtemplate boolean  is a template object ? (default 0)
     *
     * @return true
-    **/
+    **@since version 0.83
+    *
+    */
    static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0) {
       if ($item->getType() == PluginSatisfactionSurvey::class) {
          self::showSurvey($item, true);
@@ -119,21 +119,21 @@ class PluginSatisfactionSurveyReminder extends CommonDBChild {
             'id'            => -1
          ];
          Ajax::updateItemJsCode("viewreminder$sID$rand_survey",
-            $CFG_GLPI["root_doc"] . "/ajax/viewsubitem.php", $params);
+                                $CFG_GLPI["root_doc"] . "/ajax/viewsubitem.php", $params);
          echo "};";
 
          // Add predefined reminder ajax action
          // Add reminder ajax action
          echo "function viewAddPredefinedReminder$sID$rand_survey() {\n";
          $params = [
-            'type'          => __CLASS__,
-            'parenttype'    => PluginSatisfactionSurvey::class,
-            self::$items_id => $sID,
-            'id'            => -1,
-            self::PREDEFINED_REMINDER_OPTION_NAME    => 1
+            'type'                                => __CLASS__,
+            'parenttype'                          => PluginSatisfactionSurvey::class,
+            self::$items_id                       => $sID,
+            'id'                                  => -1,
+            self::PREDEFINED_REMINDER_OPTION_NAME => 1
          ];
          Ajax::updateItemJsCode("viewreminder$sID$rand_survey",
-            $CFG_GLPI["root_doc"] . "/plugins/satisfaction/ajax/viewsubitem_reminder.php", $params);
+                                $CFG_GLPI["root_doc"] . "/plugins/satisfaction/ajax/viewsubitem_reminder.php", $params);
          echo "};";
 
          echo "</script>\n";
@@ -152,8 +152,12 @@ class PluginSatisfactionSurveyReminder extends CommonDBChild {
       echo "<form name='form' method='post' action='/glpi/plugins/satisfaction/front/survey.form.php'>";
       echo "<table class='tab_cadre_fixe'><tr class='tab_bg_2'>";
       echo "<th class='b' colspan='2'>" . __('Setup maximum number of days to send reminder', 'satisfaction') . "</th>";
-      echo "<tr calss='b'><td>". __('Maximum number of days to send reminder', 'satisfaction') ."</td>";
-      echo "<td><input type='text' id='reminders_days' name='reminders_days' minlength='1' value='". $survey->fields['reminders_days'] ."'></td></tr>";
+      echo "<tr class='tab_bg_1'><td>" . __('Maximum number of days to send reminder', 'satisfaction') . "</td>";
+      echo "<td>";
+      Dropdown::showNumber('reminders_days', ['value' => $survey->fields["reminders_days"],
+                                              'min'   => 1,
+                                              'max'   => 365]);
+      echo "</td></tr>";
       echo "<tr>";
       echo "<td class='tab_bg_2 center' colspan='4'>";
       echo Html::hidden('id', ['value' => $sID]);
@@ -229,44 +233,43 @@ class PluginSatisfactionSurveyReminder extends CommonDBChild {
       }
 
       $displayPresetReminderForm = isset($options[self::PREDEFINED_REMINDER_OPTION_NAME])
-         && $options[self::PREDEFINED_REMINDER_OPTION_NAME];
+                                   && $options[self::PREDEFINED_REMINDER_OPTION_NAME];
 
       echo "<form name='form' method='post' action='" . Toolbox::getItemTypeFormURL(self::getType()) . "'>";
 
       echo "<div align='center'><table class='tab_cadre_fixe'>";
 
       echo "<tr>";
-      if($displayPresetReminderForm){
+      if ($displayPresetReminderForm) {
          echo "<th colspan='4'>" . __('Choose a predefined reminder', 'satisfaction') . "</th>";
-      }
-      else{
+      } else {
          echo "<th colspan='4'>" . __('Add a reminder', 'satisfaction') . "</th>";
       }
 
       echo "</tr>";
 
-      if($displayPresetReminderForm){
+      if ($displayPresetReminderForm) {
 
          echo "<tr class='tab_bg_1' rowspan='10'>";
 
          echo "<td>" . __('Predefined Reminders', "satisfaction") . "</td>";
-         echo "<td>" .self::getPresetReminderDropdown(self::PREDEFINED_REMINDER_OPTION_NAME) . "</td>";
+         echo "<td>" . self::getPresetReminderDropdown(self::PREDEFINED_REMINDER_OPTION_NAME) . "</td>";
          echo "</tr>";
 
-      }else{
+      } else {
          echo "<tr class='tab_bg_1'>";
 
          // Name line 1
          echo "<td>" . self::getColumnTitles(self::COLUMN_NAME) . "</td>";
-         echo "<td><textarea name='".self::COLUMN_NAME."' cols='50' rows='4'>";
+         echo "<td><textarea name='" . self::COLUMN_NAME . "' cols='50' rows='4'>";
          echo $surveyReminder->fields["name"] . "</textarea></td>";
 
-         echo "<input type='hidden' name='" . self::$items_id . "' value='" .$surveyReminder->fields[self::$items_id] . "'>";
+         echo "<input type='hidden' name='" . self::$items_id . "' value='" . $surveyReminder->fields[self::$items_id] . "'>";
 
          // Comment line 1
          echo "<td rowspan='2'>" . self::getColumnTitles(self::COLUMN_COMMENT) . "</td>";
          echo "<td rowspan='2'>";
-         echo "<textarea cols='60' rows='6' name='".self::COLUMN_COMMENT."' >" . $surveyReminder->fields[self::COLUMN_COMMENT] . "</textarea>";
+         echo "<textarea cols='60' rows='6' name='" . self::COLUMN_COMMENT . "' >" . $surveyReminder->fields[self::COLUMN_COMMENT] . "</textarea>";
          echo "</td>";
 
          echo "</tr>";
@@ -274,14 +277,16 @@ class PluginSatisfactionSurveyReminder extends CommonDBChild {
          // Duration type line 2
          echo "<tr class='tab_bg_1'>";
          echo "<td>" . self::getColumnTitles(self::COLUMN_DURATION_TYPE) . "</td>";
-         echo "<td>" .self::getDurationDropdown(self::COLUMN_DURATION_TYPE, $surveyReminder->fields[self::COLUMN_DURATION_TYPE]) . "</td>";
+         echo "<td>" . self::getDurationDropdown(self::COLUMN_DURATION_TYPE, $surveyReminder->fields[self::COLUMN_DURATION_TYPE]) . "</td>";
          echo "</tr>";
 
          // Duration line 3
          echo "<tr class='tab_bg_1'>";
          echo "<td>" . self::getColumnTitles(self::COLUMN_DURATION) . "</td>";
          echo "<td colspan='3'>";
-         echo '<input type="number" name="'.self::COLUMN_DURATION.'" min="1" value="'.$surveyReminder->fields[self::COLUMN_DURATION].'">';
+         Dropdown::showNumber(self::COLUMN_DURATION, ['value' => $surveyReminder->fields[self::COLUMN_DURATION],
+                                                      'min'   => 1,
+                                                      'max'   => 365]);
          echo "</td>";
          echo "</tr>";
 
@@ -322,9 +327,9 @@ class PluginSatisfactionSurveyReminder extends CommonDBChild {
       $style = '';
       if ($canedit) {
          $style = "style='cursor:pointer' onClick=\"viewEditReminder" .
-            $this->fields[self::$items_id] .
-            $this->fields['id'] . "$rand();\"" .
-            " id='viewquestion" . $this->fields[self::$items_id] . $this->fields["id"] . "$rand'";
+                  $this->fields[self::$items_id] .
+                  $this->fields['id'] . "$rand();\"" .
+                  " id='viewquestion" . $this->fields[self::$items_id] . $this->fields["id"] . "$rand'";
       }
       echo "<tr class='tab_bg_2' $style>";
 
@@ -338,11 +343,11 @@ class PluginSatisfactionSurveyReminder extends CommonDBChild {
          echo "\n<script type='text/javascript' >\n";
          echo "function viewEditReminder" . $this->fields[self::$items_id] . $this->fields["id"] . "$rand() {\n";
          $params = ['type'          => __CLASS__,
-            'parenttype'    => self::$itemtype,
-            self::$items_id => $this->fields[self::$items_id],
-            'id'            => $this->fields["id"]];
+                    'parenttype'    => self::$itemtype,
+                    self::$items_id => $this->fields[self::$items_id],
+                    'id'            => $this->fields["id"]];
          Ajax::updateItemJsCode("viewreminder" . $this->fields[self::$items_id] . "$rand",
-            $CFG_GLPI["root_doc"] . "/ajax/viewsubitem.php", $params);
+                                $CFG_GLPI["root_doc"] . "/ajax/viewsubitem.php", $params);
          echo "};";
          echo "</script>\n";
       }
@@ -357,80 +362,78 @@ class PluginSatisfactionSurveyReminder extends CommonDBChild {
    /**
     * Get the standard massive actions which are forbidden
     *
-    * @since version 0.84
-    *
     * @return an array of massive actions
-    **/
+    **@since version 0.84
+    *
+    */
    public function getForbiddenStandardMassiveAction() {
 
-      $forbidden = parent::getForbiddenStandardMassiveAction();
+      $forbidden   = parent::getForbiddenStandardMassiveAction();
       $forbidden[] = 'update';
       return $forbidden;
    }
 
-   public function getActiveTitles($id){
+   public function getActiveTitles($id) {
       $titles = [
          self::ACTIVE_OFF => __('No'),
-         self::ACTIVE_ON => __('Yes'),
+         self::ACTIVE_ON  => __('Yes'),
       ];
       return $titles[$id];
    }
 
-   public function getDurationTitles($id = null){
+   public function getDurationTitles($id = null) {
 
       $titles = [
-         self::DURATION_DAY => __('Day'),
+         self::DURATION_DAY   => __('Day'),
          self::DURATION_MONTH => __('Month', 'satisfaction')
       ];
 
-      if(is_null($id)){
+      if (is_null($id)) {
          return $titles;
-      }
-      else{
+      } else {
          return $titles[$id];
       }
    }
 
-   public function getPresetReminderTitles($id = null){
+   public function getPresetReminderTitles($id = null) {
       $yolo = 2;
 
       $titles = [
-         self::PREDEFINED_1_WEEK => __('One Week', 'satisfaction'),
-         self::PREDEFINED_2_WEEK => __('Two Week', 'satisfaction'),
+         self::PREDEFINED_1_WEEK  => __('One Week', 'satisfaction'),
+         self::PREDEFINED_2_WEEK  => __('Two Week', 'satisfaction'),
          self::PREDEFINED_1_MONTH => __('One Month', 'satisfaction'),
       ];
 
-      if(is_null($id)){
+      if (is_null($id)) {
          return $titles;
-      }
-      else{
+      } else {
          return $titles[$id];
       }
    }
 
-   public function getColumnTitles($id){
+   public function getColumnTitles($id) {
       $titles = [
-         self::COLUMN_NAME => __('Name'),
+         self::COLUMN_NAME          => __('Name'),
          self::COLUMN_DURATION_TYPE => __("Duration Type", "satisfaction"),
-         self::COLUMN_DURATION => __("Duration", "satisfaction"),
-         self::COLUMN_COMMENT => __("Comments"),
-         self::COLUMN_IS_ACTIVE => __("Active"),
+         self::COLUMN_DURATION      => __("Duration", "satisfaction"),
+         self::COLUMN_COMMENT       => __("Comments"),
+         self::COLUMN_IS_ACTIVE     => __("Active"),
       ];
 
       return $titles[$id];
    }
 
-   public function getDurationDropdown($name, $defaultValue){
+   public function getDurationDropdown($name, $defaultValue) {
 
       $params = [
          'display' => false,
-         'value' => $defaultValue
+         'value'   => $defaultValue
       ];
 
       return Dropdown::showFromArray($name, self::getDurationTitles(), $params);
    }
 
-   public function getPresetReminderDropdown($name){
+   public function getPresetReminderDropdown($name) {
       $params = [
          'display' => false
       ];
@@ -438,29 +441,29 @@ class PluginSatisfactionSurveyReminder extends CommonDBChild {
       return Dropdown::showFromArray($name, self::getPresetReminderTitles(), $params);
    }
 
-   public function generatePredefinedReminderForAdd($postValues){
+   public function generatePredefinedReminderForAdd($postValues) {
 
       $namePrefix = __('Reminder', 'satisfaction');
-      $comment = __('Preset Reminder');
+      $comment    = __('Preset Reminder');
 
-      switch(intval($postValues[self::PREDEFINED_REMINDER_OPTION_NAME])){
+      switch (intval($postValues[self::PREDEFINED_REMINDER_OPTION_NAME])) {
          case self::PREDEFINED_1_WEEK:
-            $postValues[self::COLUMN_NAME] = $namePrefix." ".self::getPresetReminderTitles(self::PREDEFINED_1_WEEK);
-            $postValues[self::COLUMN_COMMENT] = $comment;
+            $postValues[self::COLUMN_NAME]          = $namePrefix . " " . self::getPresetReminderTitles(self::PREDEFINED_1_WEEK);
+            $postValues[self::COLUMN_COMMENT]       = $comment;
             $postValues[self::COLUMN_DURATION_TYPE] = self::DURATION_DAY;
-            $postValues[self::COLUMN_DURATION] = 7;
+            $postValues[self::COLUMN_DURATION]      = 7;
             break;
          case self::PREDEFINED_2_WEEK:
-            $postValues[self::COLUMN_NAME] = $namePrefix." ".self::getPresetReminderTitles(self::PREDEFINED_2_WEEK);
-            $postValues[self::COLUMN_COMMENT] = $comment;
+            $postValues[self::COLUMN_NAME]          = $namePrefix . " " . self::getPresetReminderTitles(self::PREDEFINED_2_WEEK);
+            $postValues[self::COLUMN_COMMENT]       = $comment;
             $postValues[self::COLUMN_DURATION_TYPE] = self::DURATION_DAY;
-            $postValues[self::COLUMN_DURATION] = 14;
+            $postValues[self::COLUMN_DURATION]      = 14;
             break;
          case self::PREDEFINED_1_MONTH:
-            $postValues[self::COLUMN_NAME] = $namePrefix." ".self::getPresetReminderTitles(self::PREDEFINED_1_MONTH);
-            $postValues[self::COLUMN_COMMENT] = $comment;
+            $postValues[self::COLUMN_NAME]          = $namePrefix . " " . self::getPresetReminderTitles(self::PREDEFINED_1_MONTH);
+            $postValues[self::COLUMN_COMMENT]       = $comment;
             $postValues[self::COLUMN_DURATION_TYPE] = self::DURATION_MONTH;
-            $postValues[self::COLUMN_DURATION] = 1;
+            $postValues[self::COLUMN_DURATION]      = 1;
             break;
       }
       return $postValues;
@@ -470,17 +473,18 @@ class PluginSatisfactionSurveyReminder extends CommonDBChild {
     * Verify this survey does not have a reminder with exact same duration type and duration
     *
     * @param $input
+    *
     * @return array|bool
     */
    function prepareInputForAdd($input) {
       $crit = [
          self::COLUMN_DURATION_TYPE => $input[self::COLUMN_DURATION_TYPE],
-         self::COLUMN_DURATION => $input[self::COLUMN_DURATION],
+         self::COLUMN_DURATION      => $input[self::COLUMN_DURATION],
       ];
 
       $items = $this->find($crit);
 
-      if(count($items)){
+      if (count($items)) {
 
          $item = array_pop($items);
 
@@ -496,20 +500,21 @@ class PluginSatisfactionSurveyReminder extends CommonDBChild {
     * Verify survey remindr can be updated only if a column is different
     *
     * @param $input
+    *
     * @return array|bool
     */
-   function prepareInputForUpdate($input){
+   function prepareInputForUpdate($input) {
       $crit = [
          self::COLUMN_DURATION_TYPE => $input[self::COLUMN_DURATION_TYPE],
-         self::COLUMN_DURATION => $input[self::COLUMN_DURATION],
-         self::COLUMN_IS_ACTIVE => $input[self::COLUMN_IS_ACTIVE],
-         self::COLUMN_NAME => $input[self::COLUMN_NAME],
-         self::COLUMN_COMMENT => $input[self::COLUMN_COMMENT]
+         self::COLUMN_DURATION      => $input[self::COLUMN_DURATION],
+         self::COLUMN_IS_ACTIVE     => $input[self::COLUMN_IS_ACTIVE],
+         self::COLUMN_NAME          => $input[self::COLUMN_NAME],
+         self::COLUMN_COMMENT       => $input[self::COLUMN_COMMENT]
       ];
 
       $items = $this->find($crit);
 
-      if(count($items)){
+      if (count($items)) {
 
          $item = array_pop($items);
 
