@@ -62,7 +62,7 @@ class PluginSatisfactionSurveyTranslationDAO{
 
       $result = $DB->query($query);
 
-      while ($data = $DB->fetch_assoc($result)) {
+      while ($data = $DB->fetchAssoc($result)) {
          $datas[] = $data;
       }
       return $datas;
@@ -91,7 +91,7 @@ class PluginSatisfactionSurveyTranslationDAO{
       }
 
       $result = $DB->query($query);
-      while ($data = $DB->fetch_assoc($result)) {
+      while ($data = $DB->fetchAssoc($result)) {
          return $data['nb'];
       }
       return 0;
@@ -104,7 +104,7 @@ class PluginSatisfactionSurveyTranslationDAO{
       $query .=" WHERE `id` = ".$ID;
 
       $result = $DB->query($query);
-      while ($data = $DB->fetch_assoc($result)) {
+      while ($data = $DB->fetchAssoc($result)) {
          return $data;
       }
    }

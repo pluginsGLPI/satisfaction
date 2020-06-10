@@ -4,7 +4,7 @@
  * Init the hooks of the plugins -Needed
  */
 
-define('PLUGIN_SATISFACTION_VERSION', '1.4.5');
+define('PLUGIN_SATISFACTION_VERSION', '1.5.0');
 
 function plugin_init_satisfaction() {
    global $PLUGIN_HOOKS;
@@ -66,7 +66,7 @@ function plugin_version_satisfaction() {
            'homepage'       => 'https://github.com/pluginsGLPI/satisfaction',
            'requirements'   => [
               'glpi' => [
-                 'min' => '9.4',
+                 'min' => '9.5',
                  'dev' => false
               ]
            ]
@@ -79,10 +79,10 @@ function plugin_version_satisfaction() {
  * @return bool
  */
 function plugin_satisfaction_check_prerequisites() {
-   if (version_compare(GLPI_VERSION, '9.4', 'lt')
-       || version_compare(GLPI_VERSION, '9.5', 'ge')) {
+   if (version_compare(GLPI_VERSION, '9.5', 'lt')
+       || version_compare(GLPI_VERSION, '9.6', 'ge')) {
       if (method_exists('Plugin', 'messageIncompatible')) {
-         echo Plugin::messageIncompatible('core', '9.4');
+         echo Plugin::messageIncompatible('core', '9.5');
       }
       return false;
    }

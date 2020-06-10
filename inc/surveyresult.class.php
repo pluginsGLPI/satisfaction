@@ -83,7 +83,7 @@ class PluginSatisfactionSurveyResult extends CommonDBChild {
       if ($total_number == 0) {
          echo "<div class='center'>";
          echo "<table class='tab_cadre_fixe'>";
-         echo "<tr><th>" . __('No result of the survey', 'satisfaction') . "</th></tr>";
+         echo "<tr class='tab_bg_1'><th>" . __('No result of the survey', 'satisfaction') . "</th></trclass>";
          echo "</table>";
          echo "</div><br>";
          return;
@@ -96,7 +96,7 @@ class PluginSatisfactionSurveyResult extends CommonDBChild {
       echo "<div class='center'>";
       echo "<table class='tab_cadre_fixehov'>";
       if ($total_number > 0) {
-         echo "<tr>";
+         echo "<tr class='tab_bg_1'>";
          echo "<th>" . __('Ticket') . "</th>";
 
          $squestion_obj = new PluginSatisfactionSurveyQuestion;
@@ -121,7 +121,7 @@ class PluginSatisfactionSurveyResult extends CommonDBChild {
          $iterator = $DB->request($query);
 
          while ($data = $iterator->next()) {
-            echo "<tr>";
+            echo "<tr class='tab_bg_1'>";
 
             $ticket_satisfaction = new TicketSatisfaction();
             $ticket_satisfaction->getFromDBByRequest(['WHERE' =>

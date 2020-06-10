@@ -10,7 +10,7 @@ function plugin_satisfaction_install() {
    include_once(GLPI_ROOT . "/plugins/satisfaction/inc/notificationtargetticket.class.php");
 
    if (!$DB->tableExists("glpi_plugin_satisfaction_surveys")) {
-      $DB->runFile(GLPI_ROOT . "/plugins/satisfaction/install/sql/empty-1.4.5.sql");
+      $DB->runFile(GLPI_ROOT . "/plugins/satisfaction/install/sql/empty-1.5.0.sql");
 
    } else {
       if (!$DB->fieldExists("glpi_plugin_satisfaction_surveyquestions", "type")) {

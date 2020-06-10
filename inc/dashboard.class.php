@@ -82,7 +82,7 @@ class PluginSatisfactionDashboard extends CommonGLPI {
    function getIcon($icon) {
       switch ($icon) {
          case self::ICON_CIRCLE:
-            return "<i class='fa fa-info-circle'></i>";
+            return "<i class='fas fa-info-circle'></i>";
       }
    }
 
@@ -225,7 +225,7 @@ class PluginSatisfactionDashboard extends CommonGLPI {
          $result = $DB->query($query);
 
          if ($DB->numrows($result)) {
-            while ($data = $DB->fetch_assoc($result)) {
+            while ($data = $DB->fetchAssoc($result)) {
                $numberOfSurveys = $data['nb'];
             }
          }
@@ -238,7 +238,7 @@ class PluginSatisfactionDashboard extends CommonGLPI {
          $result = $DB->query($query);
 
          if ($DB->numrows($result)) {
-            while ($data = $DB->fetch_assoc($result)) {
+            while ($data = $DB->fetchAssoc($result)) {
                $numberOfImpactedTickets = $data['nb'];
             }
          }
@@ -252,7 +252,7 @@ class PluginSatisfactionDashboard extends CommonGLPI {
          $result = $DB->query($query);
 
          if ($DB->numrows($result)) {
-            while ($data = $DB->fetch_assoc($result)) {
+            while ($data = $DB->fetchAssoc($result)) {
                $numberSurveyNotAnswered = $data['nb'];
             }
          }
@@ -266,7 +266,7 @@ class PluginSatisfactionDashboard extends CommonGLPI {
          $result = $DB->query($query);
 
          if ($DB->numrows($result)) {
-            while ($data = $DB->fetch_assoc($result)) {
+            while ($data = $DB->fetchAssoc($result)) {
                $numberSurveyAnswered = $data['nb'];
             }
          }
@@ -280,7 +280,7 @@ class PluginSatisfactionDashboard extends CommonGLPI {
          $result = $DB->query($query);
 
          if ($DB->numrows($result)) {
-            while ($data = $DB->fetch_assoc($result)) {
+            while ($data = $DB->fetchAssoc($result)) {
                $globalSatisfaction = $data['nb'];
             }
          }

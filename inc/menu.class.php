@@ -31,7 +31,13 @@ class PluginSatisfactionMenu extends CommonGLPI
          }
       }
 
+      $menu['icon'] = self::getIcon();
+
       return $menu;
+   }
+
+   static function getIcon() {
+      return "fas fa-thumbs-up";
    }
 
    static function removeRightsFromSession() {

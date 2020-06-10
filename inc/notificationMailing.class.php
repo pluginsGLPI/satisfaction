@@ -151,7 +151,7 @@ class PluginSatisfactionNotificationMailing extends CommonDBTM {
 
       $result = $DB->query($query);
       if ($DB->numrows($result)) {
-         while ($data = $DB->fetch_assoc($result)) {
+         while ($data = $DB->fetchAssoc($result)) {
             $output[$data['id']] = $data;
          }
       }
