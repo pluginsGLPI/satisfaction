@@ -59,7 +59,8 @@ function plugin_satisfaction_uninstall() {
       "glpi_plugin_satisfaction_surveyquestions",
       "glpi_plugin_satisfaction_surveyanswers",
       "glpi_plugin_satisfaction_surveyreminders",
-      "glpi_plugin_satisfaction_surveytranslations"
+      "glpi_plugin_satisfaction_surveytranslations",
+      "glpi_plugin_satisfaction_reminders"
    ];
 
    foreach ($tables as $table) {
