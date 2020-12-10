@@ -38,8 +38,10 @@ function plugin_init_satisfaction() {
             $PLUGIN_HOOKS["menu_toadd"]['satisfaction'] = ['admin' => PluginSatisfactionMenu::class];
          }
 
-         $PLUGIN_HOOKS['add_javascript']['satisfaction'] = ["satisfaction.js"];
-
+         if (isset($_SESSION['glpiactiveprofile']['interface'])
+             && $_SESSION['glpiactiveprofile']['interface'] == 'central') {
+            $PLUGIN_HOOKS['add_javascript']['satisfaction'] = ["satisfaction.js"];
+         }
          if (class_exists('PluginMydashboardMenu')) {
             $PLUGIN_HOOKS['mydashboard']['satisfaction'] = [PluginSatisfactionDashboard::class];
          }

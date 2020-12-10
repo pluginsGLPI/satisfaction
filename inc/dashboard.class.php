@@ -302,7 +302,7 @@ class PluginSatisfactionDashboard extends CommonGLPI {
          }
 
          // Add css and javascript to display stars with rateit
-         $content = Html::css('lib/jqueryplugins/rateit/rateit.css');
+         $content = Html::css('public/lib/jquery.rateit.css');
          Html::requireJs('rateit');
 
          $content.= '<div class="tickets-stats">';
