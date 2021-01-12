@@ -11,7 +11,7 @@ function plugin_satisfaction_load_defaultvalue(root_doc, default_value){
     }
 
     $.ajax({
-        url: root_doc+'/plugins/satisfaction/ajax/satisfaction.php',
+        url: root_doc+'/ajax/satisfaction.php',
         type: 'POST',
         data: '&action_default_value&default_value='+ default_value + '&value=' + value,
         dataType: 'html',

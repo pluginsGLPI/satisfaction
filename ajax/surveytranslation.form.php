@@ -37,7 +37,7 @@ if (!isset($_POST['survey_id']) || !isset($_POST['action'])) {
 }
 
 global $CFG_GLPI;
-$redirection = $CFG_GLPI["root_doc"]."/plugins/satisfaction/front/survey.form.php?id=";
+$redirection = Plugin::getWebDir('satisfaction')."/front/survey.form.php?id=";
 
 $translation = new PluginSatisfactionSurveyTranslation();
 

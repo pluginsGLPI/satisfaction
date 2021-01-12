@@ -133,7 +133,7 @@ class PluginSatisfactionSurveyReminder extends CommonDBChild {
             self::PREDEFINED_REMINDER_OPTION_NAME => 1
          ];
          Ajax::updateItemJsCode("viewreminder$sID$rand_survey",
-                                $CFG_GLPI["root_doc"] . "/plugins/satisfaction/ajax/viewsubitem_reminder.php", $params);
+                                 Plugin::getWebDir('satisfaction') . "/ajax/viewsubitem_reminder.php", $params);
          echo "};";
 
          echo "</script>\n";
