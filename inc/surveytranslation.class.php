@@ -131,7 +131,7 @@ class PluginSatisfactionSurveyTranslation extends CommonDBChild {
 
       $rand    = mt_rand();
       $canedit = $item->can($item->getID(), UPDATE);
-      $target = $CFG_GLPI["root_doc"]."/plugins/satisfaction/ajax/surveytranslation.form.php";
+      $target = Plugin::getWebDir('satisfaction')."/ajax/surveytranslation.form.php";
 
       if ($canedit) {
          echo "<div id='viewtranslation" . $item->getType().$item->getID() . "$rand'></div>\n";
@@ -209,7 +209,7 @@ class PluginSatisfactionSurveyTranslation extends CommonDBChild {
                   'action' => 'GET'
                ];
                Ajax::updateItemJsCode("viewtranslation" . $item->getType().$item->getID() . "$rand",
-                  $CFG_GLPI["root_doc"]."/plugins/satisfaction/ajax/surveytranslation.form.php",
+                  Plugin::getWebDir('satisfaction')."/ajax/surveytranslation.form.php",
                   $params);
                echo "};";
                echo "</script>\n";
@@ -358,7 +358,7 @@ class PluginSatisfactionSurveyTranslation extends CommonDBChild {
    function getFormHeader($translationID, $surveyID){
 
       global $CFG_GLPI;
-      $target = $CFG_GLPI["root_doc"]."/plugins/satisfaction/ajax/surveytranslation.form.php";
+      $target = Plugin::getWebDir('satisfaction')."/ajax/surveytranslation.form.php";
 
       $result = "<form name='form' method='post' action='$target' enctype='multipart/form-data'>";
       $result.= "<input type='hidden' name='survey_id' value='$surveyID'>";

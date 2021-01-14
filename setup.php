@@ -4,7 +4,12 @@
  * Init the hooks of the plugins -Needed
  */
 
-define('PLUGIN_SATISFACTION_VERSION', '1.5.0');
+define ("PLUGIN_SATISFACTION_VERSION", "1.5.1");
+
+// Minimal GLPI version, inclusive
+define('PLUGIN_SATISFACTION_MIN_GLPI', '9.5');
+// Maximum GLPI version, exclusive
+define('PLUGIN_SATISFACTION_MAX_GLPI', '9.6');
 
 function plugin_init_satisfaction() {
    global $PLUGIN_HOOKS;
@@ -61,41 +66,17 @@ function plugin_version_satisfaction() {
 
    $author = "<a href='www.teclib.com'>TECLIB'</a>";
    $author.= ", <a href='http://blogglpi.infotel.com/'>Infotel</a>";
-   return ['name'           => __("More satisfaction", 'satisfaction'),
-           'version'        => PLUGIN_SATISFACTION_VERSION,
-           'author'         => $author,
-           'license'        => 'GPLv2+',
-           'homepage'       => 'https://github.com/pluginsGLPI/satisfaction',
-           'requirements'   => [
-              'glpi' => [
-                 'min' => '9.5',
-                 'dev' => false
-              ]
-           ]
+   return [
+      'name'           => __("More satisfaction", 'satisfaction'),
+      'version'        => PLUGIN_SATISFACTION_VERSION,
+      'author'         => $author,
+      'license'        => 'GPLv2+',
+      'homepage'       => 'https://github.com/pluginsGLPI/satisfaction',
+      'requirements'   => [
+         'glpi' => [
+            'min' => PLUGIN_SATISFACTION_MIN_GLPI,
+            'max' => PLUGIN_SATISFACTION_MAX_GLPI,
+         ]
+      ]
    ];
-}
-
-/**
- * Optional : check prerequisites before install : may print errors or add to message after redirect
- *
- * @return bool
- */
-function plugin_satisfaction_check_prerequisites() {
-   if (version_compare(GLPI_VERSION, '9.5', 'lt')
-       || version_compare(GLPI_VERSION, '9.6', 'ge')) {
-      if (method_exists('Plugin', 'messageIncompatible')) {
-         echo Plugin::messageIncompatible('core', '9.5');
-      }
-      return false;
-   }
-   return true;
-}
-
-/**
- * Uninstall process for plugin : need to return true if succeeded : may display messages or add to message after redirect
- *
- * @return bool
- */
-function plugin_satisfaction_check_config() {
-   return true;
 }
