@@ -40,6 +40,8 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
 
       // can exists for template
       if ($item->getType() == 'PluginSatisfactionSurvey') {
+         echo Html::css('public/lib/jquery.rateit.css');
+         Html::requireJs('rateit');
          return __('Preview', 'satisfaction');
       }
 
@@ -268,9 +270,6 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
     * @param int $value
     */
    static function showStarAnswer($question, $value = 0) {
-      echo Html::css('public/lib/jquery.rateit.css');
-      Html::requireJs('rateit');
-
       $questions_id = $question['id'];
       $number       = $question['number'];
 
