@@ -97,12 +97,16 @@ class PluginSatisfactionSurveyResult extends CommonDBChild {
       echo "<table class='tab_cadre_fixehov'>";
       if ($total_number > 0) {
          echo "<tr class='tab_bg_1'>";
+         echo "<th>" . __('ID') . "</th>";
          echo "<th>" . __('Ticket') . "</th>";
 
          $squestion_obj = new PluginSatisfactionSurveyQuestion;
          foreach ($squestion_obj->find([PluginSatisfactionSurveyQuestion::$items_id => $item->getID()]) as $question) {
             echo "<th>" . nl2br($question['name']) . "</th>";
          }
+         echo "<th>".__('Satisfaction with the resolution of the ticket')."</th>";
+         echo "<th>".__('Comments')."</th>";
+         echo "<th>".__('Response date to the satisfaction survey')."</th>";
          echo "</tr>";
 
          $dbu               = new DbUtils();
@@ -119,8 +123,8 @@ class PluginSatisfactionSurveyResult extends CommonDBChild {
          $query['LIMIT'] = (int)$_SESSION['glpilist_limit'];
 
          $iterator = $DB->request($query);
-
-         while ($data = $iterator->next()) {
+         foreach ($iterator as $data) {
+//         while ($data = $iterator->next()) {
             echo "<tr class='tab_bg_1'>";
 
             $ticket_satisfaction = new TicketSatisfaction();
@@ -129,6 +133,7 @@ class PluginSatisfactionSurveyResult extends CommonDBChild {
 
             $ticket = new Ticket();
             $ticket->getFromDB($ticket_satisfaction->getField('tickets_id'));
+            echo "<td>" . $ticket_satisfaction->getField('tickets_id') . "</td>";
             echo "<td>" . $ticket->getLink() . "</td>";
 
             $answers = $dbu->importArrayFromDB($data['answer']);
@@ -138,7 +143,11 @@ class PluginSatisfactionSurveyResult extends CommonDBChild {
                echo $obj_survey_answer->getAnswer($squestion_obj->fields, $answer);
                echo "</td>";
             }
+            echo "<td>" . $ticket_satisfaction->getField('satisfaction') . "</td>";
+            echo "<td>" . $ticket_satisfaction->getField('comment') . "</td>";
+            echo "<td>" . Html::convDateTime($ticket_satisfaction->getField('date_answered')). "</td>";
             echo "</tr>";
+            $iterator->next();
          }
 
       }

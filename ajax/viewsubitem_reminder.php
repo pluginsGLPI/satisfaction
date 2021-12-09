@@ -60,7 +60,7 @@ if (($item = getItemForItemtype($_POST['type']))
          $options[$reminderName] = intval($_POST[$reminderName]);
       }
 
-      $item->showForm($_POST["id"], $options);
+      $item->showForm($_POST["id"]);
 
    } else {
       echo __('Access denied');

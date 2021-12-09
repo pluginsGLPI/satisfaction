@@ -4,12 +4,12 @@
  * Init the hooks of the plugins -Needed
  */
 
-define ("PLUGIN_SATISFACTION_VERSION", "1.5.2");
+define ("PLUGIN_SATISFACTION_VERSION", "1.6.0");
 
 // Minimal GLPI version, inclusive
-define('PLUGIN_SATISFACTION_MIN_GLPI', '9.5');
+define('PLUGIN_SATISFACTION_MIN_GLPI', '10.0');
 // Maximum GLPI version, exclusive
-define('PLUGIN_SATISFACTION_MAX_GLPI', '9.6');
+define('PLUGIN_SATISFACTION_MAX_GLPI', '11.0');
 
 function plugin_init_satisfaction() {
    global $PLUGIN_HOOKS;

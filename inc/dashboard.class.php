@@ -62,11 +62,15 @@ class PluginSatisfactionDashboard extends CommonGLPI {
     * @return array
     */
    function getWidgetsForItem() {
-      return [
-         $this->getType().self::SATISFACTION_SURVEY =>
-            self::getWidgetTitle($this->getType().self::SATISFACTION_SURVEY)
-            ."&nbsp;".self::getIcon(self::ICON_CIRCLE)
+
+      $widgets = [
+         __('Indicators', 'mydashboard') => [
+            $this->getType().self::SATISFACTION_SURVEY => ["title"   => __('Satisfaction survey', 'satisfaction'),
+                                                           "icon"    => "fas fa-info-circle",
+                                                           "comment" => ""],
+         ]
       ];
+      return $widgets;
    }
 
    function getWidgetTitle($widgetId) {
@@ -77,13 +81,6 @@ class PluginSatisfactionDashboard extends CommonGLPI {
             break;
       }
       return $result;
-   }
-
-   function getIcon($icon) {
-      switch ($icon) {
-         case self::ICON_CIRCLE:
-            return "<i class='fas fa-info-circle'></i>";
-      }
    }
 
    /**

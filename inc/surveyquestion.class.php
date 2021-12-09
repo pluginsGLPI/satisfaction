@@ -196,14 +196,26 @@ class PluginSatisfactionSurveyQuestion extends CommonDBChild {
 
       echo "<tr class='tab_bg_1'>";
       echo "<td>" . self::getTypeName(1) . "&nbsp;:</td>";
-      echo "<td><textarea name='name' cols='50' rows='4'>" .
-           $surveyquestion->fields["name"] . "</textarea></td>";
-      echo "<input type='hidden' name='" . self::$items_id . "' value='" .
-           $surveyquestion->fields[self::$items_id] . "'>";
+      echo "<td>";
+      echo Html::textarea([
+                             'name'    => 'name',
+                             'value'    => $surveyquestion->fields["name"],
+                             'cols'    => '50',
+                             'rows'    => '4',
+                             'display' => false,
+                          ]);
+      echo "</td>";
+      echo Html::hidden(self::$items_id, ['value' =>$surveyquestion->fields[self::$items_id]]);
       echo "</td>";
       echo "<td rowspan='2'>" . __('Comments') . "</td>";
       echo "<td rowspan='2'>";
-      echo "<textarea cols='60' rows='6' name='comment' >" . $surveyquestion->fields["comment"] . "</textarea>";
+      echo Html::textarea([
+                             'name'    => 'comment',
+                             'value'    => $surveyquestion->fields["comment"],
+                             'cols'    => '60',
+                             'rows'    => '6',
+                             'display' => false,
+                          ]);
       echo "</td></tr>";
 
       echo "<tr class='tab_bg_1'>";
@@ -258,10 +270,10 @@ class PluginSatisfactionSurveyQuestion extends CommonDBChild {
       echo "<td class='tab_bg_2 center' colspan='4'>";
       if ($ID <= 0) {
          echo Html::hidden(self::$items_id, ['value' => $survey->getField('id')]);
-         echo "<input type='submit' name='add' class='submit' value='" . _sx('button', 'Add') . "' >";
+         echo Html::submit(_sx('button', 'Add'), ['name' => 'add', 'class' => 'btn btn-primary']);
       } else {
          echo Html::hidden('id', ['value' => $ID]);
-         echo "<input type='submit' name='update' class='submit' value='" . _sx('button', 'Save') . "' >";
+         echo Html::submit(_sx('button', 'Save'), ['name' => 'update', 'class' => 'btn btn-primary']);
       }
       echo "</td>";
       echo "</tr>";

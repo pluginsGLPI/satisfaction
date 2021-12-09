@@ -161,7 +161,7 @@ class PluginSatisfactionSurveyReminder extends CommonDBChild {
       echo "<tr>";
       echo "<td class='tab_bg_2 center' colspan='4'>";
       echo Html::hidden('id', ['value' => $sID]);
-      echo "<input type='submit' name='update' class='submit' value='" . _sx('button', 'Save') . "' >";
+      echo Html::submit(_sx('button', 'Save'), ['name' => 'update', 'class' => 'btn btn-primary']);
       echo "</td>";
       echo "</tr></table>";
       Html::closeForm();
@@ -261,15 +261,28 @@ class PluginSatisfactionSurveyReminder extends CommonDBChild {
 
          // Name line 1
          echo "<td>" . self::getColumnTitles(self::COLUMN_NAME) . "</td>";
-         echo "<td><textarea name='" . self::COLUMN_NAME . "' cols='50' rows='4'>";
-         echo $surveyReminder->fields["name"] . "</textarea></td>";
+         echo "<td>";
+         echo Html::textarea([
+                                'name'    => self::COLUMN_NAME,
+                                'value'    => $surveyReminder->fields["name"],
+                                'cols'    => '50',
+                                'rows'    => '4',
+                                'display' => false,
+                             ]);
+         echo "</td>";
 
-         echo "<input type='hidden' name='" . self::$items_id . "' value='" . $surveyReminder->fields[self::$items_id] . "'>";
+         echo Html::hidden(self::$items_id, ['value' => $surveyReminder->fields[self::$items_id]]);
 
          // Comment line 1
          echo "<td rowspan='2'>" . self::getColumnTitles(self::COLUMN_COMMENT) . "</td>";
          echo "<td rowspan='2'>";
-         echo "<textarea cols='60' rows='6' name='" . self::COLUMN_COMMENT . "' >" . $surveyReminder->fields[self::COLUMN_COMMENT] . "</textarea>";
+         echo Html::textarea([
+                                'name'    => self::COLUMN_COMMENT,
+                                'value'    => $surveyReminder->fields[self::COLUMN_COMMENT],
+                                'cols'    => '60',
+                                'rows'    => '6',
+                                'display' => false,
+                             ]);
          echo "</td>";
 
          echo "</tr>";
@@ -302,10 +315,10 @@ class PluginSatisfactionSurveyReminder extends CommonDBChild {
       echo "<td class='tab_bg_2 center' colspan='4'>";
       if ($ID <= 0) {
          echo Html::hidden(self::$items_id, ['value' => $survey->getField('id')]);
-         echo "<input type='submit' name='add' class='submit' value='" . _sx('button', 'Add') . "' >";
+         echo Html::submit(_sx('button', 'Add'), ['name' => 'add', 'class' => 'btn btn-primary']);
       } else {
          echo Html::hidden('id', ['value' => $ID]);
-         echo "<input type='submit' name='update' class='submit' value='" . _sx('button', 'Save') . "' >";
+         echo Html::submit(_sx('button', 'Save'), ['name' => 'update', 'class' => 'btn btn-primary']);
       }
       echo "</td>";
       echo "</tr>";

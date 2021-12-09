@@ -149,7 +149,7 @@ class PluginSatisfactionSurveyTranslation extends CommonDBChild {
          echo "};";
          echo "</script>\n";
          echo "<div class='center'>".
-            "<a class='vsubmit' href='javascript:addTranslation".
+            "<a class='btn btn-primary' href='javascript:addTranslation".
             $item->getType().$item->getID()."$rand();'>". __('Add a new translation').
             "</a></div><br>";
       }
@@ -243,7 +243,7 @@ class PluginSatisfactionSurveyTranslation extends CommonDBChild {
 
    }
 
-   function showForm($options){
+   function showSurveyTranslationForm($options){
       global $CFG_GLPI;
       $surveyId = Toolbox::cleanInteger($options['survey_id']);
 
@@ -264,8 +264,7 @@ class PluginSatisfactionSurveyTranslation extends CommonDBChild {
       echo "<tr>";
       // Edit Translation
       if ($options['id'] > 0) {
-         echo "<input type='hidden' name='action' value='EDIT'>";
-
+         echo Html::hidden('action', ['value' => 'EDIT']);
          $surveyTranslationData = PluginSatisfactionSurveyTranslationDAO::getSurveyTranslationByID($options['id']);
 
          $surveyQuestion = new PluginSatisfactionSurveyQuestion();
@@ -273,27 +272,34 @@ class PluginSatisfactionSurveyTranslation extends CommonDBChild {
 
          // Language
          echo "<td width='10%' $tdBaseStyle>";
-         echo "<input type='hidden' name='language' value='".$surveyTranslationData['language']."'>";
-         echo "<input type='hidden' name='id' value='".$options['id']."'>";
-         echo "<input type='hidden' name='question_id' value='".$surveyQuestion->getID()."'>";
+         echo Html::hidden('language', ['value' => $surveyTranslationData['language']]);
+         echo Html::hidden('id', ['value' => $options['id']]);
+         echo Html::hidden('question_id', ['value' => $surveyQuestion->getI]);
 
          echo Dropdown::getLanguageName($surveyTranslationData['language']);
          echo "</td>";
          // Question
          echo "<td width='45%' $tdBaseStyle>".$surveyQuestion->getName()."</td>";
          // Value
-         echo "<td width='45%' $tdBaseStyle><textarea style='position:relative; width:90%; height:60px' type='textarea' name='value'>";
-         echo $surveyTranslationData['value']."</textarea></td>";
+         echo "<td width='45%' $tdBaseStyle>";
+         echo Html::textarea([
+                                'name'    => 'value',
+                                'value'    => $surveyTranslationData['value'],
+                                'cols'    => '50',
+                                'rows'    => '4',
+                                'display' => false,
+                             ]); //style='position:relative; width:90%; height:60px'
+         echo "</td>";
          echo "</tr>";
 
          // Save button
          echo "<tr><td class='center' colspan='3'>\n";
-         echo Html::submit(_x('button', 'Save'), ['name' => 'update']);
+         echo Html::submit(_x('button', 'Save'), ['name' => 'update', 'class' => 'btn btn-primary']);
          echo "</tr>";
       }
       // New translation
       else{
-         echo "<input type='hidden' name='action' value='NEW'>";
+         echo Html::hidden('action', ['value' =>'NEW']);
 
          // Language
          echo "<td width='10%' $tdBaseStyle>";
@@ -319,14 +325,20 @@ class PluginSatisfactionSurveyTranslation extends CommonDBChild {
 
          // Value
 
-         echo "<td width='60%' $tdBaseStyle><textarea style='position:relative; width:90%; height:60px' type='textarea' name='value'>";
-         echo "</textarea></td>";
+         echo "<td width='60%' $tdBaseStyle>";
+         echo Html::textarea([
+                                'name'    => 'value',
+                                'cols'    => '50',
+                                'rows'    => '4',
+                                'display' => false,
+                             ]); //style='position:relative; width:90%; height:60px'
+         echo "</td>";
 
          echo "</tr>";
 
          // Add button
          echo "<tr><td class='center' colspan='3'>\n";
-         echo Html::submit(_x('button', 'Add'), ['name' => 'update']);
+         echo Html::submit(_x('button', 'Add'), ['name' => 'update', 'class' => 'btn btn-primary']);
          echo "</tr>";
       }
 
@@ -361,7 +373,7 @@ class PluginSatisfactionSurveyTranslation extends CommonDBChild {
       $target = Plugin::getWebDir('satisfaction')."/ajax/surveytranslation.form.php";
 
       $result = "<form name='form' method='post' action='$target' enctype='multipart/form-data'>";
-      $result.= "<input type='hidden' name='survey_id' value='$surveyID'>";
+      $result.= Html::hidden('survey_id', ['value' =>$surveyID]);
       $result.= "<div class='spaced' id='tabsbody'>";
       $result.= "<table class='tab_cadre_fixe' id='mainformtable'>";
       $result.= "<tbody>";

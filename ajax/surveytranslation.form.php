@@ -46,7 +46,7 @@ switch($_POST['action']){
       header("Content-Type: text/html; charset=UTF-8");
       Html::header_nocache();
       Session::checkLoginUser();
-      $translation->showForm($_POST);
+      $translation->showSurveyTranslationForm($_POST);
       Html::ajaxFooter();
       break;
    case 'NEW':

@@ -113,26 +113,26 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
          $sanswer_obj->fields['answer'] = $dbu->importArrayFromDB($sanswer_obj->fields['answer']);
       }
 
-      echo "<input type='hidden' name='plugin_satisfaction_surveys_id' value='$plugin_satisfaction_surveys_id'>";
+      echo Html::hidden('plugin_satisfaction_surveys_id', ['value' =>$plugin_satisfaction_surveys_id]);
 
       if ($preview) {
          echo "<div class='spaced' id='tabsbody'>";
-         echo "<table class='tab_cadre_fixe'>";
-         echo "<tr><th colspan='2'>" . __('Satisfaction', 'satisfaction') . "&nbsp;:</th></tr>";
+      } else {
+         echo "<div class='card-body d-flex flex-wrap'>";
       }
 
       //list survey questions
       $squestion_obj = new PluginSatisfactionSurveyQuestion;
       foreach ($squestion_obj->find([PluginSatisfactionSurveyQuestion::$items_id => $plugin_satisfaction_surveys_id]) as $question) {
-         echo "<tr class=\"tab_bg_2\">";
-
+         echo "<div class='row flex-row col-12 col-sm-12'>";
          $name = $question['name'];
          if (PluginSatisfactionSurveyTranslation::hasTranslation($question["plugin_satisfaction_surveys_id"], $question["id"])) {
             $name = PluginSatisfactionSurveyTranslation::getTranslation($question["plugin_satisfaction_surveys_id"], $question["id"]);
          }
-
-         echo "<td>" . nl2br($name) . "</td>";
-         echo "<td>";
+         echo "<div class='row flex-rowform-field row col-12 col-sm-6 mb-2'>";
+         echo nl2br($name);
+         echo "</div>";
+         echo "<div class='row flex-rowform-field row col-12 col-sm-6 mb-2'>";
          if (isset($sanswer_obj->fields['answer'][$question['id']])) {
             $value = $sanswer_obj->fields['answer'][$question['id']];
          } else {
@@ -145,14 +145,11 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
             }
          }
          self::displayAnswer($question, $value);
-         echo "</td>";
-         echo "</tr>";
-      }
-
-      if ($preview) {
-         echo "</table>";
+         echo "</div>";
          echo "</div>";
       }
+
+      echo "</div>";
    }
 
 
@@ -201,7 +198,7 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
          $sanswer_obj->fields['answer'] = $dbu->importArrayFromDB($sanswer_obj->fields['answer']);
       }
 
-      echo "<input type='hidden' name='plugin_satisfaction_surveys_id' value='$plugin_satisfaction_surveys_id'>";
+      echo Html::hidden('plugin_satisfaction_surveys_id', ['value' =>$plugin_satisfaction_surveys_id]);
 
       //list survey questions
       $squestion_obj = new PluginSatisfactionSurveyQuestion;
@@ -253,7 +250,14 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
 
          case PluginSatisfactionSurveyQuestion::TEXTAREA :
             $value = Html::cleanPostForTextArea($value);
-            echo "<textarea cols='60' rows='6' name='answer[$questions_id]' >" . $value . "</textarea>";
+            $name = "answer[".$questions_id."]";
+            echo Html::textarea([
+                                   'name'    => $name,
+                                   'value'    => $value,
+                                   'cols'    => '60',
+                                   'rows'    => '6',
+                                   'display' => false,
+                                ]);
             break;
 
          case PluginSatisfactionSurveyQuestion::NOTE :
