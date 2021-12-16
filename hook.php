@@ -37,7 +37,7 @@ function plugin_satisfaction_install() {
    include_once(Plugin::getPhpDir('satisfaction')."/inc/notificationtargetticket.class.php");
 
    if (!$DB->tableExists("glpi_plugin_satisfaction_surveys")) {
-      $DB->runFile(Plugin::getPhpDir('satisfaction')."/install/sql/empty-1.5.0.sql");
+      $DB->runFile(Plugin::getPhpDir('satisfaction')."/install/sql/empty-1.6.0.sql");
 
    } else {
       if (!$DB->fieldExists("glpi_plugin_satisfaction_surveyquestions", "type")) {
