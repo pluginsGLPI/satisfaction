@@ -66,7 +66,7 @@ class PluginSatisfactionDashboard extends CommonGLPI {
       $widgets = [
          __('Indicators', 'mydashboard') => [
             $this->getType().self::SATISFACTION_SURVEY => ["title"   => __('Satisfaction survey', 'satisfaction'),
-                                                           "icon"    => "fas fa-info-circle",
+                                                           "icon"    => "ti ti-info-circle",
                                                            "comment" => ""],
          ]
       ];
