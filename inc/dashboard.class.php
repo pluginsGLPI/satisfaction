@@ -242,8 +242,7 @@ class PluginSatisfactionDashboard extends CommonGLPI {
 
          // Survey not answered
          $query = "SELECT count(*) as nb FROM " . TicketSatisfaction::getTable();
-         $query .= " WHERE 1=1";
-         $query .= " AND date_answered IS NULL";
+         $query .= " WHERE date_answered IS NULL";
          addDateCriteria($query, $opt['begin'], $opt['end']);
 
          $result = $DB->query($query);
@@ -256,8 +255,7 @@ class PluginSatisfactionDashboard extends CommonGLPI {
 
          // Survey answered
          $query = "SELECT count(DISTINCT tickets_id) as nb FROM " . TicketSatisfaction::getTable();
-         $query .= " WHERE 1=1";
-         $query .= " AND date_answered IS NOT NULL";
+         $query .= " WHERE date_answered IS NOT NULL";
          addDateCriteria($query, $opt['begin'], $opt['end']);
 
          $result = $DB->query($query);
@@ -270,8 +268,7 @@ class PluginSatisfactionDashboard extends CommonGLPI {
 
          // Global satisfaction
          $query = "SELECT AVG(satisfaction) as nb FROM " . TicketSatisfaction::getTable();
-         $query .= " WHERE 1=1";
-         $query .= " AND date_answered IS NOT NULL";
+         $query .= " WHERE date_answered IS NOT NULL";
          addDateCriteria($query, $opt['begin'], $opt['end']);
 
          $result = $DB->query($query);
