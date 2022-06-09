@@ -224,7 +224,7 @@ class PluginSatisfactionReminder extends CommonDBTM {
                }
             }
             usort($potentialReminderToSendDates, "date_sort");
-            $dateNow = date("Y/m/d");
+            $dateNow = date("Y-m-d");
 
             if (isset($potentialReminderToSendDates[0])) {
 
