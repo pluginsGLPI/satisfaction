@@ -358,7 +358,7 @@ class PluginSatisfactionDashboard extends CommonGLPI {
     */
    function addPeriodCriteriaToGraphHeader(&$graphHeader){
 
-      $submitPos = strpos($graphHeader, "<input type='submit'");
+      $submitPos = strpos($graphHeader, "<button type='submit'");
       $graphBeforeSubmit = substr($graphHeader, 0, $submitPos);
       $graphAfterSubmit = substr($graphHeader, $submitPos, strlen($graphHeader) - 1);
 
