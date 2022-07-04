@@ -116,7 +116,3 @@ function plugin_satisfaction_uninstall() {
 
    return true;
 }
-
-function plugin_satisfaction_get_events(NotificationTargetTicket $target) {
-   $target->events['survey_reminder'] = __("Ticket Satisfaction Reminder", 'satisfaction');
-}
