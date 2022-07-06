@@ -40,6 +40,12 @@ class PluginSatisfactionNotificationTargetTicket extends NotificationTarget {
       return ["survey_reminder" => __('Survey Reminder', 'satisfaction')];
    }
 
+   static function addEvents(NotificationTargetTicket $target) {
+
+      $target->events['survey_reminder']
+         = __('Survey Reminder', 'satisfaction');
+   }
+
    function getDatasForTemplate($event, $options = []) {
    }
 
