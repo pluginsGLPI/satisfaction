@@ -146,6 +146,7 @@ class PluginSatisfactionSurveyTranslation extends CommonDBChild {
             $params);
          echo "};";
          echo "</script>\n";
+
          echo "<div class='center'>".
             "<a class='submit btn btn-primary' href='javascript:addTranslation".
             $item->getType().$item->getID()."$rand();'>". __('Add a new translation').
@@ -368,7 +369,7 @@ class PluginSatisfactionSurveyTranslation extends CommonDBChild {
    function getFormHeader($translationID, $surveyID){
 
       global $CFG_GLPI;
-      $target = Plugin::getWebDir('satisfaction')."/ajax/surveytranslation.form.php";
+      $target = Plugin::getWebDir('satisfaction')."/front/surveytranslation.form.php";
 
       $result = "<form name='form' method='post' action='$target' enctype='multipart/form-data'>";
       $result.= Html::hidden('survey_id', ['value' =>$surveyID]);
@@ -485,7 +486,7 @@ class PluginSatisfactionSurveyTranslation extends CommonDBChild {
 
       $translationList = PluginSatisfactionSurveyTranslationDAO::getSurveyTranslationByCrit($crit);
       $translation = array_pop($translationList);
-      
+
       return $translation['value'];
    }
 }
