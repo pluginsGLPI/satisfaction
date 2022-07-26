@@ -44,8 +44,7 @@ function plugin_init_satisfaction() {
    $PLUGIN_HOOKS['csrf_compliant']['satisfaction'] = true;
    $PLUGIN_HOOKS['change_profile']['satisfaction'] = [PluginSatisfactionProfile::class, 'initProfile'];
 
-   $plugin = new Plugin();
-   if ($plugin->isInstalled('satisfaction') && $plugin->isActivated('satisfaction')) {
+   if (Plugin::isPluginActive('satisfaction')) {
 
       //if glpi is loaded
       if (Session::getLoginUserID()) {
