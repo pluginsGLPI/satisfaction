@@ -46,10 +46,10 @@ class PluginSatisfactionNotificationTargetTicket extends NotificationTarget {
          = __('Survey Reminder', 'satisfaction');
    }
 
-   function getDatasForTemplate($event, $options = []) {
+   function addDataForTemplate($event, $options = []) {
    }
 
-   function getSpecificTargets($data, $options) {
+   function addSpecificTargets($data, $options) {
 
    }
 
