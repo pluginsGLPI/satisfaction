@@ -68,7 +68,7 @@ class PluginSatisfactionDashboard extends CommonGLPI
         $widgets = [
             PluginMydashboardMenu::$HELPDESK => [
 
-                $this->getType().self::SATISFACTION_SURVEY => ["title"   => __('Satisfaction survey', 'satisfaction'),
+                $this->getType().self::SATISFACTION_SURVEY => ["title"   => __('Summary of satisfaction surveys', 'satisfaction'),
                                                                "type"    => PluginMydashboardWidget::$KPI,
                                                                "comment" => ""],
             ],
