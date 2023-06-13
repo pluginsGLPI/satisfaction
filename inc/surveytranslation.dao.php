@@ -115,7 +115,7 @@ class PluginSatisfactionSurveyTranslationDAO{
       $query .= " VALUES(".$surveyId.",".$questionId.",'".$language."','".$value."')";
 
       if($DB->query($query)){
-         return $DB->insert_id();
+         return $DB->insertId();
       }else{
          return null;
       }

@@ -368,7 +368,7 @@ class PluginSatisfactionSurveyTranslation extends CommonDBChild {
    function getFormHeader($translationID, $surveyID){
 
       global $CFG_GLPI;
-      $target = Plugin::getWebDir('satisfaction')."/ajax/surveytranslation.form.php";
+      $target = Plugin::getWebDir('satisfaction')."/front/surveytranslation.form.php";
 
       $result = "<form name='form' method='post' action='$target' enctype='multipart/form-data'>";
       $result.= Html::hidden('survey_id', ['value' =>$surveyID]);
