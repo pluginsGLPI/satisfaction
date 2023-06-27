@@ -146,21 +146,24 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
       if ($preview) {
          echo "<div class='spaced' id='tabsbody'>";
       } else {
-         echo "<div class='card-body d-flex flex-wrap'>";
+         echo "<div>";
       }
+
+      echo "<table class='tab_cadre_fixe'>";
+      echo "<tbody>";
 
       //list survey questions
       $squestion_obj = new PluginSatisfactionSurveyQuestion;
       foreach ($squestion_obj->find([PluginSatisfactionSurveyQuestion::$items_id => $plugin_satisfaction_surveys_id]) as $question) {
-         echo "<div class='row flex-row col-12 col-sm-12'>";
+         echo "<tr>";
+         echo "<td class='w-50'>";
          $name = $question['name'];
          if (PluginSatisfactionSurveyTranslation::hasTranslation($question["plugin_satisfaction_surveys_id"], $question["id"])) {
             $name = PluginSatisfactionSurveyTranslation::getTranslation($question["plugin_satisfaction_surveys_id"], $question["id"]);
          }
-         echo "<div class='row flex-rowform-field row col-12 col-sm-6 mb-2'>";
          echo nl2br($name);
-         echo "</div>";
-         echo "<div class='row flex-rowform-field row col-12 col-sm-6 mb-2'>";
+         echo "</td>";
+         echo "<td>";
          if (isset($sanswer_obj->fields['answer'][$question['id']])) {
             $value = $sanswer_obj->fields['answer'][$question['id']];
          } else {
@@ -173,11 +176,17 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
             }
          }
          self::displayAnswer($question, $value);
-         echo "</div>";
-         echo "</div>";
+         echo "</td>";
+         echo "</tr>";
       }
 
+      echo "</tbody>";
+      echo "</table>";
       echo "</div>";
+
+      echo "<script type='text/javascript'>";
+      echo "$('td', '#mainformtable').addClass('w-50');";
+      echo "</script>";
    }
 
 

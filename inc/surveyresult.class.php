@@ -174,7 +174,6 @@ class PluginSatisfactionSurveyResult extends CommonDBChild {
             echo "<td>" . $ticket_satisfaction->getField('comment') . "</td>";
             echo "<td>" . Html::convDateTime($ticket_satisfaction->getField('date_answered')). "</td>";
             echo "</tr>";
-            $iterator->next();
          }
 
       }
