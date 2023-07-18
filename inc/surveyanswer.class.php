@@ -184,9 +184,26 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
       echo "</table>";
       echo "</div>";
 
-      echo "<script type='text/javascript'>";
-      echo "$('td', '#mainformtable').addClass('w-50');";
-      echo "</script>";
+      echo Html::scriptBlock("
+         // Isolate variables in a self calling function
+         (function(){
+            // Set table content width
+            const setTableWidth = function() {
+               $('#mainformtable td').addClass('w-50');
+            };
+
+            // Throttled function to avoid spamming the function on repeated events
+            const setTableWidthDebounced = _.throttle(setTableWidth, 500, false);
+
+            // Run once immediatly
+            setTableWidth();
+
+            // Run the function on each container change, to make sure it is applied to all rows
+            $('#mainformtable').on('DOMSubtreeModified', function() {
+               setTableWidthDebounced();
+            });
+         })();
+      ");
    }
 
 
