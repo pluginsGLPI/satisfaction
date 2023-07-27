@@ -338,7 +338,7 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
       }
       echo "</select>";
 
-      echo "<div class='rateit' id='stars_$questions_id'></div>";
+      echo "<div id='stars_$questions_id'></div>";
       echo "<script type='text/javascript'>\n";
       echo "$(function() {";
       echo "$('#stars_$questions_id').rateit({value: " . $value . ",
