@@ -446,9 +446,27 @@ class PluginSatisfactionSurvey extends CommonDBTM {
       $questions = toolbox::addslashes_deep($questions);
       foreach ($questions as $question) {
          $question['plugin_satisfaction_surveys_id'] = $newID;
+         $question_id = $question['id'];
          unset($question['id']);
-         if (!$question_obj->add($question)) {
+         if (!$new_question_id = $question_obj->add($question)) {
             return false;
+         }
+         //find and duplicate translations
+         $translation_obj  = new PluginSatisfactionSurveyTranslation();
+         $translations = $translation_obj->find([
+            'plugin_satisfaction_surveys_id' => $ID,
+            'glpi_plugin_satisfaction_surveyquestions_id' => $question_id
+         ]);
+         $translations = toolbox::addslashes_deep($translations);
+         foreach ($translations as $translation) {
+            if (!$translation_obj->newSurveyTranslation([
+               'survey_id' => $newID,
+               'question_id' => $new_question_id,
+               'language' => $translation['language'],
+               'value' => $translation['value']
+            ])) {
+               return false;
+            }
          }
       }
 
