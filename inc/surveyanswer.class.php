@@ -146,21 +146,24 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
       if ($preview) {
          echo "<div class='spaced' id='tabsbody'>";
       } else {
-         echo "<div class='card-body d-flex flex-wrap'>";
+         echo "<div>";
       }
+
+      echo "<table class='tab_cadre_fixe'>";
+      echo "<tbody>";
 
       //list survey questions
       $squestion_obj = new PluginSatisfactionSurveyQuestion;
       foreach ($squestion_obj->find([PluginSatisfactionSurveyQuestion::$items_id => $plugin_satisfaction_surveys_id]) as $question) {
-         echo "<div class='row flex-row col-12 col-sm-12'>";
+         echo "<tr>";
+         echo "<td class='w-50'>";
          $name = $question['name'];
          if (PluginSatisfactionSurveyTranslation::hasTranslation($question["plugin_satisfaction_surveys_id"], $question["id"])) {
             $name = PluginSatisfactionSurveyTranslation::getTranslation($question["plugin_satisfaction_surveys_id"], $question["id"]);
          }
-         echo "<div class='row flex-rowform-field row col-12 col-sm-6 mb-2'>";
          echo nl2br($name);
-         echo "</div>";
-         echo "<div class='row flex-rowform-field row col-12 col-sm-6 mb-2'>";
+         echo "</td>";
+         echo "<td>";
          if (isset($sanswer_obj->fields['answer'][$question['id']])) {
             $value = $sanswer_obj->fields['answer'][$question['id']];
          } else {
@@ -173,11 +176,34 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
             }
          }
          self::displayAnswer($question, $value);
-         echo "</div>";
-         echo "</div>";
+         echo "</td>";
+         echo "</tr>";
       }
 
+      echo "</tbody>";
+      echo "</table>";
       echo "</div>";
+
+      echo Html::scriptBlock("
+         // Isolate variables in a self calling function
+         (function(){
+            // Set table content width
+            const setTableWidth = function() {
+               $('#mainformtable td').addClass('w-50');
+            };
+
+            // Throttled function to avoid spamming the function on repeated events
+            const setTableWidthDebounced = _.throttle(setTableWidth, 500, false);
+
+            // Run once immediatly
+            setTableWidth();
+
+            // Run the function on each container change, to make sure it is applied to all rows
+            $('#mainformtable').on('DOMSubtreeModified', function() {
+               setTableWidthDebounced();
+            });
+         })();
+      ");
    }
 
 
