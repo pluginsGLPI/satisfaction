@@ -459,14 +459,12 @@ class PluginSatisfactionSurvey extends CommonDBTM {
          ]);
          $translations = toolbox::addslashes_deep($translations);
          foreach ($translations as $translation) {
-            if (!$translation_obj->newSurveyTranslation([
+            $translation_obj->newSurveyTranslation([
                'survey_id' => $newID,
                'question_id' => $new_question_id,
                'language' => $translation['language'],
                'value' => $translation['value']
-            ])) {
-               return false;
-            }
+            ]);
          }
       }
 
