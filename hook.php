@@ -27,6 +27,8 @@
  --------------------------------------------------------------------------
  */
 
+use Glpi\RichText\RichText;
+
 /**
  * @return bool
  */
@@ -115,4 +117,140 @@ function plugin_satisfaction_uninstall() {
    CronTask::Register(PluginSatisfactionReminder::class, PluginSatisfactionReminder::CRON_TASK_NAME, DAY_TIMESTAMP);
 
    return true;
+}
+
+function plugin_satisfaction_giveItem($type, $ID, $data, $num) {
+   global $DB, $GLPI_CACHE;
+   $dbu = new DbUtils();
+   $searchopt = &Search::getOptions($type);
+   $table = $searchopt[$ID]["table"];
+   $field = $searchopt[$ID]["field"];
+   $html_output = (strpos($_SERVER['REQUEST_URI'], "front/report.dynamic.php") === false);
+
+   $out = '';
+   if (
+      $type == Ticket::class &&
+      ($table . '.' . $field) == "glpi_plugin_satisfaction_surveyanswers.answer"
+   ) {
+
+      if (null === $data[$num][0]['name']) {
+         return '';
+      } elseif ($data[$num][0]['name']) {
+
+         $cellContent = explode(PluginSatisfactionSurveyQuestion::SEPARATOR, $data[$num][0]['name']);
+         $surveyResponses = $dbu->importArrayFromDB($cellContent[0]);
+         $response = null;
+         foreach ($surveyResponses as $surveyResponseKey => $surveyResponseValue) {
+            if ($surveyResponseKey == $cellContent[2]) {
+               $response = $surveyResponseValue;
+               break;
+            }
+         }
+         if ($response === null) {
+            return '';
+         }
+
+         //Get Survey question meta data in database (question type)
+         $ref_cache_key = sprintf('plugin_satisfaction_question_%d_type', $cellContent[2]);
+         //Get from cache for performance
+         $surveyType = "" . $GLPI_CACHE->get($ref_cache_key);
+         if (!$surveyType) {
+            $surveyQuestion = new PluginSatisfactionSurveyQuestion();
+            $surveyQuestion->getFromDB($cellContent[2]);
+            $surveyType = $surveyQuestion->fields['type'];
+            $GLPI_CACHE->set($ref_cache_key, $surveyType, new \DateInterval('P1D'));
+         }
+
+         switch ($surveyType) {
+            case 'yesno':
+               return \Dropdown::getYesNo($response);
+
+            case 'note':
+               if ($html_output) {
+                  return TicketSatisfaction::displaySatisfaction($response);
+               }
+
+            default:
+               return RichText::getTextFromHtml($response, true, true, $html_output);
+         }
+      }
+   }
+
+   return $out;
+}
+
+function plugin_satisfaction_getAddSearchOptionsNew($itemtype) {
+   global $DB;
+
+   $options = [];
+   if ($itemtype == Ticket::class) {
+
+      //Get all questions
+      $query = [
+         'FIELDS' => [
+            'glpi_plugin_satisfaction_surveyquestions' => ['id', 'name'],
+            'glpi_plugin_satisfaction_surveys' => ['entities_id', 'is_recursive']
+         ],
+         'FROM' => 'glpi_plugin_satisfaction_surveyquestions',
+         'LEFT JOIN' => [
+            'glpi_plugin_satisfaction_surveys' => [
+               'FKEY' => [
+                  'glpi_plugin_satisfaction_surveys' => 'id',
+                  'glpi_plugin_satisfaction_surveyquestions' => 'plugin_satisfaction_surveys_id'
+               ]
+            ]
+         ],
+         'WHERE' => ['is_active' => 1],
+         'ORDER' => 'glpi_plugin_satisfaction_surveyquestions.id ASC'
+      ];
+      $iterator = $DB->request($query);
+      $questionsArray = [];
+      foreach ($iterator as $data) {
+         if (
+            isset($_SESSION['glpiactive_entity']) &&
+
+            (
+               ($data['is_recursive'] == 1 &&
+                  in_array($_SESSION['glpiactive_entity'], getSonsOf(Entity::getTable(), $data['entities_id']))
+               )
+               ||
+               ($data['is_recursive'] == 0 &&
+                  $_SESSION['glpiactive_entity'] == $data['entities_id'])
+            )
+         ) {
+            $questionsArray[$data['id']] = $data['name'];
+         }
+
+      }
+
+      foreach ($questionsArray as $key => $question) {
+         $options[] = [
+            'id' => sprintf('520%02d', $key),
+            'table' => 'glpi_plugin_satisfaction_surveyanswers',
+            'field' => 'answer',
+            'name' => $question,
+            'jointype' => 'child',
+            'linkfield' => 'id',
+            'nosearch' => true,
+            'joinparams' => [
+               'jointype' => 'child',
+               'linkfield' => 'ticketsatisfactions_id',
+               'beforejoin' => [
+                  [
+                     'table' => 'glpi_ticketsatisfactions',
+                     'jointype' => '',
+                  ],
+               ]
+            ],
+            'computation' =>
+               '(CONCAT(answer, "' . PluginSatisfactionSurveyQuestion::SEPARATOR .
+               '", plugin_satisfaction_surveys_id, "' . PluginSatisfactionSurveyQuestion::SEPARATOR .
+               '", "' . $key . '"))',
+         ];
+
+         
+      }
+
+   }
+   return $options;
 }
