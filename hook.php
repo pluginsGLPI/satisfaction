@@ -134,7 +134,7 @@ function plugin_satisfaction_giveItem($type, $ID, $data, $num) {
    ) {
 
       if (null === $data[$num][0]['name']) {
-         return '';
+         return ' ';
       } elseif ($data[$num][0]['name']) {
 
          $cellContent = explode(PluginSatisfactionSurveyQuestion::SEPARATOR, $data[$num][0]['name']);
@@ -146,8 +146,8 @@ function plugin_satisfaction_giveItem($type, $ID, $data, $num) {
                break;
             }
          }
-         if ($response === null) {
-            return '';
+         if ($response === null || $response === "") {
+            return ' ';
          }
 
          //Get Survey question meta data in database (question type)
