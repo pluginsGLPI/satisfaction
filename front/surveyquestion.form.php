@@ -32,6 +32,8 @@ include('../../../inc/includes.php');
 
 Session::checkLoginUser();
 
+global $GLPI_CACHE;
+
 $question = new PluginSatisfactionSurveyQuestion();
 
 if (isset($_POST["add"])) {
@@ -42,6 +44,9 @@ if (isset($_POST["add"])) {
 } else if (isset($_POST["update"])) {
    $question->check($_POST['id'], UPDATE);
    $question->update($_POST);
+   //Delete cache if exist
+   $ref_cache_key = sprintf('plugin_satisfaction_question_%d_type', $_POST['id']);
+   $GLPI_CACHE->delete($ref_cache_key);
    Html::back();
 
 } else if (isset($_POST["delete"])) {
