@@ -389,11 +389,13 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
 
          $surveyanswer->update($input);
       } else {
-         $input = ['plugin_satisfaction_surveys_id' => $ticketSatisfaction->input['plugin_satisfaction_surveys_id'],
-                   'ticketsatisfactions_id'         => $ticketSatisfaction->getField('id'),
-                   'answer'                         => addslashes($dbu->exportArrayToDB($ticketSatisfaction->input['answer']))];
+          if (isset($ticketSatisfaction->input['plugin_satisfaction_surveys_id'])) {
+              $input = ['plugin_satisfaction_surveys_id' => $ticketSatisfaction->input['plugin_satisfaction_surveys_id'],
+                  'ticketsatisfactions_id'         => $ticketSatisfaction->getField('id'),
+                  'answer'                         => addslashes($dbu->exportArrayToDB($ticketSatisfaction->input['answer']))];
 
-         $surveyanswer->add($input);
+              $surveyanswer->add($input);
+          }
       }
 
    }

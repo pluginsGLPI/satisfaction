@@ -107,20 +107,12 @@ class PluginSatisfactionNotificationTargetTicket extends NotificationTarget {
       $notification_notificationTemplate = new Notification_NotificationTemplate();
 
       if($notification_notificationTemplate->find(['notifications_id' => $notificationDBTM->getID()])){
-         $DB->query("DELETE FROM glpi_notificationtemplatetranslations
-                     WHERE notificationtemplates_id = " . $notification_notificationTemplate->getField('notificationtemplates_id'));
 
-         $DB->query("DELETE FROM glpi_notificationtargets
-                     WHERE notifications_id = " . $notificationDBTM->getID());
-
-         $DB->query("DELETE FROM glpi_notifications_notificationtemplates
-                     WHERE id = " . $notification_notificationTemplate->getField('notificationtemplates_id'));
-
-         $DB->query("DELETE FROM glpi_notificationtemplates
-                     WHERE id = " . $notification_notificationTemplate->getField('notificationtemplates_id'));
-
-         $DB->query("DELETE FROM glpi_notifications
-                     WHERE id = " . $notificationDBTM->getID());
+          $DB->delete("glpi_notificationtemplatetranslations", ['notificationtemplates_id' => $notification_notificationTemplate->getField('notificationtemplates_id')]);
+          $DB->delete("glpi_notificationtargets", ['notifications_id' => $notificationDBTM->getID()]);
+          $DB->delete("glpi_notifications_notificationtemplates", ['id' => $notification_notificationTemplate->getField('notificationtemplates_id')]);
+          $DB->delete("glpi_notificationtemplates", ['id' => $notification_notificationTemplate->getField('notificationtemplates_id')]);
+          $DB->delete("glpi_notifications", ['id' => $notificationDBTM->getID()]);
       }
    }
 }

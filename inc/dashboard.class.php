@@ -30,6 +30,7 @@
 /**
  * Class PluginResourcesDashboard
  */
+#[AllowDynamicProperties]
 class PluginSatisfactionDashboard extends CommonGLPI
 {
     // Widget identifiers

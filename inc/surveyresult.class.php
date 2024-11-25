@@ -172,7 +172,11 @@ class PluginSatisfactionSurveyResult extends CommonDBChild {
             }
             echo "<td>" . $ticket_satisfaction->getField('satisfaction') . "</td>";
             echo "<td>" . $ticket_satisfaction->getField('comment') . "</td>";
-            echo "<td>" . Html::convDateTime($ticket_satisfaction->getField('date_answered')). "</td>";
+            $date_answered = "";
+            if (!empty($ticket_satisfaction->getField('date_answered'))) {
+                $date_answered = $ticket_satisfaction->getField('date_answered');
+            }
+            echo "<td>" . Html::convDateTime($date_answered). "</td>";
             echo "</tr>";
          }
 

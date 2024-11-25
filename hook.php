@@ -91,14 +91,13 @@ function plugin_satisfaction_uninstall() {
    ];
 
    foreach ($tables as $table) {
-      $DB->query("DROP TABLE IF EXISTS `$table`;");
+      $DB->dropTable($table);
    }
 
    $tables_glpi = ["glpi_logs"];
 
    foreach ($tables_glpi as $table_glpi) {
-      $DB->query("DELETE FROM `$table_glpi`
-               WHERE `itemtype` = 'PluginSatisfactionSurvey';");
+       $DB->delete($table_glpi, ['itemtype' => ['LIKE' => 'PluginSatisfaction%']]);
    }
 
    //Delete rights associated with the plugin
