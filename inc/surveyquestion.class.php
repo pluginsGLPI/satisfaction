@@ -47,6 +47,8 @@ class PluginSatisfactionSurveyQuestion extends CommonDBChild {
    CONST TEXTAREA = 'textarea';
    CONST NOTE     = 'note';
 
+   CONST SEPARATOR     = '|==|';
+
    /**
     * Return the localized name of the current Type
     * Should be overloaded in each new class
