@@ -91,7 +91,7 @@ function plugin_satisfaction_uninstall() {
    ];
 
    foreach ($tables as $table) {
-      $DB->dropTable($table);
+      $DB->dropTable($table, true);
    }
 
    $tables_glpi = ["glpi_logs"];
