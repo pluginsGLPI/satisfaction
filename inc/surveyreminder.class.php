@@ -100,7 +100,7 @@ class PluginSatisfactionSurveyReminder extends CommonDBChild
     }
     public static function getIcon()
     {
-        return "ti ti-alert-small";
+        return "ti ti-bell";
     }
    /**
     * show Tab content

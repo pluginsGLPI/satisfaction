@@ -252,7 +252,7 @@ class PluginSatisfactionSurveyTranslation extends CommonDBChild
            // ** MASS ACTION **
         } else {
             echo "<table class='tab_cadre_fixe'><tr class='tab_bg_2'>";
-            echo "<th class='b'>" . __("No translation found", "satisfaction")."</th></tr></table>";
+            echo "<th class='b'>" . __("No translation has been added yet", "satisfaction")."</th></tr></table>";
         }
         return true;
     }
@@ -289,7 +289,7 @@ class PluginSatisfactionSurveyTranslation extends CommonDBChild
             echo "<td width='10%' $tdBaseStyle>";
             echo Html::hidden('language', ['value' => $surveyTranslationData['language']]);
             echo Html::hidden('id', ['value' => $options['id']]);
-            echo Html::hidden('question_id', ['value' => $surveyQuestion->getI]);
+            echo Html::hidden('question_id', ['value' => $surveyQuestion->getID()]);
 
             echo Dropdown::getLanguageName($surveyTranslationData['language']);
             echo "</td>";
@@ -521,7 +521,7 @@ class PluginSatisfactionSurveyTranslation extends CommonDBChild
 
         $translationList = PluginSatisfactionSurveyTranslationDAO::getSurveyTranslationByCrit($crit);
         $translation = array_pop($translationList);
-      
+
         return $translation['value'];
     }
 }
