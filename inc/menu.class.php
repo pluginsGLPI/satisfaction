@@ -32,48 +32,52 @@
  */
 class PluginSatisfactionMenu extends CommonGLPI
 {
-   static $rightname = 'plugin_satisfaction';
+    static $rightname = 'plugin_satisfaction';
 
    /**
     * @return translated
     */
-   static function getMenuName() {
-      return __('Satisfaction survey', 'satisfaction');
-   }
+    static function getMenuName()
+    {
+        return __('Satisfaction survey', 'satisfaction');
+    }
 
    /**
     * @return array
     */
-   static function getMenuContent() {
+    static function getMenuContent()
+    {
 
-      $menu = [];
+        $menu = [];
 
-      if (Session::haveRight('plugin_satisfaction', READ)) {
-         $web_dir = '/' . Plugin::getWebDir('satisfaction', false);
-         $menu['title']           = self::getMenuName();
-         $menu['page']            = $web_dir."/front/survey.php";
-         $menu['page']            = $web_dir."/front/survey.php";
-         $menu['links']['search'] = PluginSatisfactionSurvey::getSearchURL(false);
-         if (PluginSatisfactionSurvey::canCreate()) {
-            $menu['links']['add'] = PluginSatisfactionSurvey::getFormURL(false);
-         }
-      }
+        if (Session::haveRight('plugin_satisfaction', READ)) {
+            $web_dir = '/plugins/satisfaction';
+            $menu['title']           = self::getMenuName();
+            $menu['page']            = $web_dir."/front/survey.php";
+            $menu['page']            = $web_dir."/front/survey.php";
+            $menu['links']['search'] = PluginSatisfactionSurvey::getSearchURL(false);
+            if (PluginSatisfactionSurvey::canCreate()) {
+                $menu['links']['add'] = PluginSatisfactionSurvey::getFormURL(false);
+            }
+        }
 
-      $menu['icon'] = self::getIcon();
+        $menu['icon'] = self::getIcon();
 
-      return $menu;
-   }
+        return $menu;
+    }
 
-   static function getIcon() {
-      return "ti ti-thumb-up";
-   }
+    static function getIcon()
+    {
+        return "ti ti-thumb-up";
+    }
 
-   static function removeRightsFromSession() {
-      if (isset($_SESSION['glpimenu']['admin']['types']['PluginSatisfactionMenu'])) {
-         unset($_SESSION['glpimenu']['admin']['types']['PluginSatisfactionMenu']);
-      }
-      if (isset($_SESSION['glpimenu']['admin']['content']['pluginsatisfactionmenu'])) {
-         unset($_SESSION['glpimenu']['admin']['content']['pluginsatisfactionmenu']);
-      }
-   }
+    static function removeRightsFromSession()
+    {
+        if (isset($_SESSION['glpimenu']['admin']['types']['PluginSatisfactionMenu'])) {
+            unset($_SESSION['glpimenu']['admin']['types']['PluginSatisfactionMenu']);
+        }
+        if (isset($_SESSION['glpimenu']['admin']['content']['pluginsatisfactionmenu'])) {
+            unset($_SESSION['glpimenu']['admin']['content']['pluginsatisfactionmenu']);
+        }
+    }
 }

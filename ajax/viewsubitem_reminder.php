@@ -28,40 +28,36 @@
  */
 
 
-include('../../../inc/includes.php');
 header("Content-Type: text/html; charset=UTF-8");
 Html::header_nocache();
 
 Session::checkLoginUser();
+Session::checkRight('plugin_satisfaction', UPDATE);
 
 if (!isset($_POST['type'])) {
-   exit();
+    throw new \Glpi\Exception\Http\NotFoundHttpException();
 }
 if (!isset($_POST['parenttype'])) {
-   exit();
+    throw new \Glpi\Exception\Http\NotFoundHttpException();
 }
 
 if (($item = getItemForItemtype($_POST['type']))
    && ($parent = getItemForItemtype($_POST['parenttype']))) {
-   if (isset($_POST[$parent->getForeignKeyField()])
+    if (isset($_POST[$parent->getForeignKeyField()])
       && isset($_POST["id"])
       && $parent->getFromDB($_POST[$parent->getForeignKeyField()])) {
+        $reminderName = PluginSatisfactionSurveyReminder::PREDEFINED_REMINDER_OPTION_NAME;
 
-      $reminderName = PluginSatisfactionSurveyReminder::PREDEFINED_REMINDER_OPTION_NAME;
-
-      $options = [
+        $options = [
          'parent' => $parent
-      ];
+        ];
 
-      if(isset( $_POST[$reminderName])){
-         $options[$reminderName] = intval($_POST[$reminderName]);
-      }
+        if (isset($_POST[$reminderName])) {
+            $options[$reminderName] = intval($_POST[$reminderName]);
+        }
 
-      $item->showForm($_POST["id"], $options);
-
-   } else {
-      echo __('Access denied');
-   }
+        $item->showForm($_POST["id"], $options);
+    } else {
+        echo __('Access denied');
+    }
 }
-
-Html::ajaxFooter();

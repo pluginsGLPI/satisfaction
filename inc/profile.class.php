@@ -47,11 +47,13 @@ class PluginSatisfactionProfile extends Profile
     public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
     {
         if ($item->getType() == 'Profile' && $item->getField('interface') != 'helpdesk') {
-            return _n('Satisfaction survey', 'Satisfaction surveys', 2, 'satisfaction');
+            return self::createTabEntry(_n('Satisfaction survey', 'Satisfaction surveys', 2, 'satisfaction'));
         }
         return '';
     }
-
+    public static function getIcon() {
+        return PluginSatisfactionMenu::getIcon();
+    }
     /**
      * @param CommonGLPI $item
      * @param int        $tabnum

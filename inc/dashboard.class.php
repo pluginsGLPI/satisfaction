@@ -126,7 +126,7 @@ class PluginSatisfactionDashboard extends CommonGLPI
     {
         $interval = [];
 
-        switch($idPeriod) {
+        switch ($idPeriod) {
             case self::FIRST_TRIMESTER_PERIOD:
                 $interval['begin'] = $year.'-01-01 00:00:00';
                 $interval['end'] = $year.'-03-31 00:00:00';
@@ -227,7 +227,7 @@ class PluginSatisfactionDashboard extends CommonGLPI
             $query .= " WHERE 1=1";
             addDateCriteria($query, $opt['begin'], $opt['end']);
 
-            $result = $DB->query($query);
+            $result = $DB->doQuery($query);
 
             if ($DB->numrows($result)) {
                 while ($data = $DB->fetchAssoc($result)) {
@@ -240,7 +240,7 @@ class PluginSatisfactionDashboard extends CommonGLPI
             $query .= " WHERE 1=1";
             addDateCriteria($query, $opt['begin'], $opt['end']);
 
-            $result = $DB->query($query);
+            $result = $DB->doQuery($query);
 
             if ($DB->numrows($result)) {
                 while ($data = $DB->fetchAssoc($result)) {
@@ -253,7 +253,7 @@ class PluginSatisfactionDashboard extends CommonGLPI
             $query .= " WHERE date_answered IS NULL";
             addDateCriteria($query, $opt['begin'], $opt['end']);
 
-            $result = $DB->query($query);
+            $result = $DB->doQuery($query);
 
             if ($DB->numrows($result)) {
                 while ($data = $DB->fetchAssoc($result)) {
@@ -266,7 +266,7 @@ class PluginSatisfactionDashboard extends CommonGLPI
             $query .= " WHERE date_answered IS NOT NULL";
             addDateCriteria($query, $opt['begin'], $opt['end']);
 
-            $result = $DB->query($query);
+            $result = $DB->doQuery($query);
 
             if ($DB->numrows($result)) {
                 while ($data = $DB->fetchAssoc($result)) {
@@ -279,7 +279,7 @@ class PluginSatisfactionDashboard extends CommonGLPI
             $query .= " WHERE date_answered IS NOT NULL";
             addDateCriteria($query, $opt['begin'], $opt['end']);
 
-            $result = $DB->query($query);
+            $result = $DB->doQuery($query);
 
             if ($DB->numrows($result)) {
                 while ($data = $DB->fetchAssoc($result)) {

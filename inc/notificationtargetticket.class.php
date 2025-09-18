@@ -28,65 +28,73 @@
  */
 
 if (!defined('GLPI_ROOT')) {
-   die("Sorry. You can't access directly to this file");
+    die("Sorry. You can't access directly to this file");
 }
 
 /**
  * Class PluginSatisfactionNotificationTargetTicket
  */
-class PluginSatisfactionNotificationTargetTicket extends NotificationTarget {
+class PluginSatisfactionNotificationTargetTicket extends NotificationTarget
+{
 
-   function getEvents(){
-      return ["survey_reminder" => __('Survey Reminder', 'satisfaction')];
-   }
+    public function getEvents()
+    {
+        return ["survey_reminder" => __('Survey Reminder', 'satisfaction')];
+    }
 
-   static function addEvents(NotificationTargetTicket $target) {
+    public static function addEvents(NotificationTargetTicket $target)
+    {
 
-      $target->events['survey_reminder']
+        $target->events['survey_reminder']
          = __('Survey Reminder', 'satisfaction');
-   }
+    }
 
-   function addDataForTemplate($event, $options = []) {
-   }
+    public function addDataForTemplate($event, $options = [])
+    {
+    }
 
-   function addSpecificTargets($data, $options) {
+    public function addSpecificTargets($data, $options)
+    {
+    }
 
-   }
+    public static function sendReminder($tickets_id)
+    {
 
-   public static function sendReminder($tickets_id){
+        $ticketDBTM = new Ticket();
+        if ($ticketDBTM->getFromDB($tickets_id)) {
+            NotificationEvent::raiseEvent("survey_reminder", $ticketDBTM);
+        }
+    }
 
-      $ticketDBTM = new Ticket();
-      if($ticketDBTM->getFromDB($tickets_id)){
-         NotificationEvent::raiseEvent("survey_reminder", $ticketDBTM);
-      }
-   }
+    public function getTags()
+    {
+        $notification_target_ticket = new NotificationTargetTicket();
+        $notification_target_ticket->getTags();
+        $this->tag_descriptions = $notification_target_ticket->tag_descriptions;
+    }
 
-   function getTags() {
-      $notification_target_ticket = new NotificationTargetTicket();
-      $notification_target_ticket->getTags();
-      $this->tag_descriptions = $notification_target_ticket->tag_descriptions;
-   }
+    public function getDatasForObject(CommonDBTM $item, array $options, $simple = false)
+    {
+        $notification_target_ticket = new NotificationTargetTicket();
+        $data = $notification_target_ticket->getDataForObject($item, $options, $simple);
+        return $data;
+    }
 
-   function getDatasForObject(CommonDBTM $item, array $options, $simple=false) {
-      $notification_target_ticket = new NotificationTargetTicket();
-      $data = $notification_target_ticket->getDataForObject($item, $options, $simple);
-      return $data;
-   }
+    public static function install()
+    {
 
-   static function install(){
-
-      $notificationTemplateDBTM = new NotificationTemplate();
-      if(!$notificationTemplateDBTM->getFromDBByCrit(['name' => 'Ticket Satisfaction Reminder'])) {
-         $notificationTemplateId = $notificationTemplateDBTM->add([
+        $notificationTemplateDBTM = new NotificationTemplate();
+        if (!$notificationTemplateDBTM->getFromDBByCrit(['name' => 'Ticket Satisfaction Reminder'])) {
+            $notificationTemplateId = $notificationTemplateDBTM->add([
             'name'     => "Ticket Satisfaction Reminder",
             'itemtype' => 'Ticket',
             'comment'  => "Created by the plugin satisfaction"
-         ]);
-      }
+            ]);
+        }
 
-      $notificationDBTM = new Notification();
-      if(!$notificationDBTM->getFromDBByCrit(['name' => 'Ticket Satisfaction Reminder'])){
-         $notifications_id   = $notificationDBTM->add([
+        $notificationDBTM = new Notification();
+        if (!$notificationDBTM->getFromDBByCrit(['name' => 'Ticket Satisfaction Reminder'])) {
+            $notifications_id   = $notificationDBTM->add([
             'name'                     => "Ticket Satisfaction Reminder",
             'entities_id'              => 0,
             'is_recursive'             => 1,
@@ -94,25 +102,30 @@ class PluginSatisfactionNotificationTargetTicket extends NotificationTarget {
             'itemtype'                 => 'Ticket',
             'event'                    => "survey_reminder",
             'comment'                  => "Created by the plugin Satisfaction"
-         ]);
-      }
-   }
+            ]);
+        }
+    }
 
-   static function uninstall(){
-      global $DB;
+    public static function uninstall()
+    {
+        global $DB;
 
-      $notificationDBTM = new Notification();
-      $notificationDBTM->getFromDBByCrit(['event'=>'survey-reminder']);
+        $notificationDBTM = new Notification();
+        $notificationDBTM->getFromDBByCrit(['event'=>'survey-reminder']);
 
-      $notification_notificationTemplate = new Notification_NotificationTemplate();
+        $notification_notificationTemplate = new Notification_NotificationTemplate();
 
-      if($notification_notificationTemplate->find(['notifications_id' => $notificationDBTM->getID()])){
-
-          $DB->delete("glpi_notificationtemplatetranslations", ['notificationtemplates_id' => $notification_notificationTemplate->getField('notificationtemplates_id')]);
-          $DB->delete("glpi_notificationtargets", ['notifications_id' => $notificationDBTM->getID()]);
-          $DB->delete("glpi_notifications_notificationtemplates", ['id' => $notification_notificationTemplate->getField('notificationtemplates_id')]);
-          $DB->delete("glpi_notificationtemplates", ['id' => $notification_notificationTemplate->getField('notificationtemplates_id')]);
-          $DB->delete("glpi_notifications", ['id' => $notificationDBTM->getID()]);
-      }
-   }
+        if ($notification_notificationTemplate->find(['notifications_id' => $notificationDBTM->getID()])) {
+            $DB->delete("glpi_notificationtemplatetranslations", [
+                'notificationtemplates_id' => $notification_notificationTemplate->getField(
+                    'notificationtemplates_id'
+                )]);
+            $DB->delete("glpi_notificationtargets", ['notifications_id' => $notificationDBTM->getID()]);
+            $DB->delete("glpi_notifications_notificationtemplates", [
+                'id' => $notification_notificationTemplate->getField('notificationtemplates_id')]);
+            $DB->delete("glpi_notificationtemplates", [
+                'id' => $notification_notificationTemplate->getField('notificationtemplates_id')]);
+            $DB->delete("glpi_notifications", ['id' => $notificationDBTM->getID()]);
+        }
+    }
 }

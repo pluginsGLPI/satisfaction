@@ -28,7 +28,7 @@
  */
 
 
-include('../../../inc/includes.php');
+use Glpi\Exception\Http\AccessDeniedHttpException;
 
 Html::header(PluginSatisfactionSurvey::getTypeName(2), '', "admin", "pluginsatisfactionmenu");
 
@@ -36,10 +36,9 @@ $satisfaction = new PluginSatisfactionSurvey();
 $satisfaction->checkGlobal(READ);
 
 if ($satisfaction->canView()) {
-   Search::show('PluginSatisfactionSurvey');
-
+    Search::show('PluginSatisfactionSurvey');
 } else {
-   Html::displayRightError();
+    throw new AccessDeniedHttpException();
 }
 
 Html::footer();
