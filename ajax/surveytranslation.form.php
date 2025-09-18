@@ -30,7 +30,7 @@
 Session::checkRight('plugin_satisfaction', UPDATE);
 
 if (!isset($_POST['survey_id']) || !isset($_POST['action'])) {
-    	throw new \Glpi\Exception\Http\NotFoundHttpException();
+        throw new \Glpi\Exception\Http\NotFoundHttpException();
 }
 
 global $CFG_GLPI;
@@ -38,19 +38,19 @@ $redirection = PLUGINSATISFACTION_WEBDIR."/front/survey.form.php?id=";
 
 $translation = new PluginSatisfactionSurveyTranslation();
 
-switch($_POST['action']){
-   case 'GET':
-      header("Content-Type: text/html; charset=UTF-8");
-      Html::header_nocache();
-      Session::checkLoginUser();
-      $translation->showSurveyTranslationForm($_POST);
-      break;
-   case 'NEW':
-      $translation->newSurveyTranslation($_POST);
-      Html::redirect($redirection.$_POST['survey_id']);
-      break;
-   case 'EDIT':
-      $translation->editSurveyTranslation($_POST);
-      Html::redirect($redirection.$_POST['survey_id']);
-      break;
+switch ($_POST['action']) {
+    case 'GET':
+        header("Content-Type: text/html; charset=UTF-8");
+        Html::header_nocache();
+        Session::checkLoginUser();
+        $translation->showSurveyTranslationForm($_POST);
+        break;
+    case 'NEW':
+        $translation->newSurveyTranslation($_POST);
+        Html::redirect($redirection.$_POST['survey_id']);
+        break;
+    case 'EDIT':
+        $translation->editSurveyTranslation($_POST);
+        Html::redirect($redirection.$_POST['survey_id']);
+        break;
 }

@@ -51,7 +51,7 @@ class PluginSatisfactionProfile extends Profile
         }
         return '';
     }
-    static function getIcon() {
+    public static function getIcon() {
         return PluginSatisfactionMenu::getIcon();
     }
     /**

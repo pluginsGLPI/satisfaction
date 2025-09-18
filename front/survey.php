@@ -36,8 +36,7 @@ $satisfaction = new PluginSatisfactionSurvey();
 $satisfaction->checkGlobal(READ);
 
 if ($satisfaction->canView()) {
-   Search::show('PluginSatisfactionSurvey');
-
+    Search::show('PluginSatisfactionSurvey');
 } else {
     throw new AccessDeniedHttpException();
 }

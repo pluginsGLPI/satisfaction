@@ -1,12 +1,13 @@
 /**
  *
  * @param root_doc
- * @param id
+ * @param default_value
  */
-function plugin_satisfaction_load_defaultvalue(root_doc, default_value){
+function plugin_satisfaction_load_defaultvalue(root_doc, default_value)
+{
     var value = $('input[name="default_value"]').val();
 
-    if(value > default_value) {
+    if (value > default_value) {
         value = default_value;
     }
 

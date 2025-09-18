@@ -28,15 +28,16 @@
  */
 
 if (!defined('GLPI_ROOT')) {
-   die("Sorry. You can't access directly to this file");
+    die("Sorry. You can't access directly to this file");
 }
 
 /**
  * Class PluginResourcesNotification
  */
-class PluginSatisfactionNotificationMailing extends CommonDBTM {
+class PluginSatisfactionNotificationMailing extends CommonDBTM
+{
 
-   static $rightname = 'plugin_satisfaction';
+    static $rightname = 'plugin_satisfaction';
 
    /**
     * Return the localized name of the current Type
@@ -46,10 +47,11 @@ class PluginSatisfactionNotificationMailing extends CommonDBTM {
     *
     * @return string
     **/
-   static function getTypeName($nb = 0) {
+    static function getTypeName($nb = 0)
+    {
 
-      return __('Notification satisfaction reminder', 'satisfaction');
-   }
+        return __('Notification satisfaction reminder', 'satisfaction');
+    }
 
    /**
     * Have I the global right to "create" the Object
@@ -57,10 +59,10 @@ class PluginSatisfactionNotificationMailing extends CommonDBTM {
     *
     * @return booleen
     **/
-   static function canCreate(): bool
-   {
-      return Session::haveRight(self::$rightname, [CREATE, UPDATE, DELETE]);
-   }
+    static function canCreate(): bool
+    {
+        return Session::haveRight(self::$rightname, [CREATE, UPDATE, DELETE]);
+    }
 
    /**
     * Have I the global right to "view" the Object
@@ -71,73 +73,75 @@ class PluginSatisfactionNotificationMailing extends CommonDBTM {
     *
     * @return booleen
     **/
-   static function canView(): bool
-   {
-      return Session::haveRight(self::$rightname, READ);
-   }
+    static function canView(): bool
+    {
+        return Session::haveRight(self::$rightname, READ);
+    }
 
    /**
     * Function list items
     *
     * @param type $ID
     */
-   public function listItems($ID) {
+    public function listItems($ID)
+    {
 
-      $rand = mt_rand();
+        $rand = mt_rand();
 
-      // Start
-      $start = 0;
-      if (isset($_REQUEST["start"])) {
-         $start = $_REQUEST["start"];
-      }
+       // Start
+        $start = 0;
+        if (isset($_REQUEST["start"])) {
+            $start = $_REQUEST["start"];
+        }
 
-      // Get data
-      $data = $this->getItems($ID, $start);
-      if (!empty($data)) {
-         echo "<div class='center'>";
-         $dbu = new DbUtils();
-         Html::printAjaxPager(self::getTypeName(2), $start, $dbu->countElementsInTable($this->getTable()));
-         echo "<table class='tab_cadre_fixehov'>";
-         echo "<tr class='tab_bg_1'>";
-         echo "<th colspan='3'>".self::getTypeName(1)."</th>";
-         echo "</tr>";
-         echo "<tr class='tab_bg_1'>";
-         echo "<th>".__('User')."</th>";
-         echo "<th>".__('Date')."</th>";
-         echo "<th>".__('Type')."</th>";
-         echo "</tr>";
+       // Get data
+        $data = $this->getItems($ID, $start);
+        if (!empty($data)) {
+            echo "<div class='center'>";
+            $dbu = new DbUtils();
+            Html::printAjaxPager(self::getTypeName(2), $start, $dbu->countElementsInTable($this->getTable()));
+            echo "<table class='tab_cadre_fixehov'>";
+            echo "<tr class='tab_bg_1'>";
+            echo "<th colspan='3'>".self::getTypeName(1)."</th>";
+            echo "</tr>";
+            echo "<tr class='tab_bg_1'>";
+            echo "<th>".__('User')."</th>";
+            echo "<th>".__('Date')."</th>";
+            echo "<th>".__('Type')."</th>";
+            echo "</tr>";
 
-         $dbu = new DbUtils();
+            $dbu = new DbUtils();
 
-         foreach ($data as $field) {
-            echo "<tr class='tab_bg_2'>";
-//            // User
-//            echo "<td>".$dbu->formatUserName($field['users_id'], $field['name'], $field['realname'], $field['firstname'])."</td>";
-//            echo "<td>".Html::convDateTime($field['date_mod'])."</td>";
-//            echo "<td>".self::getStatus($field['type'])."</td>";
-//            echo "</tr>";
-            // Ticket
-            // TODO
-         }
-         echo "</table>";
-         echo "</div>";
-      }
-   }
+            foreach ($data as $field) {
+                echo "<tr class='tab_bg_2'>";
+  //            // User
+  //            echo "<td>".$dbu->formatUserName($field['users_id'], $field['name'], $field['realname'], $field['firstname'])."</td>";
+  //            echo "<td>".Html::convDateTime($field['date_mod'])."</td>";
+  //            echo "<td>".self::getStatus($field['type'])."</td>";
+  //            echo "</tr>";
+               // Ticket
+               // TODO
+            }
+            echo "</table>";
+            echo "</div>";
+        }
+    }
 
    /**
     * Function get items for resource
     *
-    * @global type $DB
     * @param type $recordmodels_id
     * @param type $start
     * @return type
+    *@global type $DB
     */
-   function getItems($resources_id, $start = 0) {
-      global $DB;
+    public function getItems($resources_id, $start = 0)
+    {
+        global $DB;
 
-      $output = [];
+        $output = [];
 
-      $query = "SELECT `".$this->getTable()."`.`id`, 
+        $query = "SELECT `".$this->getTable()."`.`id`, 
                        `glpi_users`.`realname`,
                        `glpi_users`.`firstname`,
                        `glpi_users`.`name`,
@@ -151,48 +155,50 @@ class PluginSatisfactionNotificationMailing extends CommonDBTM {
           ORDER BY `".$this->getTable()."`.`date_mod` DESC
           LIMIT ".intval($start).",".intval($_SESSION['glpilist_limit']);
 
-      $result = $DB->doQuery($query);
-      if ($DB->numrows($result)) {
-         while ($data = $DB->fetchAssoc($result)) {
-            $output[$data['id']] = $data;
-         }
-      }
+        $result = $DB->doQuery($query);
+        if ($DB->numrows($result)) {
+            while ($data = $DB->fetchAssoc($result)) {
+                $output[$data['id']] = $data;
+            }
+        }
 
-      return $output;
-   }
+        return $output;
+    }
 
    /**
     * Function get the Status
     *
     * @return an array
     */
-   static function getStatus($value) {
-      $data = self::getAllStatusArray();
-      return $data[$value];
-   }
+    public static function getStatus($value)
+    {
+        $data = self::getAllStatusArray();
+        return $data[$value];
+    }
 
    /**
     * Get the SNMP Status list
     *
     * @return an array
     */
-   static function getAllStatusArray() {
+    public static function getAllStatusArray()
+    {
 
-      // To be overridden by class
-      $tab = ['report'  => __('Resource creation', 'resources'),
+           // To be overridden by class
+        $tab = ['report'  => __('Resource creation', 'resources'),
          'other'   => __('Other', 'resources')];
 
-      return $tab;
-   }
+        return $tab;
+    }
 
    /**
     * if profile deleted
     *
     * @param \Ticket $resource
     */
-   static function purgeNotification(Ticket $ticket) {
-      $temp = new self();
-      $temp->deleteByCriteria(['tickets_id' => $ticket->getField("id")]);
-   }
+    public static function purgeNotification(Ticket $ticket)
+    {
+        $temp = new self();
+        $temp->deleteByCriteria(['tickets_id' => $ticket->getField("id")]);
+    }
 }
-

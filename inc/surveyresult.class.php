@@ -31,14 +31,15 @@
 /**
  * Class PluginSatisfactionSurveyResult
  */
-class PluginSatisfactionSurveyResult extends CommonDBChild {
+class PluginSatisfactionSurveyResult extends CommonDBChild
+{
 
-   static $rightname = "plugin_satisfaction";
-   public $dohistory = true;
+    public static $rightname = "plugin_satisfaction";
+    public $dohistory = true;
 
    // From CommonDBChild
-   public static $itemtype = 'PluginSatisfactionSurvey';
-   public static $items_id = 'plugin_satisfaction_surveys_id';
+    public static $itemtype = 'PluginSatisfactionSurvey';
+    public static $items_id = 'plugin_satisfaction_surveys_id';
 
    /**
     * Return the localized name of the current Type
@@ -46,9 +47,10 @@ class PluginSatisfactionSurveyResult extends CommonDBChild {
     *
     * @return string
     **/
-   static function getTypeName($nb = 0) {
-      return _n('Result of the survey', 'Results of the survey', $nb, 'satisfaction');
-   }
+    public static function getTypeName($nb = 0)
+    {
+        return _n('Result of the survey', 'Results of the survey', $nb, 'satisfaction');
+    }
 
 
    /**
@@ -64,17 +66,19 @@ class PluginSatisfactionSurveyResult extends CommonDBChild {
     *
     * @return string tab name
     **/
-   function getTabNameForItem(CommonGLPI $item, $withtemplate = 0) {
+    public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
+    {
 
-      // can exists for template
-      if ($item->getType() == 'PluginSatisfactionSurvey') {
-         return self::createTabEntry(__('Result', 'satisfaction'));
-      }
+       // can exists for template
+        if ($item->getType() == 'PluginSatisfactionSurvey') {
+            return self::createTabEntry(__('Result', 'satisfaction'));
+        }
 
-      return '';
-   }
+        return '';
+    }
 
-    static function getIcon() {
+    public static function getIcon()
+    {
         return "ti ti-report-analytics";
     }
 
@@ -89,103 +93,106 @@ class PluginSatisfactionSurveyResult extends CommonDBChild {
     *
     * @return true
     **/
-   static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0) {
-      if ($item->getType() == 'PluginSatisfactionSurvey') {
-         self::showResult($item);
+    public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
+    {
+        if ($item->getType() == 'PluginSatisfactionSurvey') {
+            self::showResult($item);
+        }
+        return true;
+    }
 
-      }
-      return true;
-   }
+    public static function showResult(PluginSatisfactionSurvey $item)
+    {
+        global $DB;
 
-   static function showResult(PluginSatisfactionSurvey $item) {
-      global $DB;
+        if (isset($_GET["start"])) {
+            $start = intval($_GET["start"]);
+        } else {
+            $start = 0;
+        }
 
-      if (isset($_GET["start"])) {
-         $start = intval($_GET["start"]);
-      } else {
-         $start = 0;
-      }
+       // Total Number of events
+        $total_number = countElementsInTable(
+            "glpi_plugin_satisfaction_surveyanswers",
+            ['plugin_satisfaction_surveys_id' => $item->getID()]
+        );
 
-      // Total Number of events
-      $total_number = countElementsInTable("glpi_plugin_satisfaction_surveyanswers",
-                                           ['plugin_satisfaction_surveys_id' => $item->getID()]);
+       // No Events in database
+        if ($total_number == 0) {
+            echo "<div class='center'>";
+            echo "<table class='tab_cadre_fixe'>";
+            echo "<tr class='tab_bg_1'><th>" . __('No result of the survey', 'satisfaction') . "</th></trclass>";
+            echo "</table>";
+            echo "</div><br>";
+            return;
+        }
 
-      // No Events in database
-      if ($total_number == 0) {
-         echo "<div class='center'>";
-         echo "<table class='tab_cadre_fixe'>";
-         echo "<tr class='tab_bg_1'><th>" . __('No result of the survey', 'satisfaction') . "</th></trclass>";
-         echo "</table>";
-         echo "</div><br>";
-         return;
-      }
-
-      // Display the pager
-      Html::printAjaxPager(self::getTypeName(1), $start, $total_number, '', true);
+       // Display the pager
+        Html::printAjaxPager(self::getTypeName(1), $start, $total_number, '', true);
 
 
-      echo "<div class='center'>";
-      echo "<table class='tab_cadre_fixehov'>";
-      if ($total_number > 0) {
-         echo "<tr class='tab_bg_1'>";
-         echo "<th>" . __('ID') . "</th>";
-         echo "<th>" . __('Ticket') . "</th>";
+        echo "<div class='center'>";
+        echo "<table class='tab_cadre_fixehov'>";
+        if ($total_number > 0) {
+            echo "<tr class='tab_bg_1'>";
+            echo "<th>" . __('ID') . "</th>";
+            echo "<th>" . __('Ticket') . "</th>";
 
-         $squestion_obj = new PluginSatisfactionSurveyQuestion;
-         foreach ($squestion_obj->find([PluginSatisfactionSurveyQuestion::$items_id => $item->getID()]) as $question) {
-            echo "<th>" . nl2br($question['name']) . "</th>";
-         }
-         echo "<th>".__('Satisfaction with the resolution of the ticket')."</th>";
-         echo "<th>".__('Comments')."</th>";
-         echo "<th>".__('Response date to the satisfaction survey')."</th>";
-         echo "</tr>";
+            $squestion_obj = new PluginSatisfactionSurveyQuestion;
+            foreach ($squestion_obj->find([
+                PluginSatisfactionSurveyQuestion::$items_id => $item->getID()]) as $question) {
+                echo "<th>" . nl2br($question['name']) . "</th>";
+            }
+            echo "<th>".__('Satisfaction with the resolution of the ticket')."</th>";
+            echo "<th>".__('Comments')."</th>";
+            echo "<th>".__('Response date to the satisfaction survey')."</th>";
+            echo "</tr>";
 
-         $dbu               = new DbUtils();
-         $obj_survey_answer = new PluginSatisfactionSurveyAnswer();
+            $dbu               = new DbUtils();
+            $obj_survey_answer = new PluginSatisfactionSurveyAnswer();
 
-         $query          = [
+            $query          = [
             'FROM'  => 'glpi_plugin_satisfaction_surveyanswers',
             'WHERE' => [
                'plugin_satisfaction_surveys_id' => $item->getID(),
             ],
             'ORDER' => 'id DESC'
-         ];
-         $query['START'] = (int)$start;
-         $query['LIMIT'] = (int)$_SESSION['glpilist_limit'];
+            ];
+            $query['START'] = (int)$start;
+            $query['LIMIT'] = (int)$_SESSION['glpilist_limit'];
 
-         $iterator = $DB->request($query);
-         foreach ($iterator as $data) {
-            echo "<tr class='tab_bg_1'>";
+            $iterator = $DB->request($query);
+            foreach ($iterator as $data) {
+                echo "<tr class='tab_bg_1'>";
 
-            $ticket_satisfaction = new TicketSatisfaction();
-            $ticket_satisfaction->getFromDBByRequest(['WHERE' =>
+                $ticket_satisfaction = new TicketSatisfaction();
+                $ticket_satisfaction->getFromDBByRequest(['WHERE' =>
                                                          ["id" => $data['ticketsatisfactions_id']]]);
 
-            $ticket = new Ticket();
-            $ticket->getFromDB($ticket_satisfaction->getField('tickets_id'));
-            echo "<td>" . $ticket_satisfaction->getField('tickets_id') . "</td>";
-            echo "<td>" . $ticket->getLink() . "</td>";
+                $ticket = new Ticket();
+                $ticket->getFromDB($ticket_satisfaction->getField('tickets_id'));
+                echo "<td>" . $ticket_satisfaction->getField('tickets_id') . "</td>";
+                echo "<td>" . $ticket->getLink() . "</td>";
 
-            $answers = $dbu->importArrayFromDB($data['answer']);
-            foreach ($answers as $questions_id => $answer) {
-               echo "<td>";
-               $squestion_obj->getFromDB($questions_id);
-               echo $obj_survey_answer->getAnswer($squestion_obj->fields, $answer);
-               echo "</td>";
+                $answers = $dbu->importArrayFromDB($data['answer']);
+                foreach ($answers as $questions_id => $answer) {
+                     echo "<td>";
+                     $squestion_obj->getFromDB($questions_id);
+                     echo $obj_survey_answer->getAnswer($squestion_obj->fields, $answer);
+                     echo "</td>";
+                }
+                echo "<td>" . $ticket_satisfaction->getField('satisfaction') . "</td>";
+                echo "<td>" . $ticket_satisfaction->getField('comment') . "</td>";
+                $date_answered = "";
+                if (!empty($ticket_satisfaction->getField('date_answered'))) {
+                    $date_answered = $ticket_satisfaction->getField('date_answered');
+                }
+                echo "<td>" . Html::convDateTime($date_answered). "</td>";
+                echo "</tr>";
             }
-            echo "<td>" . $ticket_satisfaction->getField('satisfaction') . "</td>";
-            echo "<td>" . $ticket_satisfaction->getField('comment') . "</td>";
-            $date_answered = "";
-            if (!empty($ticket_satisfaction->getField('date_answered'))) {
-                $date_answered = $ticket_satisfaction->getField('date_answered');
-            }
-            echo "<td>" . Html::convDateTime($date_answered). "</td>";
-            echo "</tr>";
-         }
+        }
 
-      }
-
-      echo "</table>";
-      echo "</div>";
-   }
+        echo "</table>";
+        echo "</div>";
+    }
 }
