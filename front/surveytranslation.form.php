@@ -27,13 +27,12 @@
  --------------------------------------------------------------------------
  */
 
-include('../../../inc/includes.php');
 
 if (!isset($_POST['survey_id']) || !isset($_POST['action'])) {
-    exit();
+    throw new \Glpi\Exception\Http\NotFoundHttpException();
 }
 
-$redirection = Plugin::getWebDir('satisfaction')."/front/survey.form.php?id=";
+$redirection = PLUGINSATISFACTION_WEBDIR."/front/survey.form.php?id=";
 $translation = new PluginSatisfactionSurveyTranslation();
 switch($_POST['action']){
     case 'NEW':

@@ -63,6 +63,10 @@ class PluginSatisfactionSurveyTranslation extends CommonDBChild {
       return '';
    }
 
+    static function getIcon() {
+        return "ti ti-language";
+    }
+
    /**
     * Get the standard massive actions which are forbidden
     *
@@ -129,7 +133,7 @@ class PluginSatisfactionSurveyTranslation extends CommonDBChild {
 
       $rand    = mt_rand();
       $canedit = $item->can($item->getID(), UPDATE);
-      $target = Plugin::getWebDir('satisfaction')."/ajax/surveytranslation.form.php";
+      $target = PLUGINSATISFACTION_WEBDIR."/ajax/surveytranslation.form.php";
 
       if ($canedit) {
          echo "<div id='viewtranslation" . $item->getType().$item->getID() . "$rand'></div>\n";
@@ -207,7 +211,7 @@ class PluginSatisfactionSurveyTranslation extends CommonDBChild {
                   'action' => 'GET'
                ];
                Ajax::updateItemJsCode("viewtranslation" . $item->getType().$item->getID() . "$rand",
-                  Plugin::getWebDir('satisfaction')."/ajax/surveytranslation.form.php",
+                   PLUGINSATISFACTION_WEBDIR."/ajax/surveytranslation.form.php",
                   $params);
                echo "};";
                echo "</script>\n";
@@ -368,7 +372,7 @@ class PluginSatisfactionSurveyTranslation extends CommonDBChild {
    function getFormHeader($translationID, $surveyID){
 
       global $CFG_GLPI;
-      $target = Plugin::getWebDir('satisfaction')."/front/surveytranslation.form.php";
+      $target = PLUGINSATISFACTION_WEBDIR."/front/surveytranslation.form.php";
 
       $result = "<form name='form' method='post' action='$target' enctype='multipart/form-data'>";
       $result.= Html::hidden('survey_id', ['value' =>$surveyID]);

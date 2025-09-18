@@ -26,18 +26,22 @@
  along with satisfaction. If not, see <http://www.gnu.org/licenses/>.
  --------------------------------------------------------------------------
  */
+global $CFG_GLPI;
 
 /**
  * Init the hooks of the plugins -Needed
  */
 
+use Glpi\Plugin\Hooks;
+
 define ("PLUGIN_SATISFACTION_VERSION", "1.6.2");
 
 // Minimal GLPI version, inclusive
-define('PLUGIN_SATISFACTION_MIN_GLPI', '10.0');
+define('PLUGIN_SATISFACTION_MIN_GLPI', '11.0');
 // Maximum GLPI version, exclusive
-define('PLUGIN_SATISFACTION_MAX_GLPI', '11.0');
-
+define('PLUGIN_SATISFACTION_MAX_GLPI', '12.0');
+$root = $CFG_GLPI['root_doc'] . '/plugins/satisfaction';
+define ("PLUGINSATISFACTION_WEBDIR", $root);
 function plugin_init_satisfaction() {
    global $PLUGIN_HOOKS;
 
@@ -72,7 +76,7 @@ function plugin_init_satisfaction() {
 
          if (isset($_SESSION['glpiactiveprofile']['interface'])
              && $_SESSION['glpiactiveprofile']['interface'] == 'central') {
-            $PLUGIN_HOOKS['add_javascript']['satisfaction'] = ["satisfaction.js"];
+            $PLUGIN_HOOKS[Hooks::ADD_JAVASCRIPT]['satisfaction'] = ["satisfaction.js"];
          }
          if (class_exists('PluginMydashboardMenu')) {
             $PLUGIN_HOOKS['mydashboard']['satisfaction'] = [PluginSatisfactionDashboard::class];

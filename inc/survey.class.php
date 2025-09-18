@@ -51,7 +51,9 @@ class PluginSatisfactionSurvey extends CommonDBTM {
    static function getTypeName($nb = 0) {
       return _n('Satisfaction survey', 'Satisfaction surveys', $nb, 'satisfaction');
    }
-
+    static function getIcon() {
+        return PluginSatisfactionMenu::getIcon();
+    }
    /**
     * Define tabs to display
     *
@@ -94,7 +96,8 @@ class PluginSatisfactionSurvey extends CommonDBTM {
     *
     * @return boolean
     **/
-   function canCreateItem() {
+   function canCreateItem(): bool
+   {
 
       if (!$this->checkEntity()) {
          return false;
@@ -329,7 +332,7 @@ class PluginSatisfactionSurvey extends CommonDBTM {
                 ORDER BY `glpi_entities`.`level` DESC
                 LIMIT 1";
 
-      $result = $DB->query($query);
+      $result = $DB->doQuery($query);
       if (($id = $DB->result($result,0,"id")) === NULL) {
          return false;
       } else {
@@ -435,7 +438,7 @@ class PluginSatisfactionSurvey extends CommonDBTM {
       unset($survey->fields['id']);
 
       //add new duplicate
-      $input = toolbox::addslashes_deep($survey->fields);
+      $input = $survey->fields;
       $newID = $survey->add($input);
       if (!$newID) {
          return false;
@@ -443,7 +446,7 @@ class PluginSatisfactionSurvey extends CommonDBTM {
       //find and duplicate questions
       $question_obj  = new PluginSatisfactionSurveyQuestion();
       $questions = $question_obj->find(['plugin_satisfaction_surveys_id' => $ID]);
-      $questions = toolbox::addslashes_deep($questions);
+      $questions = $questions;
       foreach ($questions as $question) {
          $question['plugin_satisfaction_surveys_id'] = $newID;
          $question_id = $question['id'];
@@ -457,7 +460,7 @@ class PluginSatisfactionSurvey extends CommonDBTM {
             'plugin_satisfaction_surveys_id' => $ID,
             'glpi_plugin_satisfaction_surveyquestions_id' => $question_id
          ]);
-         $translations = toolbox::addslashes_deep($translations);
+         $translations = $translations;
          foreach ($translations as $translation) {
             $translation_obj->newSurveyTranslation([
                'survey_id' => $newID,

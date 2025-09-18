@@ -57,7 +57,8 @@ class PluginSatisfactionNotificationMailing extends CommonDBTM {
     *
     * @return booleen
     **/
-   static function canCreate() {
+   static function canCreate(): bool
+   {
       return Session::haveRight(self::$rightname, [CREATE, UPDATE, DELETE]);
    }
 
@@ -70,7 +71,8 @@ class PluginSatisfactionNotificationMailing extends CommonDBTM {
     *
     * @return booleen
     **/
-   static function canView() {
+   static function canView(): bool
+   {
       return Session::haveRight(self::$rightname, READ);
    }
 
@@ -149,7 +151,7 @@ class PluginSatisfactionNotificationMailing extends CommonDBTM {
           ORDER BY `".$this->getTable()."`.`date_mod` DESC
           LIMIT ".intval($start).",".intval($_SESSION['glpilist_limit']);
 
-      $result = $DB->query($query);
+      $result = $DB->doQuery($query);
       if ($DB->numrows($result)) {
          while ($data = $DB->fetchAssoc($result)) {
             $output[$data['id']] = $data;

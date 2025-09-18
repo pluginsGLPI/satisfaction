@@ -58,7 +58,7 @@ class PluginSatisfactionSurveyTranslationDAO{
          }
       }
 
-      $result = $DB->query($query);
+      $result = $DB->doQuery($query);
 
       while ($data = $DB->fetchAssoc($result)) {
          $datas[] = $data;
@@ -88,7 +88,7 @@ class PluginSatisfactionSurveyTranslationDAO{
          }
       }
 
-      $result = $DB->query($query);
+      $result = $DB->doQuery($query);
       while ($data = $DB->fetchAssoc($result)) {
          return $data['nb'];
       }
@@ -101,7 +101,7 @@ class PluginSatisfactionSurveyTranslationDAO{
       $query = "SELECT * FROM `".self::$tablename."`";
       $query .=" WHERE `id` = ".$ID;
 
-      $result = $DB->query($query);
+      $result = $DB->doQuery($query);
       while ($data = $DB->fetchAssoc($result)) {
          return $data;
       }
@@ -114,7 +114,7 @@ class PluginSatisfactionSurveyTranslationDAO{
       $query .= " (`plugin_satisfaction_surveys_id`, `glpi_plugin_satisfaction_surveyquestions_id`, `language`, `value`)";
       $query .= " VALUES(".$surveyId.",".$questionId.",'".$language."','".$value."')";
 
-      if($DB->query($query)){
+      if($DB->doQuery($query)){
          return $DB->insertId();
       }else{
          return null;
@@ -128,6 +128,6 @@ class PluginSatisfactionSurveyTranslationDAO{
       $query .= " SET `value` = '".$value."'";
       $query .= " WHERE `id` = ".$id;
 
-      return ($DB->query($query));
+      return ($DB->doQuery($query));
    }
 }

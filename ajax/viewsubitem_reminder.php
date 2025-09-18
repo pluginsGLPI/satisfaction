@@ -28,17 +28,17 @@
  */
 
 
-include('../../../inc/includes.php');
 header("Content-Type: text/html; charset=UTF-8");
 Html::header_nocache();
 
 Session::checkLoginUser();
+Session::checkRight('plugin_satisfaction', UPDATE);
 
 if (!isset($_POST['type'])) {
-   exit();
+    throw new \Glpi\Exception\Http\NotFoundHttpException();
 }
 if (!isset($_POST['parenttype'])) {
-   exit();
+    throw new \Glpi\Exception\Http\NotFoundHttpException();
 }
 
 if (($item = getItemForItemtype($_POST['type']))
@@ -64,4 +64,3 @@ if (($item = getItemForItemtype($_POST['type']))
    }
 }
 
-Html::ajaxFooter();

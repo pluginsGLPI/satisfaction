@@ -49,7 +49,7 @@ class PluginSatisfactionMenu extends CommonGLPI
       $menu = [];
 
       if (Session::haveRight('plugin_satisfaction', READ)) {
-         $web_dir = '/' . Plugin::getWebDir('satisfaction', false);
+         $web_dir = '/plugins/satisfaction';
          $menu['title']           = self::getMenuName();
          $menu['page']            = $web_dir."/front/survey.php";
          $menu['page']            = $web_dir."/front/survey.php";

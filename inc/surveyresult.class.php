@@ -68,12 +68,15 @@ class PluginSatisfactionSurveyResult extends CommonDBChild {
 
       // can exists for template
       if ($item->getType() == 'PluginSatisfactionSurvey') {
-         return __('Result', 'satisfaction');
+         return self::createTabEntry(__('Result', 'satisfaction'));
       }
 
       return '';
    }
 
+    static function getIcon() {
+        return "ti ti-report-analytics";
+    }
 
    /**
     * show Tab content

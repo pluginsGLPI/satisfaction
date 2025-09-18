@@ -90,12 +90,14 @@ class PluginSatisfactionSurveyReminder extends CommonDBChild {
 
       // can exists for template
       if ($item->getType() == PluginSatisfactionSurvey::class) {
-         return _n('Reminder', 'Reminders', 2, 'satisfaction');
+         return self::createTabEntry(_n('Reminder', 'Reminders', 2, 'satisfaction'));
       }
 
       return '';
    }
-
+    static function getIcon() {
+        return "ti ti-alert-small";
+    }
    /**
     * show Tab content
     *
@@ -161,7 +163,7 @@ class PluginSatisfactionSurveyReminder extends CommonDBChild {
             self::PREDEFINED_REMINDER_OPTION_NAME => 1
          ];
          Ajax::updateItemJsCode("viewreminder$sID$rand_survey",
-                                 Plugin::getWebDir('satisfaction') . "/ajax/viewsubitem_reminder.php", $params);
+             PLUGINSATISFACTION_WEBDIR . "/ajax/viewsubitem_reminder.php", $params);
          echo "};";
 
          echo "</script>\n";

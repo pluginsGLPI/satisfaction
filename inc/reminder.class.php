@@ -125,7 +125,7 @@ class PluginSatisfactionReminder extends CommonDBTM {
       $query .= " AND ts.date_begin > DATE('" . $date_begin . "')";
       $query .= " AND ts.date_answered " . (($date_answered == null) ? " IS NULL" : " = DATE('" . $date_answered . "')");
 
-      $result = $DB->query($query);
+      $result = $DB->doQuery($query);
 
       if ($DB->numrows($result)) {
          while ($data = $DB->fetchAssoc($result)) {

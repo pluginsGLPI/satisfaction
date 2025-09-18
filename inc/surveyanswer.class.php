@@ -70,7 +70,7 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
       if ($item->getType() == 'PluginSatisfactionSurvey') {
          echo Html::css('public/lib/jquery.rateit.css');
          Html::requireJs('rateit');
-         return __('Preview', 'satisfaction');
+         return self::createTabEntry(__('Preview', 'satisfaction'));
       }
 
       return '';
@@ -95,7 +95,9 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
       }
       return true;
    }
-
+    static function getIcon() {
+        return "ti ti-message-reply";
+    }
    /**
     * Print survey
     *
@@ -303,7 +305,6 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
             break;
 
          case PluginSatisfactionSurveyQuestion::TEXTAREA :
-            $value = Html::cleanPostForTextArea($value);
             $name = "answer[".$questions_id."]";
             echo Html::textarea([
                                    'name'    => $name,
@@ -366,7 +367,7 @@ class PluginSatisfactionSurveyAnswer extends CommonDBChild {
             return Dropdown::getYesNo($value);
 
          case PluginSatisfactionSurveyQuestion::TEXTAREA :
-            return Html::cleanPostForTextArea($value);
+            return $value;
 
          case PluginSatisfactionSurveyQuestion::NOTE :
             return $value;

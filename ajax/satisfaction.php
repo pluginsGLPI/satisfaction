@@ -28,8 +28,6 @@
  */
 
 
-include ('../../../inc/includes.php');
-
 if (isset($_POST['action_default_value'])) {
    Dropdown::showNumber('default_value', ['max'   => $_POST['default_value'],
                                    'min'   => 1,

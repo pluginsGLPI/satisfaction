@@ -81,11 +81,13 @@ class PluginSatisfactionSurveyQuestion extends CommonDBChild {
                                         $dbu->countElementsInTable($table,
                                                                    [self::$items_id => $item->getID()]));
          }
-         return self::getTypeName();
+         return self::createTabEntry(self::getTypeName());
       }
       return '';
    }
-
+    static function getIcon() {
+        return "ti ti-user-question";
+    }
    /**
     * show Tab content
     *
@@ -273,7 +275,7 @@ class PluginSatisfactionSurveyQuestion extends CommonDBChild {
       Dropdown::showNumber('number', ['max'   => 10,
                                       'min'   => 2,
                                       'value' => $surveyquestion->fields['number'],
-                                      'on_change' => "plugin_satisfaction_load_defaultvalue(\"" . Plugin::getWebDir('satisfaction') . "\", this.value);"]);
+                                      'on_change' => "plugin_satisfaction_load_defaultvalue(\"" . PLUGINSATISFACTION_WEBDIR . "\", this.value);"]);
       echo "</td>";
 
       if (!empty($surveyquestion->fields['number'])) {

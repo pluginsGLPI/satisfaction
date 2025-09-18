@@ -27,15 +27,14 @@
  --------------------------------------------------------------------------
  */
 
-
-include ('../../../inc/includes.php');
+Session::checkRight('plugin_satisfaction', UPDATE);
 
 if (!isset($_POST['survey_id']) || !isset($_POST['action'])) {
-   exit();
+    	throw new \Glpi\Exception\Http\NotFoundHttpException();
 }
 
 global $CFG_GLPI;
-$redirection = Plugin::getWebDir('satisfaction')."/front/survey.form.php?id=";
+$redirection = PLUGINSATISFACTION_WEBDIR."/front/survey.form.php?id=";
 
 $translation = new PluginSatisfactionSurveyTranslation();
 
@@ -45,7 +44,6 @@ switch($_POST['action']){
       Html::header_nocache();
       Session::checkLoginUser();
       $translation->showSurveyTranslationForm($_POST);
-      Html::ajaxFooter();
       break;
    case 'NEW':
       $translation->newSurveyTranslation($_POST);
