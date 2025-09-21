@@ -102,7 +102,7 @@ function plugin_version_satisfaction()
     return [
       'name'           => __("More satisfaction", 'satisfaction'),
       'version'        => PLUGIN_SATISFACTION_VERSION,
-      'author'         => "<a href='http://blogglpi.infotel.com/'>Infotel</a>",
+        'author'       => "<a href='https//blogglpi.infotel.com'>Infotel</a>, Xavier CAILLAUD",
       'license'        => 'GPLv2+',
       'homepage'       => 'https://github.com/pluginsGLPI/satisfaction',
       'requirements'   => [

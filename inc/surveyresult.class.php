@@ -128,7 +128,7 @@ class PluginSatisfactionSurveyResult extends CommonDBChild
         }
 
        // Display the pager
-        Html::printAjaxPager(self::getTypeName(1), $start, $total_number, '', true);
+        Html::printAjaxPager(self::getTypeName($total_number), $start, $total_number, '', true);
 
 
         echo "<div class='center'>";
@@ -184,7 +184,8 @@ class PluginSatisfactionSurveyResult extends CommonDBChild
                 echo "<td>" . $ticket_satisfaction->getField('satisfaction') . "</td>";
                 echo "<td>" . $ticket_satisfaction->getField('comment') . "</td>";
                 $date_answered = "";
-                if (!empty($ticket_satisfaction->getField('date_answered'))) {
+                if (!empty($ticket_satisfaction->getField('date_answered'))
+                && $ticket_satisfaction->getField('date_answered') != "N/A") {
                     $date_answered = $ticket_satisfaction->getField('date_answered');
                 }
                 echo "<td>" . Html::convDateTime($date_answered). "</td>";

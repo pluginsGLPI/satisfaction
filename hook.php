@@ -101,6 +101,7 @@ function plugin_satisfaction_uninstall()
         $DB->delete($table_glpi, ['itemtype' => ['LIKE' => 'PluginSatisfaction%']]);
     }
 
+
    //Delete rights associated with the plugin
     $profileRight = new ProfileRight();
     foreach (PluginSatisfactionProfile::getAllRights() as $right) {
