@@ -26,6 +26,7 @@
  along with satisfaction. If not, see <http://www.gnu.org/licenses/>.
  --------------------------------------------------------------------------
  */
+
 global $CFG_GLPI;
 
 /**
