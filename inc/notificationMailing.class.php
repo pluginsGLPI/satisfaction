@@ -32,7 +32,7 @@ if (!defined('GLPI_ROOT')) {
 }
 
 /**
- * Class PluginResourcesNotification
+ * Class PluginSatisfactionNotificationMailing
  */
 class PluginSatisfactionNotificationMailing extends CommonDBTM
 {
@@ -141,7 +141,7 @@ class PluginSatisfactionNotificationMailing extends CommonDBTM
 
         $output = [];
 
-        $query = "SELECT `".$this->getTable()."`.`id`, 
+        $query = "SELECT `".$this->getTable()."`.`id`,
                        `glpi_users`.`realname`,
                        `glpi_users`.`firstname`,
                        `glpi_users`.`name`,

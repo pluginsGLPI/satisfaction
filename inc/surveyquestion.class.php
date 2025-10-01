@@ -232,7 +232,7 @@ class PluginSatisfactionSurveyQuestion extends CommonDBChild
 
         echo "<form name='form' method='post' action='" . Toolbox::getItemTypeFormURL(self::getType()) . "'>";
 
-        echo "<div align='center'><table class='tab_cadre_fixe'>";
+        echo "<div class='center'><table class='tab_cadre_fixe'>";
         echo "<tr><th colspan='4'>" . __('Add a question', 'satisfaction') . "</th></tr>";
 
         echo "<tr class='tab_bg_1'>";

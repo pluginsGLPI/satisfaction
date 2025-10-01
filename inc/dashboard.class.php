@@ -56,7 +56,7 @@ class PluginSatisfactionDashboard extends CommonGLPI
     const PERIOD_SELECTOR_HTML_ID = "period-selector";
 
     /**
-     * PluginResourcesDashboard constructor.
+     * Dashboard constructor.
      *
      * @param array $options
      */
