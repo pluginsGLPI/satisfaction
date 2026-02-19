@@ -72,8 +72,6 @@ function plugin_init_satisfaction()
             $PLUGIN_HOOKS['pre_item_update']['satisfaction'][TicketSatisfaction::class] = [
                 SurveyAnswer::class, 'preUpdateSatisfaction'];
 
-            $PLUGIN_HOOKS['item_get_events']['satisfaction'] =
-            ['NotificationTargetTicket' => [NotificationTargetTicket::class, 'addEvents']];
 
             $PLUGIN_HOOKS['item_delete']['satisfaction'] = ['Ticket' => [Reminder::class, 'deleteItem']];
 
@@ -93,6 +91,9 @@ function plugin_init_satisfaction()
                 $PLUGIN_HOOKS['mydashboard']['satisfaction'] = [Dashboard::class];
             }
         }
+
+        $PLUGIN_HOOKS['item_get_events']['satisfaction'] =
+            ['NotificationTargetTicket' => [NotificationTargetTicket::class, 'addEvents']];
 
         $PLUGIN_HOOKS['item_get_datas']['satisfaction'] = [
             NotificationTargetTicket::class => [SurveyAnswer::class,
