@@ -5,6 +5,20 @@ This plugin extends the satisfaction survey of GLPI.
 
 Satisfaction is a plugin which allows you to add questions to the satisfaction survey.
 
+GLPI v11
+--------
+Temporarily you need to modify a glpi file
+
+Add
+
+{{ call_plugin_hook(constant('Glpi\\Plugin\\Hooks::POST_ITEM_FORM'), {'item': item, 'options': params}) }}
+
+Juste before
+
+{% endblock %}
+
+at the end of the glpi file : \templates\components\itilobject\itilsatisfaction.html.twig
+
 Features
 --------
 
