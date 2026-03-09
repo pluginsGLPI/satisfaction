@@ -11,11 +11,11 @@ Temporarily you need to modify a glpi file
 
 Add
 
-{{ call_plugin_hook(constant('Glpi\\Plugin\\Hooks::POST_ITEM_FORM'), {'item': item, 'options': params}) }}
+`{{ call_plugin_hook(constant('Glpi\\Plugin\\Hooks::POST_ITEM_FORM'), {'item': item, 'options': params}) }}`
 
 Juste before
 
-{% endblock %}
+`{% endblock %}`
 
 at the end of the glpi file : \templates\components\itilobject\itilsatisfaction.html.twig
 
