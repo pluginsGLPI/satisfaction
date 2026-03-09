@@ -404,20 +404,19 @@ class SurveyAnswer extends CommonDBChild
     public static function preUpdateSatisfaction(TicketSatisfaction $ticketSatisfaction)
     {
 
+
         $surveyanswer = new self();
         $dbu          = new DbUtils();
         if ($surveyanswer->getFromDBByCrit(["ticketsatisfactions_id" => $ticketSatisfaction->getField('id')])) {
             $input = ['id'     => $surveyanswer->getID(),
-                'answer' => addslashes($dbu->exportArrayToDB($ticketSatisfaction->input['answer']))];
-
+                'answer' => $dbu->exportArrayToDB($ticketSatisfaction->input['answer'])];
             $surveyanswer->update($input);
         } else {
             if (isset($ticketSatisfaction->input['plugin_satisfaction_surveys_id'])) {
                 $input = ['plugin_satisfaction_surveys_id' => $ticketSatisfaction->input[
                  'plugin_satisfaction_surveys_id'],
                     'ticketsatisfactions_id'         => $ticketSatisfaction->getField('id'),
-                    'answer'                         => addslashes(
-                        $dbu->exportArrayToDB($ticketSatisfaction->input['answer'])
+                    'answer'                         => $dbu->exportArrayToDB($ticketSatisfaction->input['answer']
                     )];
 
                 $surveyanswer->add($input);
