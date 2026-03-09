@@ -11,13 +11,13 @@ Temporarily you need to modify a glpi file
 
 Add
 
-`{{ call_plugin_hook(constant('Glpi\\Plugin\\Hooks::POST_ITEM_FORM'), {'item': item, 'options': params}) }}`
+`{{ call_plugin_hook(constant('Glpi\\Plugin\\Hooks::PRE_ITEM_FORM'), {'item': item, 'options': params ?? []}) }}`
 
-Juste before
+Juste after
 
-`{% endblock %}`
+`{% import "components/form/fields_macros.html.twig" as fields %}`
 
-at the end of the glpi file : \templates\components\itilobject\itilsatisfaction.html.twig
+at the beginning of the glpi file : \templates\components\itilobject\itilsatisfaction.html.twig
 
 Features
 --------
