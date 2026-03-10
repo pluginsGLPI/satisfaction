@@ -19,6 +19,8 @@ Juste after
 
 at the beginning of the glpi file : \templates\components\itilobject\itilsatisfaction.html.twig
 
+And clean you GLPI cache : php bin/console cache:clear
+
 Features
 --------
 
