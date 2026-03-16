@@ -82,7 +82,7 @@
     <homepage>https://github.com/pluginsGLPI/satisfaction</homepage>
     <download>https://github.com/pluginsGLPI/satisfaction/releases</download>
     <issues>https://github.com/pluginsGLPI/satisfaction/issues</issues>
-    <readme>https://raw.githubusercontent.com/pluginsGLPI/satisfaction/master/README.md</readme>
+    <readme>https://help.glpi-project.org/doc-plugins/moresatisfaction</readme>
     <authors>
         <author>Infotel</author>
     </authors>
