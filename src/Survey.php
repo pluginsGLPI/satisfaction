@@ -358,23 +358,25 @@ class Survey extends CommonDBTM
     {
         global $DB;
         $dbu = new DbUtils();
-        $where = $dbu->getEntitiesRestrictRequest("AND", "survey", 'entities_id', $entities_id, true);
 
-        $query = "SELECT `survey`.`id`
-                FROM `" . $dbu->getTableForItemType(__CLASS__) . "` as `survey`
-                LEFT JOIN `glpi_entities`
-                  ON (`glpi_entities`.`id` = `survey`.`entities_id`)
-                WHERE `is_active` = 1 $where
-                ORDER BY `glpi_entities`.`level` DESC
-                LIMIT 1";
+        $result = $DB->request([
+            'SELECT'    => 'survey.id',
+            'FROM'      => self::getTable() . ' AS survey',
+            'LEFT JOIN' => [
+                'glpi_entities' => [
+                    'FKEY' => ['glpi_entities' => 'id', 'survey' => 'entities_id'],
+                ],
+            ],
+            'WHERE'     => array_merge(
+                ['survey.is_active' => 1],
+                $dbu->getEntitiesRestrictCriteria('survey', 'entities_id', $entities_id, true)
+            ),
+            'ORDER'     => 'glpi_entities.level DESC',
+            'LIMIT'     => 1,
+        ]);
 
-        $result = $DB->doQuery($query);
-        if (($id = $DB->result($result, 0, "id")) === null) {
-            return false;
-        } else {
-            return $id;
-        }
-        return false;
+        $row = $result->current();
+        return $row ? $row['id'] : false;
     }
 
     /**

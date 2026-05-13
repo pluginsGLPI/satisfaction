@@ -1,4 +1,5 @@
 <?php
+
 /*
  * @version $Id: HEADER 15930 2011-10-30 15:47:55Z tsmr $
  -------------------------------------------------------------------------
@@ -32,7 +33,6 @@ namespace GlpiPlugin\Satisfaction;
 use AllowDynamicProperties;
 use CommonGLPI;
 use Dropdown;
-use GlpiPlugin\Mydashboard\Datatable;
 use GlpiPlugin\Mydashboard\Helper;
 use GlpiPlugin\Mydashboard\Html as MydashboardHtml;
 use GlpiPlugin\Mydashboard\Menu;
@@ -47,20 +47,20 @@ use TicketSatisfaction;
 class Dashboard extends CommonGLPI
 {
     // Widget identifiers
-    const SATISFACTION_SURVEY = 1;
+    public const SATISFACTION_SURVEY = 1;
 
     // Icons
-    const ICON_CIRCLE = 0;
+    public const ICON_CIRCLE = 0;
 
     // Periods
-    const EMPTY_PERIOD = 0;
-    const FIRST_TRIMESTER_PERIOD = 1;
-    const SECOND_TRIMESTER_PERIOD = 2;
-    const THIRD_TRIMESTER_PERIOD = 3;
-    const FOURTH_TRIMESTER_PERIOD = 4;
-    const YEAR_PERIOD = 5;
+    public const EMPTY_PERIOD = 0;
+    public const FIRST_TRIMESTER_PERIOD = 1;
+    public const SECOND_TRIMESTER_PERIOD = 2;
+    public const THIRD_TRIMESTER_PERIOD = 3;
+    public const FOURTH_TRIMESTER_PERIOD = 4;
+    public const YEAR_PERIOD = 5;
 
-    const PERIOD_SELECTOR_HTML_ID = "period-selector";
+    public const PERIOD_SELECTOR_HTML_ID = "period-selector";
 
     /**
      * Dashboard constructor.
@@ -82,9 +82,9 @@ class Dashboard extends CommonGLPI
         $widgets = [
             Menu::$HELPDESK => [
 
-                $this->getType().self::SATISFACTION_SURVEY => ["title"   => __('Summary of satisfaction surveys', 'satisfaction'),
-                                                               "type"    => Widget::$KPI,
-                                                               "comment" => ""],
+                $this->getType() . self::SATISFACTION_SURVEY => ["title"   => __('Summary of satisfaction surveys', 'satisfaction'),
+                    "type"    => Widget::$KPI,
+                    "comment" => ""],
             ],
         ];
 
@@ -96,7 +96,7 @@ class Dashboard extends CommonGLPI
     {
         $result = "";
         switch ($widgetId) {
-            case $this->getType().self::SATISFACTION_SURVEY:
+            case $this->getType() . self::SATISFACTION_SURVEY:
                 $result = __('Satisfaction survey', 'satisfaction');
                 break;
         }
@@ -113,12 +113,12 @@ class Dashboard extends CommonGLPI
     public function getPeriodNames($idPeriod = null)
     {
         $titles = [
-           self::EMPTY_PERIOD => "--",
-           self::FIRST_TRIMESTER_PERIOD => __('First Trimester', 'satisfaction'),
-           self::SECOND_TRIMESTER_PERIOD => __('Second Trimester', 'satisfaction'),
-           self::THIRD_TRIMESTER_PERIOD => __('Third Trimester', 'satisfaction'),
-           self::FOURTH_TRIMESTER_PERIOD => __('Fourth Trimester', 'satisfaction'),
-           self::YEAR_PERIOD => __('Year', 'satisfaction'),
+            self::EMPTY_PERIOD => "--",
+            self::FIRST_TRIMESTER_PERIOD => __('First Trimester', 'satisfaction'),
+            self::SECOND_TRIMESTER_PERIOD => __('Second Trimester', 'satisfaction'),
+            self::THIRD_TRIMESTER_PERIOD => __('Third Trimester', 'satisfaction'),
+            self::FOURTH_TRIMESTER_PERIOD => __('Fourth Trimester', 'satisfaction'),
+            self::YEAR_PERIOD => __('Year', 'satisfaction'),
         ];
 
         if (is_null($idPeriod)) {
@@ -141,25 +141,25 @@ class Dashboard extends CommonGLPI
 
         switch ($idPeriod) {
             case self::FIRST_TRIMESTER_PERIOD:
-                $interval['begin'] = $year.'-01-01 00:00:00';
-                $interval['end'] = $year.'-03-31 00:00:00';
+                $interval['begin'] = $year . '-01-01 00:00:00';
+                $interval['end'] = $year . '-03-31 00:00:00';
                 break;
             case self::SECOND_TRIMESTER_PERIOD:
-                $interval['begin'] = $year.'-04-01 00:00:00';
-                $interval['end'] = $year.'-06-30 00:00:00';
+                $interval['begin'] = $year . '-04-01 00:00:00';
+                $interval['end'] = $year . '-06-30 00:00:00';
                 break;
             case self::THIRD_TRIMESTER_PERIOD:
-                $interval['begin'] = $year.'-07-01 00:00:00';
-                $interval['end'] = $year.'-09-30 00:00:00';
+                $interval['begin'] = $year . '-07-01 00:00:00';
+                $interval['end'] = $year . '-09-30 00:00:00';
                 break;
             case self::FOURTH_TRIMESTER_PERIOD:
-                $interval['begin'] = $year.'-10-01 00:00:00';
-                $interval['end'] = $year.'-12-31 00:00:00';
+                $interval['begin'] = $year . '-10-01 00:00:00';
+                $interval['end'] = $year . '-12-31 00:00:00';
                 break;
             case self::YEAR_PERIOD:
             case null:
-                $interval['begin'] = $year.'-01-01 00:00:00';
-                $interval['end'] = $year.'-12-31 00:00:00';
+                $interval['begin'] = $year . '-01-01 00:00:00';
+                $interval['end'] = $year . '-12-31 00:00:00';
         }
         return $interval;
     }
@@ -172,7 +172,7 @@ class Dashboard extends CommonGLPI
     public function getWidgetContentForItem($widgetId, $opt = [])
     {
         switch ($widgetId) {
-            case $this->getType().self::SATISFACTION_SURVEY:
+            case $this->getType() . self::SATISFACTION_SURVEY:
                 return self::satisfactionSurvey($widgetId, $opt);
                 break;
         }
@@ -183,11 +183,13 @@ class Dashboard extends CommonGLPI
         global $DB;
 
         $criterias = ['begin', 'end', 'year', self::PERIOD_SELECTOR_HTML_ID];
-        $params    = ["criterias"   => $criterias, "opt"=> $opt];
-        $options   = Helper::manageCriterias($params);
+        $params    = ["criterias"   => $criterias,
+            "opt" => $opt];
 
-        $period = isset($opt[self::PERIOD_SELECTOR_HTML_ID]) ? $opt[self::PERIOD_SELECTOR_HTML_ID] : null ;
-        $year = isset($options['opt']['year']) ? $options['opt']['year'] : date("Y");
+        $default = Helper::manageCriterias($params);
+
+        $period = $opt[self::PERIOD_SELECTOR_HTML_ID] ?? null ;
+        $year = $options['opt']['year'] ?? date("Y");
 
         // When period is chosen we set the interval of date with the year
         if (is_null($period) || intval($period) !== self::EMPTY_PERIOD) {
@@ -209,13 +211,13 @@ class Dashboard extends CommonGLPI
         // Recover survey associed to current entity
         $Survey = new Survey();
         if (!$Survey->getFromDBByCrit([
-           'entities_id' => $_SESSION['glpiactive_entity'],
-           'is_active' => 1
+            'entities_id' => $_SESSION['glpiactive_entity'],
+            'is_active' => 1,
         ])) {
-            $content.= '<div class="center">';
-            $content.= '<br><br>';
-            $content.= '<h4>'.__("There are no survey for current entity", "satisfaction").'</h4>';
-            $content.= '</div>';
+            $content .= '<div class="center">';
+            $content .= '<br><br>';
+            $content .= '<h4>' . __("There are no survey for current entity", "satisfaction") . '</h4>';
+            $content .= '</div>';
         } else {
             // Values
             $numberOfSurveys = 0;
@@ -224,95 +226,65 @@ class Dashboard extends CommonGLPI
             $numberSurveyAnswered = 0;
             $globalSatisfaction = 0;
 
-            // Datetime to date conversion
-            function addDateCriteria(&$query, $dateBegin, $dateEnd)
-            {
-                if (!empty($dateBegin)) {
-                    $query.= " AND date(date_begin) >= '".$dateBegin."'";
-                }
-                if (!empty($dateEnd)) {
-                    $query.= " AND date(date_begin) < '".$dateEnd."'";
-                }
+            $date_where = [];
+            if (!empty($opt['begin'])) {
+                $date_where[] = ['date_begin' => ['>=', new \QueryExpression('DATE(' . $DB->quoteValue($opt['begin']) . ')')]];
+            }
+            if (!empty($opt['end'])) {
+                $date_where[] = ['date_begin' => ['<', new \QueryExpression('DATE(' . $DB->quoteValue($opt['end']) . ')')]];
             }
 
-            // Number of satisfaction survey
-            $query = "SELECT count(*) as nb FROM " . TicketSatisfaction::getTable();
-            $query .= " WHERE 1=1";
-            addDateCriteria($query, $opt['begin'], $opt['end']);
-
-            $result = $DB->doQuery($query);
-
-            if ($DB->numrows($result)) {
-                while ($data = $DB->fetchAssoc($result)) {
-                    $numberOfSurveys = $data['nb'];
-                }
-            }
+            // Number of satisfaction surveys
+            $row = $DB->request([
+                'COUNT' => 'nb',
+                'FROM'  => TicketSatisfaction::getTable(),
+                'WHERE' => $date_where,
+            ])->current();
+            $numberOfSurveys = $row ? (int) $row['nb'] : 0;
 
             // Number of concerned tickets
-            $query = "SELECT count(DISTINCT tickets_id) as nb FROM " . TicketSatisfaction::getTable();
-            $query .= " WHERE 1=1";
-            addDateCriteria($query, $opt['begin'], $opt['end']);
+            $row = $DB->request([
+                'SELECT' => ['COUNT DISTINCT' => 'tickets_id AS nb'],
+                'FROM'   => TicketSatisfaction::getTable(),
+                'WHERE'  => $date_where,
+            ])->current();
+            $numberOfImpactedTickets = $row ? (int) $row['nb'] : 0;
 
-            $result = $DB->doQuery($query);
+            // Surveys not answered
+            $row = $DB->request([
+                'COUNT' => 'nb',
+                'FROM'  => TicketSatisfaction::getTable(),
+                'WHERE' => array_merge($date_where, ['date_answered' => null]),
+            ])->current();
+            $numberSurveyNotAnswered = $row ? (int) $row['nb'] : 0;
 
-            if ($DB->numrows($result)) {
-                while ($data = $DB->fetchAssoc($result)) {
-                    $numberOfImpactedTickets = $data['nb'];
-                }
-            }
-
-            // Survey not answered
-            $query = "SELECT count(*) as nb FROM " . TicketSatisfaction::getTable();
-            $query .= " WHERE date_answered IS NULL";
-            addDateCriteria($query, $opt['begin'], $opt['end']);
-
-            $result = $DB->doQuery($query);
-
-            if ($DB->numrows($result)) {
-                while ($data = $DB->fetchAssoc($result)) {
-                    $numberSurveyNotAnswered = $data['nb'];
-                }
-            }
-
-            // Survey answered
-            $query = "SELECT count(DISTINCT tickets_id) as nb FROM " . TicketSatisfaction::getTable();
-            $query .= " WHERE date_answered IS NOT NULL";
-            addDateCriteria($query, $opt['begin'], $opt['end']);
-
-            $result = $DB->doQuery($query);
-
-            if ($DB->numrows($result)) {
-                while ($data = $DB->fetchAssoc($result)) {
-                    $numberSurveyAnswered = $data['nb'];
-                }
-            }
+            // Surveys answered
+            $row = $DB->request([
+                'SELECT' => ['COUNT DISTINCT' => 'tickets_id AS nb'],
+                'FROM'   => TicketSatisfaction::getTable(),
+                'WHERE'  => array_merge($date_where, ['NOT' => ['date_answered' => null]]),
+            ])->current();
+            $numberSurveyAnswered = $row ? (int) $row['nb'] : 0;
 
             // Global satisfaction
-            $query = "SELECT AVG(satisfaction) as nb FROM " . TicketSatisfaction::getTable();
-            $query .= " WHERE date_answered IS NOT NULL";
-            addDateCriteria($query, $opt['begin'], $opt['end']);
-
-            $result = $DB->doQuery($query);
-
-            if ($DB->numrows($result)) {
-                while ($data = $DB->fetchAssoc($result)) {
-                    $globalSatisfaction = $data['nb'];
-                }
-            }
-
-            $globalSatisfaction = round($globalSatisfaction, 1);
+            $row = $DB->request([
+                'SELECT' => [new \QueryExpression('AVG(satisfaction) AS nb')],
+                'FROM'   => TicketSatisfaction::getTable(),
+                'WHERE'  => array_merge($date_where, ['NOT' => ['date_answered' => null]]),
+            ])->current();
+            $globalSatisfaction = round($row ? (float) $row['nb'] : 0, 1);
 
             function displayElement($color, $icon, $title, $value)
             {
-                $elem = '<div class="nb" style="color:'.$color.'">';
+                $elem = '<div class="nb" style="color:' . $color . '">';
                 //$elem.= '<a style="color:'.$color.'" target="_blank" href="" title="'.$title.'">';
-                $elem.= '<i style="color:'.$color.';font-size:34px" class="fa '.$icon.' fa-3x fa-border"></i>';
-                $elem.= '<h3>';
-                $elem.= '<span class="counter count-number">'.$value.'</span>';
-                $elem.= '</h3>';
-                $elem.= '<p class="count-text ">'.$title.'</p>';
+                $elem .= '<i style="color:' . $color . ';font-size:34px" class="fa ' . $icon . ' fa-3x fa-border"></i>';
+                $elem .= '<h3>';
+                $elem .= '<span class="counter count-number">' . $value . '</span>';
+                $elem .= '</h3>';
+                $elem .= '<p class="count-text ">' . $title . '</p>';
                 //$elem.= '</a>';
-                $elem.= '</div>';
+                $elem .= '</div>';
 
                 return $elem;
             }
@@ -321,49 +293,50 @@ class Dashboard extends CommonGLPI
             $content = Html::css('public/lib/jquery.rateit.css');
             Html::requireJs('rateit');
 
-            $content.= '<div class="tickets-stats">';
-            $content.= displayElement(
+            $content .= '<div class="tickets-stats">';
+            $content .= displayElement(
                 "grey",
                 "fa-exclamation-circle",
                 __("Number of surveys", "satisfaction"),
                 $numberOfSurveys
             );
-            $content.= displayElement(
+            $content .= displayElement(
                 "grey",
                 "fa-id-card",
                 __("Number of concerned tickets", "satisfaction"),
                 $numberOfImpactedTickets
             );
-            $content.= displayElement(
+            $content .= displayElement(
                 "indianred",
                 "fa-times",
                 __("Survey not answered", "satisfaction"),
                 $numberSurveyNotAnswered
             );
-            $content.= displayElement(
+            $content .= displayElement(
                 "green",
                 "fa-check",
                 __("Survey answered", "satisfaction"),
                 $numberSurveyAnswered
             );
 
-            $content.= '<div>';
-            $content.= '<h3 style="color:grey">';
-            $content.= '<span>'.__("Global satisfaction", "satisfaction").'</span>';
-            $content.= '</h3>';
-            $content.= '<h3>'.$globalSatisfaction.'</h3>';
-            $content.= '<div class="rateit" data-rateit-value="'.$globalSatisfaction.'" data-rateit-ispreset="true" data-rateit-readonly="true"></div>';
-            $content.= "</div>";
-            $content.= "</div>";
+            $content .= '<div>';
+            $content .= '<h3 style="color:grey">';
+            $content .= '<span>' . __("Global satisfaction", "satisfaction") . '</span>';
+            $content .= '</h3>';
+            $content .= '<h3>' . $globalSatisfaction . '</h3>';
+            $content .= '<div class="rateit" data-rateit-value="' . $globalSatisfaction . '" data-rateit-ispreset="true" data-rateit-readonly="true"></div>';
+            $content .= "</div>";
+            $content .= "</div>";
 
             $params = ["widgetId"  => $widgetId,
-               "name"      => str_replace(' ', '', self::getWidgetTitle($widgetId)),
-               "onsubmit"  => true,
-               "opt"       => $opt,
-               "criterias" => $criterias,
-               "export"    => false,
-               "canvas"    => false,
-               "nb"        => 1];
+                "name"      => str_replace(' ', '', self::getWidgetTitle($widgetId)),
+                "onsubmit"  => true,
+                "opt"       => $opt,
+                "default" => $default,
+                "criterias" => $criterias,
+                "export"    => false,
+                "canvas"    => false,
+                "nb"        => 1];
 
             $graphHeader = Helper::getGraphHeader($params);
 
@@ -391,12 +364,12 @@ class Dashboard extends CommonGLPI
         $dropdown = Dropdown::showFromArray(self::PERIOD_SELECTOR_HTML_ID, self::getPeriodNames(), ['display' => false]);
 
         $period = "<span class='md-widgetcrit'>";
-        $period.= __('Periods', 'satisfaction');
-        $period.= "&nbsp;";
-        $period.= $dropdown;
-        $period.= "</span>";
-        $period.= "<br><br>";
+        $period .= __('Periods', 'satisfaction');
+        $period .= "&nbsp;";
+        $period .= $dropdown;
+        $period .= "</span>";
+        $period .= "<br><br>";
 
-        $graphHeader = $graphBeforeSubmit.$period.$graphAfterSubmit;
+        $graphHeader = $graphBeforeSubmit . $period . $graphAfterSubmit;
     }
 }

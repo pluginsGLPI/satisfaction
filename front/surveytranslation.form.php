@@ -31,6 +31,9 @@
 use Glpi\Exception\Http\NotFoundHttpException;
 use GlpiPlugin\Satisfaction\SurveyTranslation;
 
+Session::checkLoginUser();
+Session::checkRight('plugin_satisfaction', UPDATE);
+
 if (!isset($_POST['survey_id']) || !isset($_POST['action'])) {
     throw new NotFoundHttpException();
 }

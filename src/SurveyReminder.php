@@ -421,12 +421,12 @@ class SurveyReminder extends CommonDBChild
             echo "</script>\n";
         }
 
-        echo "<td class='center'>" . nl2br($this->fields[self::COLUMN_NAME]) . "</td>";
-        echo "<td class='center'>" . nl2br($this->getDurationTitles(
+        echo "<td class='center'>" . nl2br(htmlspecialchars($this->fields[self::COLUMN_NAME], ENT_QUOTES)) . "</td>";
+        echo "<td class='center'>" . nl2br(htmlspecialchars($this->getDurationTitles(
             $this->fields[self::COLUMN_DURATION_TYPE]
-        )) . "</td>";
-        echo "<td class='center'>" . nl2br($this->fields[self::COLUMN_DURATION]) . "</td>";
-        echo "<td class='center'>" . nl2br($this->getActiveTitles($this->fields[self::COLUMN_IS_ACTIVE])) . "</td>";
+        ), ENT_QUOTES)) . "</td>";
+        echo "<td class='center'>" . nl2br(htmlspecialchars((string) $this->fields[self::COLUMN_DURATION], ENT_QUOTES)) . "</td>";
+        echo "<td class='center'>" . nl2br(htmlspecialchars($this->getActiveTitles($this->fields[self::COLUMN_IS_ACTIVE]), ENT_QUOTES)) . "</td>";
         echo "</tr>";
     }
 

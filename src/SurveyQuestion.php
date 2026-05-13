@@ -377,7 +377,7 @@ class SurveyQuestion extends CommonDBChild
 
         $name = $this->fields["name"];
 
-        echo "<td class='left'>" . nl2br($name) . "</td>";
+        echo "<td class='left'>" . nl2br(htmlspecialchars($name, ENT_QUOTES)) . "</td>";
         echo "<td class='left'>" . self::getQuestionType($this->fields["type"]) . "</td>";
         echo "</tr>";
     }

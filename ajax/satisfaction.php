@@ -29,8 +29,12 @@
  */
 
 
+Session::checkLoginUser();
+
 if (isset($_POST['action_default_value'])) {
-    Dropdown::showNumber('default_value', ['max'   => $_POST['default_value'],
+    Dropdown::showNumber('default_value', [
+        'max'   => intval($_POST['default_value']),
         'min'   => 1,
-        'value' => $_POST['value']]);
+        'value' => intval($_POST['value']),
+    ]);
 }

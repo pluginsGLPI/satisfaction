@@ -180,7 +180,7 @@ class SurveyAnswer extends CommonDBChild
                 $name = SurveyTranslation::getTranslation($question[
                     "plugin_satisfaction_surveys_id"], $question["id"]);
             }
-            echo nl2br($name);
+            echo nl2br(htmlspecialchars($name, ENT_QUOTES));
             echo "</td>";
             echo "<td>";
             if (isset($sanswer_obj->fields['answer'][$question['id']])) {
@@ -287,7 +287,7 @@ class SurveyAnswer extends CommonDBChild
             }
 
             echo "<div class=\"form-group col-md-11\">";
-            echo nl2br($name);
+            echo nl2br(htmlspecialchars($name, ENT_QUOTES));
             echo "</div>";
 
             echo "<div class=\"form-group col-md-11\">";
@@ -389,10 +389,10 @@ class SurveyAnswer extends CommonDBChild
                 return Dropdown::getYesNo($value);
 
             case SurveyQuestion::TEXTAREA:
-                return $value;
+                return nl2br(htmlspecialchars($value, ENT_QUOTES));
 
             case SurveyQuestion::NOTE:
-                return $value;
+                return htmlspecialchars((string) $value, ENT_QUOTES);
         }
     }
 
@@ -448,7 +448,7 @@ class SurveyAnswer extends CommonDBChild
      *
      * @param \NotificationTarget $target
      */
-    public static function addNotificationDatas(NotificationTargetTicket $target)
+    public static function addNotificationDatas(\NotificationTargetTicket $target)
     {
 
         $event = $target->raiseevent;

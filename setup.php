@@ -27,8 +27,6 @@
  --------------------------------------------------------------------------
  */
 
-global $CFG_GLPI;
-
 /**
  * Init the hooks of the plugins -Needed
  */
@@ -42,21 +40,20 @@ use GlpiPlugin\Satisfaction\Profile;
 use GlpiPlugin\Satisfaction\Reminder;
 use GlpiPlugin\Satisfaction\SurveyAnswer;
 
-define("PLUGIN_SATISFACTION_VERSION", "1.7.2");
+define("PLUGIN_SATISFACTION_VERSION", "1.7.3");
 
 // Minimal GLPI version, inclusive
 define('PLUGIN_SATISFACTION_MIN_GLPI', '11.0');
 // Maximum GLPI version, exclusive
 define('PLUGIN_SATISFACTION_MAX_GLPI', '12.0');
-$root = $CFG_GLPI['root_doc'] . '/plugins/satisfaction';
-define("PLUGINSATISFACTION_WEBDIR", $root);
+global $CFG_GLPI;
+define("PLUGINSATISFACTION_WEBDIR", $CFG_GLPI['root_doc'] . '/plugins/satisfaction');
 
 function plugin_init_satisfaction()
 {
     global $PLUGIN_HOOKS;
 
-    $PLUGIN_HOOKS['csrf_compliant']['satisfaction'] = true;
-    $PLUGIN_HOOKS['change_profile']['satisfaction'] = [Profile::class, 'initProfile'];
+    $PLUGIN_HOOKS[Hooks::CHANGE_PROFILE]['satisfaction'] = [Profile::class, 'initProfile'];
 
     if (Plugin::isPluginActive('satisfaction')) {
        //if glpi is loaded
@@ -66,21 +63,21 @@ function plugin_init_satisfaction()
                 ['addtabon' => Profile::class]
             );
 
-            $PLUGIN_HOOKS['pre_item_form']['satisfaction'] = [
+            $PLUGIN_HOOKS[Hooks::PRE_ITEM_FORM]['satisfaction'] = [
                 SurveyAnswer::class, 'displaySatisfaction'];
 
-            $PLUGIN_HOOKS['pre_item_update']['satisfaction'][TicketSatisfaction::class] = [
+            $PLUGIN_HOOKS[Hooks::PRE_ITEM_UPDATE]['satisfaction'][TicketSatisfaction::class] = [
                 SurveyAnswer::class, 'preUpdateSatisfaction'];
 
 
-            $PLUGIN_HOOKS['item_delete']['satisfaction'] = ['Ticket' => [Reminder::class, 'deleteItem']];
+            $PLUGIN_HOOKS[Hooks::ITEM_DELETE]['satisfaction'] = ['Ticket' => [Reminder::class, 'deleteItem']];
 
            //current user must have config rights
             if (Session::haveRight('plugin_satisfaction', READ)) {
                 $config_page = 'front/survey.php';
-                $PLUGIN_HOOKS['config_page']['satisfaction'] = $config_page;
+                $PLUGIN_HOOKS[Hooks::CONFIG_PAGE]['satisfaction'] = $config_page;
 
-                $PLUGIN_HOOKS["menu_toadd"]['satisfaction'] = ['admin' => Menu::class];
+                $PLUGIN_HOOKS[Hooks::MENU_TOADD]['satisfaction'] = ['admin' => Menu::class];
             }
 
             if (isset($_SESSION['glpiactiveprofile']['interface'])
@@ -92,12 +89,12 @@ function plugin_init_satisfaction()
             }
         }
 
-        $PLUGIN_HOOKS['item_get_events']['satisfaction'] =
-            ['NotificationTargetTicket' => [NotificationTargetTicket::class, 'addEvents']];
+        $PLUGIN_HOOKS[Hooks::ITEM_GET_EVENTS]['satisfaction'] =
+            [\NotificationTargetTicket::class => [NotificationTargetTicket::class, 'addEvents']];
 
-        $PLUGIN_HOOKS['item_get_datas']['satisfaction'] = [
-            NotificationTargetTicket::class => [SurveyAnswer::class,
-         'addNotificationDatas']];
+        $PLUGIN_HOOKS[Hooks::ITEM_GET_DATA]['satisfaction'] = [
+            \NotificationTargetTicket::class => [SurveyAnswer::class,
+                'addNotificationDatas']];
     }
 }
 

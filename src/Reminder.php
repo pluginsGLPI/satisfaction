@@ -129,22 +129,29 @@ class Reminder extends CommonDBTM
     {
         global $DB;
 
+        $where = [
+            't.entities_id' => (int) $entities_id,
+            ['ts.date_begin' => ['>', new \QueryExpression("DATE(" . $DB->quoteValue($date_begin) . ")")]],
+        ];
+
+        if ($date_answered === null) {
+            $where['ts.date_answered'] = null;
+        } else {
+            $where[] = ['ts.date_answered' => new \QueryExpression("DATE(" . $DB->quoteValue($date_answered) . ")")];
+        }
+
         $ticketSatisfactions = [];
-
-        $query = "SELECT ts.* FROM " . TicketSatisfaction::getTable() . " as ts";
-        $query .= " INNER JOIN " . Ticket::getTable() . " as t";
-        $query .= " ON ts.tickets_id = t.id";
-        $query .= " WHERE t.entities_id = " . $entities_id;
-        $query .= " AND ts.date_begin > DATE('" . $date_begin . "')";
-        $query .= " AND ts.date_answered " . (
-            ($date_answered == null) ? " IS NULL" : " = DATE('" . $date_answered . "')");
-
-        $result = $DB->doQuery($query);
-
-        if ($DB->numrows($result)) {
-            while ($data = $DB->fetchAssoc($result)) {
-                $ticketSatisfactions[] = $data;
-            }
+        foreach ($DB->request([
+            'SELECT'     => 'ts.*',
+            'FROM'       => TicketSatisfaction::getTable() . ' AS ts',
+            'INNER JOIN' => [
+                Ticket::getTable() . ' AS t' => [
+                    'FKEY' => ['ts' => 'tickets_id', 't' => 'id'],
+                ],
+            ],
+            'WHERE' => $where,
+        ]) as $data) {
+            $ticketSatisfactions[] = $data;
         }
         return $ticketSatisfactions;
     }

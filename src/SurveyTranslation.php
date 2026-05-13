@@ -42,7 +42,6 @@ if (!defined('GLPI_ROOT')) {
     die("Sorry. You can't access this file directly");
 }
 
-include(dirname(__FILE__)."/SurveyTranslationDAO.php");
 
 /**
  * SurveyTranslation Class
