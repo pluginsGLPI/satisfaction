@@ -81,7 +81,7 @@ class SurveyAnswer extends CommonDBChild
 
         // can exists for template
         if ($item->getType() == Survey::class) {
-            echo Html::css('public/lib/jquery.rateit.css');
+            echo Html::css('/lib/jquery.rateit.css');
             Html::requireJs('rateit');
             return self::createTabEntry(__('Preview', 'satisfaction'));
         }
