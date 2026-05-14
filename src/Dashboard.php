@@ -33,6 +33,7 @@ namespace GlpiPlugin\Satisfaction;
 use AllowDynamicProperties;
 use CommonGLPI;
 use Dropdown;
+use Glpi\DBAL\QueryExpression;
 use GlpiPlugin\Mydashboard\Helper;
 use GlpiPlugin\Mydashboard\Html as MydashboardHtml;
 use GlpiPlugin\Mydashboard\Menu;
@@ -228,10 +229,10 @@ class Dashboard extends CommonGLPI
 
             $date_where = [];
             if (!empty($opt['begin'])) {
-                $date_where[] = ['date_begin' => ['>=', new \QueryExpression('DATE(' . $DB->quoteValue($opt['begin']) . ')')]];
+                $date_where[] = ['date_begin' => ['>=', new QueryExpression('DATE(' . $DB->quoteValue($opt['begin']) . ')')]];
             }
             if (!empty($opt['end'])) {
-                $date_where[] = ['date_begin' => ['<', new \QueryExpression('DATE(' . $DB->quoteValue($opt['end']) . ')')]];
+                $date_where[] = ['date_begin' => ['<', new QueryExpression('DATE(' . $DB->quoteValue($opt['end']) . ')')]];
             }
 
             // Number of satisfaction surveys
@@ -268,7 +269,7 @@ class Dashboard extends CommonGLPI
 
             // Global satisfaction
             $row = $DB->request([
-                'SELECT' => [new \QueryExpression('AVG(satisfaction) AS nb')],
+                'SELECT' => [new QueryExpression('AVG(satisfaction) AS nb')],
                 'FROM'   => TicketSatisfaction::getTable(),
                 'WHERE'  => array_merge($date_where, ['NOT' => ['date_answered' => null]]),
             ])->current();

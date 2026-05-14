@@ -32,6 +32,7 @@ namespace GlpiPlugin\Satisfaction;
 use CommonDBTM;
 use CronTask;
 use Entity;
+use Glpi\DBAL\QueryExpression;
 use Ticket;
 use TicketSatisfaction;
 
@@ -131,13 +132,13 @@ class Reminder extends CommonDBTM
 
         $where = [
             't.entities_id' => (int) $entities_id,
-            ['ts.date_begin' => ['>', new \QueryExpression("DATE(" . $DB->quoteValue($date_begin) . ")")]],
+            ['ts.date_begin' => ['>', new QueryExpression("DATE(" . $DB->quoteValue($date_begin) . ")")]],
         ];
 
         if ($date_answered === null) {
             $where['ts.date_answered'] = null;
         } else {
-            $where[] = ['ts.date_answered' => new \QueryExpression("DATE(" . $DB->quoteValue($date_answered) . ")")];
+            $where[] = ['ts.date_answered' => new QueryExpression("DATE(" . $DB->quoteValue($date_answered) . ")")];
         }
 
         $ticketSatisfactions = [];
