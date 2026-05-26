@@ -116,6 +116,7 @@ class Reminder extends CommonDBTM
         }
 
         self::sendReminders();
+        return 1;
     }
 
    /**
@@ -241,7 +242,7 @@ class Reminder extends CommonDBTM
                 }
                 // Order dates
                 usort($potentialReminderToSendDates, function($a, $b) {
-                    strtotime($a["date"]) - strtotime($b["date"]);
+                    return strtotime($a["date"]) - strtotime($b["date"]);
                 });
                 $dateNow = date("Y-m-d");
 
