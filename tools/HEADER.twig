@@ -1,6 +1,4 @@
-<?php
-
-/*
+{#
  -------------------------------------------------------------------------
  satisfaction plugin for GLPI
  Copyright (C) 2018-2026 by the satisfaction Development Team.
@@ -25,21 +23,4 @@
  You should have received a copy of the GNU General Public License
  along with satisfaction. If not, see <http://www.gnu.org/licenses/>.
  --------------------------------------------------------------------------
- */
-
-use Glpi\Exception\Http\AccessDeniedHttpException;
-use GlpiPlugin\Satisfaction\Menu;
-use GlpiPlugin\Satisfaction\Survey;
-
-Html::header(Survey::getTypeName(2), '', "admin", Menu::class);
-
-$satisfaction = new Survey();
-$satisfaction->checkGlobal(READ);
-
-if ($satisfaction->canView()) {
-    Search::show(Survey::class);
-} else {
-    throw new AccessDeniedHttpException();
-}
-
-Html::footer();
+ #}

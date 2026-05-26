@@ -1,5 +1,3 @@
-<?php
-
 /*
  -------------------------------------------------------------------------
  satisfaction plugin for GLPI
@@ -26,20 +24,3 @@
  along with satisfaction. If not, see <http://www.gnu.org/licenses/>.
  --------------------------------------------------------------------------
  */
-
-use Glpi\Exception\Http\AccessDeniedHttpException;
-use GlpiPlugin\Satisfaction\Menu;
-use GlpiPlugin\Satisfaction\Survey;
-
-Html::header(Survey::getTypeName(2), '', "admin", Menu::class);
-
-$satisfaction = new Survey();
-$satisfaction->checkGlobal(READ);
-
-if ($satisfaction->canView()) {
-    Search::show(Survey::class);
-} else {
-    throw new AccessDeniedHttpException();
-}
-
-Html::footer();
