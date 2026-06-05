@@ -433,10 +433,16 @@ class SurveyAnswer extends CommonDBChild
      */
     public static function displaySatisfaction($params)
     {
+        static $displayed_ids = [];
 
         if (isset($params['item'])) {
             $item = $params['item'];
             if ($item->getType() == 'TicketSatisfaction') {
+                $item_id = $item->getID();
+                if (isset($displayed_ids[$item_id])) {
+                    return;
+                }
+                $displayed_ids[$item_id] = true;
                 self::showSurvey($item);
             }
         }
