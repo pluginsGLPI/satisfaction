@@ -65,6 +65,8 @@ function plugin_init_satisfaction()
 
             $PLUGIN_HOOKS[Hooks::PRE_ITEM_FORM]['satisfaction'] = [
                 SurveyAnswer::class, 'displaySatisfaction'];
+            $PLUGIN_HOOKS[Hooks::POST_ITEM_FORM]['satisfaction'] = [
+                SurveyAnswer::class, 'displaySatisfaction'];
 
             $PLUGIN_HOOKS[Hooks::PRE_ITEM_UPDATE]['satisfaction'][TicketSatisfaction::class] = [
                 SurveyAnswer::class, 'preUpdateSatisfaction'];

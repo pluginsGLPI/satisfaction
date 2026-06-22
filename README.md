@@ -1,3 +1,11 @@
+## Satisfaction plugin for GLPI
+
+[![License](https://img.shields.io/badge/License-GNU%20v3-blue.svg?style=flat-square)](https://github.com/pluginsGLPI/satisfaction/blob/master/LICENSE)
+[![Web](https://img.shields.io/badge/Web-Infotel-blue.svg?style=flat-square)](https://blogglpi.infotel.com)
+[![Translate](https://img.shields.io/badge/Translate-Transifex-cyan)](https://explore.transifex.com/infotelGLPI/GLPI_satisfaction/)
+
+### English
+
 Introduction
 ============
 
@@ -20,13 +28,8 @@ Features
 * This plugin will add two new tags to the notifications for "Satisfaction survey" and "Satisfaction survey answer" events.
   - The tag "##satisfaction. question##" will allow you to add the list of questions of the plugin.
   - The tag "##satisfaction. answer##" will allow you to add the list of questions and answers of the plugin.
-  
-  Translations
-  ------------
-  
-  Join us on [Transifex](https://www.transifex.com/InfotelGLPI/GLPI_satisfaction)
 
-  ------------------------------------------------------------------------------------------------------------------------
+### French
 
 Introduction
 ============
@@ -45,7 +48,7 @@ Fonctionnalités
     - Zone de texte 
     - Note : Il sera possible de configurer la nombre total d’étoiles.
 
-* Ce plugin va permettre d’ajouter l’ensemble des questions configurés dans le plugin avec les deux questions du cœur de GLPI.
+* Ce plugin va permettre d’ajouter l’ensemble des questions configurées dans le plugin avec les deux questions du cœur de GLPI.
 
 * Ce plugin va ajouter deux nouvelles balises dans les notifications concernant les événements « Enquête de satisfaction » et « Réponse à l’enquête de satisfaction ».
    - La balise « ##satisfaction.question## » va permettre d’ajouter la liste des questions du plugin.
