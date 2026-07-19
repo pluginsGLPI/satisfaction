@@ -349,8 +349,10 @@ class SurveyAnswer extends CommonDBChild
      */
     public static function showStarAnswer($question, $value = 0)
     {
-        $questions_id = $question['id'];
-        $number       = $question['number'];
+
+        $questions_id = (int) $question['id'];
+        $number       = (int) $question['number'];
+        $value        = (int) $value;
 
         echo "<select id='satisfaction_data_$questions_id' name='answer[$questions_id]'>";
 

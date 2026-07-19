@@ -178,7 +178,7 @@ class SurveyResult extends CommonDBChild
 
                 $ticket = new Ticket();
                 $ticket->getFromDB($ticket_satisfaction->getField('tickets_id'));
-                echo "<td>" . $ticket_satisfaction->getField('tickets_id') . "</td>";
+                echo "<td>" . (int) $ticket_satisfaction->getField('tickets_id') . "</td>";
                 echo "<td>" . $ticket->getLink() . "</td>";
 
                 $answers = $dbu->importArrayFromDB($data['answer']);
@@ -188,8 +188,8 @@ class SurveyResult extends CommonDBChild
                     echo $obj_survey_answer->getAnswer($squestion_obj->fields, $answer);
                     echo "</td>";
                 }
-                echo "<td>" . $ticket_satisfaction->getField('satisfaction') . "</td>";
-                echo "<td>" . $ticket_satisfaction->getField('comment') . "</td>";
+                echo "<td>" . (int) $ticket_satisfaction->getField('satisfaction') . "</td>";
+                echo "<td>" . htmlspecialchars((string) $ticket_satisfaction->getField('comment'), ENT_QUOTES) . "</td>";
                 $date_answered = "";
                 if (!empty($ticket_satisfaction->getField('date_answered'))
                 && $ticket_satisfaction->getField('date_answered') != "N/A") {

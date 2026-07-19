@@ -27,12 +27,13 @@
  --------------------------------------------------------------------------
  */
 
+use Glpi\Exception\Http\NotFoundHttpException;
 use GlpiPlugin\Satisfaction\SurveyTranslation;
 
 Session::checkRight('plugin_satisfaction', UPDATE);
 
 if (!isset($_POST['survey_id']) || !isset($_POST['action'])) {
-        throw new \Glpi\Exception\Http\NotFoundHttpException();
+        throw new NotFoundHttpException();
 }
 
 global $CFG_GLPI;
