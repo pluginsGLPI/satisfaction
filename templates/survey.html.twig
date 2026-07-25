@@ -1,0 +1,25 @@
+{# -------------------------------------------------------------------------
+ # satisfaction plugin for GLPI
+ # Copyright (C) 2018-2026 by the satisfaction Development Team.
+ # https://github.com/pluginsGLPI/satisfaction
+ # @license GPLv2+
+ # Rows rendered between showFormHeader() and showFormButtons().
+ # ------------------------------------------------------------------------- #}
+<tr class="tab_bg_1">
+   <td>{{ __('Name') }}</td>
+   <td>
+      <input type="text" name="name" value="{{ item.fields.name }}" size="40"
+             class="form-control">
+   </td>
+   <td>{{ __('Comments') }}</td>
+   <td>
+      <textarea name="comment" cols="60" rows="6"
+                class="form-control">{{ item.fields.comment }}</textarea>
+   </td>
+</tr>
+
+<tr class="tab_bg_1">
+   <td>{{ __('Active') }}</td>
+   <td>{{ yesno_active|raw }}</td>
+   <td colspan="2"></td>
+</tr>

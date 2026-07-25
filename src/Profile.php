@@ -31,6 +31,7 @@ namespace GlpiPlugin\Satisfaction;
 
 use CommonGLPI;
 use DbUtils;
+use Glpi\Application\View\TemplateRenderer;
 use Html;
 use ProfileRight;
 use Session;
@@ -48,7 +49,7 @@ class Profile extends \Profile
 
     /**
      * @param CommonGLPI $item
-     * @param int        $withtemplate
+     * @param int $withtemplate
      *
      * @return string|translated
      */
@@ -59,26 +60,41 @@ class Profile extends \Profile
         }
         return '';
     }
+
     public static function getIcon()
     {
         return Menu::getIcon();
     }
+
     /**
      * @param CommonGLPI $item
-     * @param int        $tabnum
-     * @param int        $withtemplate
+     * @param int $tabnum
+     * @param int $withtemplate
      *
      * @return bool
      */
-    public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
-    {
-        if ($item->getType() == 'Profile') {
-            $ID   = $item->getID();
-            $prof = new self();
-
-            self::addDefaultProfileInfos($ID, ['plugin_satisfaction' => 0]);
-            $prof->showForm($ID);
+    public static function displayTabContentForItem(
+        CommonGLPI $item,
+        $tabnum = 1,
+        $withtemplate = 0
+    ) {
+        if (!$item instanceof \Profile || !self::canView()) {
+            return false;
         }
+
+        $profile = new \Profile();
+        $profile->getFromDB($item->getID());
+
+        $rights = self::getAllRights(true);
+
+        $twig = TemplateRenderer::getInstance();
+        $twig->display('@satisfaction/profile.html.twig', [
+            'id' => $item->getID(),
+            'profile' => $profile,
+            'title' => self::getTypeName(Session::getPluralNumber()),
+            'rights' => $rights,
+        ]);
+
         return true;
     }
 
@@ -104,9 +120,9 @@ class Profile extends \Profile
         $dbu = new DbUtils();
         foreach ($rights as $right => $value) {
             if ($dbu->countElementsInTable(
-                'glpi_profilerights',
-                ["profiles_id" => $profiles_id, "name" => $right]
-            ) && $drop_existing) {
+                    'glpi_profilerights',
+                    ["profiles_id" => $profiles_id, "name" => $right]
+                ) && $drop_existing) {
                 $profileRight->deleteByCriteria(['profiles_id' => $profiles_id, 'name' => $right]);
             }
             if (!$dbu->countElementsInTable(
@@ -114,8 +130,8 @@ class Profile extends \Profile
                 ["profiles_id" => $profiles_id, "name" => $right]
             )) {
                 $myright['profiles_id'] = $profiles_id;
-                $myright['name']        = $right;
-                $myright['rights']      = $value;
+                $myright['name'] = $right;
+                $myright['rights'] = $value;
                 $profileRight->add($myright);
 
                 //Add right to the current session
@@ -124,43 +140,6 @@ class Profile extends \Profile
         }
     }
 
-    /**
-     * Show profile form
-     *
-     * @param int  $profiles_id
-     * @param bool $openform
-     * @param bool $closeform
-     *
-     * @return nothing
-     * @internal param int $items_id id of the profile
-     * @internal param value $target url of target
-     */
-    public function showForm($profiles_id = 0, $openform = true, $closeform = true)
-    {
-        echo "<div class='firstbloc'>";
-        if (($canedit = Session::haveRightsOr(self::$rightname, [CREATE, UPDATE, PURGE])) && $openform) {
-            $profile = new \Profile();
-            echo "<form method='post' action='" . $profile->getFormURL() . "'>";
-        }
-
-        $profile = new \Profile();
-        $profile->getFromDB($profiles_id);
-        if ($profile->getField('interface') == 'central') {
-            $rights = $this->getAllRights();
-            $profile->displayRightsChoiceMatrix($rights, ['canedit'       => $canedit,
-                'default_class' => 'tab_bg_2',
-                'title'         => __('General')]);
-        }
-
-        if ($canedit && $closeform) {
-            echo "<div class='center'>";
-            echo Html::hidden('id', ['value' => $profiles_id]);
-            echo Html::submit(_sx('button', 'Save'), ['name' => 'update', 'class' => 'btn btn-primary']);
-            echo "</div>\n";
-            Html::closeForm();
-        }
-        echo "</div>";
-    }
 
     /**
      * @param bool $all
@@ -170,9 +149,10 @@ class Profile extends \Profile
     public static function getAllRights($all = false)
     {
         $rights = [
-            ['itemtype' => Survey::class,
-                'label'    => Survey::getTypeName(2),
-                'field'    => 'plugin_satisfaction',
+            [
+                'itemtype' => Survey::class,
+                'label' => Survey::getTypeName(2),
+                'field' => 'plugin_satisfaction',
             ],
         ];
 
@@ -212,13 +192,13 @@ class Profile extends \Profile
         global $DB;
 
         $profile = new self();
-        $dbu     = new DbUtils();
+        $dbu = new DbUtils();
         //Add new rights in glpi_profilerights table
         foreach ($profile->getAllRights(true) as $data) {
             if ($dbu->countElementsInTable(
-                "glpi_profilerights",
-                ["name" => $data['field']]
-            ) == 0) {
+                    "glpi_profilerights",
+                    ["name" => $data['field']]
+                ) == 0) {
                 ProfileRight::addProfileRights([$data['field']]);
             }
         }

@@ -1,0 +1,67 @@
+{# -------------------------------------------------------------------------
+ # satisfaction plugin for GLPI
+ # Copyright (C) 2018-2026 by the satisfaction Development Team.
+ # https://github.com/pluginsGLPI/satisfaction
+ # @license GPLv2+
+ # ------------------------------------------------------------------------- #}
+<div id="{{ container_id }}"></div>
+
+{% if can_add %}
+   {{ add_scripts|raw }}
+   <div class="center">
+      <a href="javascript:{{ add_onclick }}">{{ __('Add a reminder', 'satisfaction') }}</a>
+      <br>
+      <a href="javascript:{{ add_predefined_onclick }}">{{ __('Add a predefined reminder', 'satisfaction') }}</a>
+   </div>
+   <br>
+{% endif %}
+
+<form name="form" method="post">
+   <table class="tab_cadre_fixe">
+      <tr class="tab_bg_2">
+         <th class="b" colspan="2">{{ __('Setup maximum number of days to send reminder', 'satisfaction') }}</th>
+      </tr>
+      <tr class="tab_bg_1">
+         <td>{{ __('Maximum number of days to send reminder', 'satisfaction') }}</td>
+         <td>{{ reminders_days_dropdown|raw }}</td>
+      </tr>
+      <tr>
+         <td class="tab_bg_2 center" colspan="4">
+            <input type="hidden" name="_glpi_csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="id" value="{{ survey_id }}">
+            <button type="submit" name="update" class="btn btn-primary">{{ _x('button', 'Save') }}</button>
+         </td>
+      </tr>
+   </table>
+</form>
+
+{% if rows is empty %}
+   <table class="tab_cadre_fixe">
+      <tr class="tab_bg_2">
+         <th class="b">{{ __('No reminders for this survey', 'satisfaction') }}</th>
+      </tr>
+   </table>
+{% else %}
+   {{ ma_top|raw }}
+   <table class="tab_cadre_fixehov">
+      <tr>
+         {% if can_purge %}<th width="10">{{ checkall|raw }}</th>{% endif %}
+         <th>{{ col_name }}</th>
+         <th>{{ col_duration_type }}</th>
+         <th>{{ col_duration }}</th>
+         <th>{{ col_is_active }}</th>
+      </tr>
+      {% for row in rows %}
+         {{ row.edit_script|raw }}
+         <tr class="tab_bg_2"
+             {% if row.edit %}style="cursor:pointer" onclick="{{ row.edit_onclick }}" id="{{ row.row_id }}"{% endif %}>
+            {% if can_purge %}<td width="10">{{ row.checkbox|raw }}</td>{% endif %}
+            <td class="center">{{ row.name|nl2br }}</td>
+            <td class="center">{{ row.duration_type|nl2br }}</td>
+            <td class="center">{{ row.duration|nl2br }}</td>
+            <td class="center">{{ row.is_active|nl2br }}</td>
+         </tr>
+      {% endfor %}
+   </table>
+   {{ ma_bottom|raw }}
+{% endif %}

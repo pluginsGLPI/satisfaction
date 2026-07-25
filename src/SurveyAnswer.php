@@ -33,6 +33,7 @@ use CommonDBChild;
 use CommonGLPI;
 use DbUtils;
 use Dropdown;
+use Glpi\Application\View\TemplateRenderer;
 use Html;
 use Session;
 use Ticket;
@@ -156,32 +157,17 @@ class SurveyAnswer extends CommonDBChild
             $sanswer_obj->fields['answer'] = $dbu->importArrayFromDB($sanswer_obj->fields['answer']);
         }
 
-        echo Html::hidden('plugin_satisfaction_surveys_id', ['value' => $plugin_satisfaction_surveys_id]);
-
-        if ($preview) {
-            echo "<div class='spaced' id='tabsbody'>";
-        } else {
-            echo "<div>";
-        }
-
-        echo "<table class='tab_cadre_fixe'>";
-        echo "<tbody>";
-
         //list survey questions
+        $questions     = [];
         $squestion_obj = new SurveyQuestion();
         foreach ($squestion_obj->find([
             SurveyQuestion::$items_id => $plugin_satisfaction_surveys_id]) as $question) {
-            echo "<tr>";
-            echo "<td class='w-50'>";
             $name = $question['name'];
             if (SurveyTranslation::hasTranslation($question[
                 "plugin_satisfaction_surveys_id"], $question["id"])) {
                 $name = SurveyTranslation::getTranslation($question[
                     "plugin_satisfaction_surveys_id"], $question["id"]);
             }
-            echo nl2br(htmlspecialchars($name, ENT_QUOTES));
-            echo "</td>";
-            echo "<td>";
             if (isset($sanswer_obj->fields['answer'][$question['id']])) {
                 $value = $sanswer_obj->fields['answer'][$question['id']];
             } else {
@@ -193,16 +179,13 @@ class SurveyAnswer extends CommonDBChild
                     $value = 0;
                 }
             }
-            self::displayAnswer($question, $value);
-            echo "</td>";
-            echo "</tr>";
+            $questions[] = [
+                'name'   => $name,
+                'answer' => self::displayAnswer($question, $value),
+            ];
         }
 
-        echo "</tbody>";
-        echo "</table>";
-        echo "</div>";
-
-        echo Html::scriptBlock("
+        $table_script = Html::scriptBlock("
          // Isolate variables in a self calling function
          (function(){
             // Set table content width
@@ -222,6 +205,16 @@ class SurveyAnswer extends CommonDBChild
             });
          })();
       ");
+
+        TemplateRenderer::getInstance()->display('@satisfaction/surveyanswer.html.twig', [
+            'hidden_survey_id' => Html::hidden(
+                'plugin_satisfaction_surveys_id',
+                ['value' => $plugin_satisfaction_surveys_id]
+            ),
+            'preview'          => $preview,
+            'questions'        => $questions,
+            'table_script'     => $table_script,
+        ]);
     }
 
 
@@ -270,26 +263,17 @@ class SurveyAnswer extends CommonDBChild
             $sanswer_obj->fields['answer'] = $dbu->importArrayFromDB($sanswer_obj->fields['answer']);
         }
 
-        echo Html::hidden('plugin_satisfaction_surveys_id', ['value' => $plugin_satisfaction_surveys_id]);
-
         //list survey questions
+        $questions     = [];
         $squestion_obj = new SurveyQuestion();
         foreach ($squestion_obj->find([
             SurveyQuestion::$items_id => $plugin_satisfaction_surveys_id]) as $question) {
-            echo "<div class=\"form-row\">";
-
             $name = $question['name'];
             if (SurveyTranslation::hasTranslation($question[
                 "plugin_satisfaction_surveys_id"], $question["id"])) {
                 $name = SurveyTranslation::getTranslation($question[
                     "plugin_satisfaction_surveys_id"], $question["id"]);
             }
-
-            echo "<div class=\"form-group col-md-11\">";
-            echo nl2br(htmlspecialchars($name, ENT_QUOTES));
-            echo "</div>";
-
-            echo "<div class=\"form-group col-md-11\">";
 
             if (isset($sanswer_obj->fields['answer'][$question['id']])) {
                 $value = $sanswer_obj->fields['answer'][$question['id']];
@@ -302,11 +286,19 @@ class SurveyAnswer extends CommonDBChild
                     $value = 0;
                 }
             }
-            self::displayAnswer($question, $value);
-            echo "</div>";
-
-            echo "</div>";
+            $questions[] = [
+                'name'   => $name,
+                'answer' => self::displayAnswer($question, $value),
+            ];
         }
+
+        TemplateRenderer::getInstance()->display('@satisfaction/surveyanswer_responsive.html.twig', [
+            'hidden_survey_id' => Html::hidden(
+                'plugin_satisfaction_surveys_id',
+                ['value' => $plugin_satisfaction_surveys_id]
+            ),
+            'questions'        => $questions,
+        ]);
     }
 
     /**
@@ -321,24 +313,25 @@ class SurveyAnswer extends CommonDBChild
 
         switch ($question['type']) {
             case SurveyQuestion::YESNO:
+                ob_start();
                 Dropdown::showYesNo("answer[$questions_id]", $value);
-                break;
+                return ob_get_clean();
 
             case SurveyQuestion::TEXTAREA:
                 $name = "answer[" . $questions_id . "]";
-                echo Html::textarea([
+                return Html::textarea([
                     'name'    => $name,
                     'value'    => $value,
                     'cols'    => '60',
                     'rows'    => '6',
                     'display' => false,
                 ]);
-                break;
 
             case SurveyQuestion::NOTE:
-                self::showStarAnswer($question, $value);
-                break;
+                return self::showStarAnswer($question, $value);
         }
+
+        return '';
     }
 
     /**
@@ -346,6 +339,8 @@ class SurveyAnswer extends CommonDBChild
      *
      * @param     $question
      * @param int $value
+     *
+     * @return string
      */
     public static function showStarAnswer($question, $value = 0)
     {
@@ -354,24 +349,24 @@ class SurveyAnswer extends CommonDBChild
         $number       = (int) $question['number'];
         $value        = (int) $value;
 
-        echo "<select id='satisfaction_data_$questions_id' name='answer[$questions_id]'>";
+        $js = "$(function() {"
+            . "$('#stars_$questions_id').rateit({value: $value,"
+            . " min: 0,"
+            . " max: $number,"
+            . " step: 1,"
+            . " backingfld: '#satisfaction_data_$questions_id',"
+            . " ispreset: true,"
+            . " resetable: false});"
+            . "});";
 
-        for ($i = 0; $i <= $number; $i++) {
-            echo "<option value='$i' " . (($i == $value) ? 'selected' : '') . ">$i</option>";
-        }
-        echo "</select>";
-
-        echo "<div id='stars_$questions_id'></div>";
-        echo "<script type='text/javascript'>\n";
-        echo "$(function() {";
-        echo "$('#stars_$questions_id').rateit({value: " . $value . ",
-                                   min : 0,
-                                   max : $number,
-                                   step: 1,
-                                   backingfld: '#satisfaction_data_$questions_id',
-                                   ispreset: true,
-                                   resetable: false});";
-        echo "});</script>";
+        ob_start();
+        TemplateRenderer::getInstance()->display('@satisfaction/surveyanswer_star.html.twig', [
+            'questions_id' => $questions_id,
+            'number'       => $number,
+            'value'        => $value,
+            'star_script'  => Html::scriptBlock($js),
+        ]);
+        return ob_get_clean();
     }
 
     /**

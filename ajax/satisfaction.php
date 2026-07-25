@@ -28,6 +28,7 @@
  */
 
 Session::checkLoginUser();
+Session::checkRight('plugin_satisfaction', UPDATE);
 
 if (isset($_POST['action_default_value'])) {
     Dropdown::showNumber('default_value', [

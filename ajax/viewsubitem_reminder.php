@@ -27,6 +27,7 @@
  --------------------------------------------------------------------------
  */
 
+use Glpi\Exception\Http\AccessDeniedHttpException;
 use Glpi\Exception\Http\NotFoundHttpException;
 use GlpiPlugin\Satisfaction\Survey;
 use GlpiPlugin\Satisfaction\SurveyReminder;
@@ -54,6 +55,9 @@ if (($item = getItemForItemtype($_POST['type']))
     if (isset($_POST[$parent->getForeignKeyField()])
       && isset($_POST["id"])
       && $parent->getFromDB($_POST[$parent->getForeignKeyField()])) {
+        // Enforce READ right and entity scoping on the parent survey (anti-IDOR)
+        $parent->check($parent->getID(), READ);
+
         $reminderName = SurveyReminder::PREDEFINED_REMINDER_OPTION_NAME;
 
         $options = [
@@ -66,6 +70,6 @@ if (($item = getItemForItemtype($_POST['type']))
 
         $item->showForm($_POST["id"], $options);
     } else {
-        echo __('Access denied');
+        throw new AccessDeniedHttpException();
     }
 }

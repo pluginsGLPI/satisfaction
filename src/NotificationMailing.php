@@ -31,10 +31,10 @@ namespace GlpiPlugin\Satisfaction;
 
 use CommonDBTM;
 use DbUtils;
+use Glpi\Application\View\TemplateRenderer;
 use Html;
 use Session;
 use Ticket;
-use Toolbox;
 
 if (!defined('GLPI_ROOT')) {
     die("Sorry. You can't access directly to this file");
@@ -86,92 +86,6 @@ class NotificationMailing extends CommonDBTM
         return Session::haveRight(self::$rightname, READ);
     }
 
-    /**
-     * Function list items
-     *
-     * @param  $ID
-     */
-    public function listItems($ID)
-    {
-
-        $rand = mt_rand();
-
-        // Start
-        $start = 0;
-        if (isset($_REQUEST["start"])) {
-            $start = $_REQUEST["start"];
-        }
-
-        // Get data
-        $data = $this->getItems($ID, $start);
-        if (!empty($data)) {
-            echo "<div class='center'>";
-            $dbu = new DbUtils();
-            Html::printAjaxPager(self::getTypeName(2), $start, $dbu->countElementsInTable($this->getTable()));
-            echo "<table class='tab_cadre_fixehov'>";
-            echo "<tr class='tab_bg_1'>";
-            echo "<th colspan='3'>" . self::getTypeName(1) . "</th>";
-            echo "</tr>";
-            echo "<tr class='tab_bg_1'>";
-            echo "<th>" . __('User') . "</th>";
-            echo "<th>" . __('Date') . "</th>";
-            echo "<th>" . __('Type') . "</th>";
-            echo "</tr>";
-
-            $dbu = new DbUtils();
-
-            foreach ($data as $field) {
-                echo "<tr class='tab_bg_2'>";
-                //            // User
-                //            echo "<td>".$dbu->formatUserName($field['users_id'], $field['name'], $field['realname'], $field['firstname'])."</td>";
-                //            echo "<td>".Html::convDateTime($field['date_mod'])."</td>";
-                //            echo "<td>".self::getStatus($field['type'])."</td>";
-                //            echo "</tr>";
-                // Ticket
-                // TODO
-            }
-            echo "</table>";
-            echo "</div>";
-        }
-    }
-
-    /**
-     * Function get items for resource
-     *
-     * @param  $recordmodels_id
-     * @param  $start
-     * @return
-     *@global  $DB
-     */
-    public function getItems($resources_id, $start = 0)
-    {
-        global $DB;
-
-        $output = [];
-
-        $query = "SELECT `" . $this->getTable() . "`.`id`,
-                       `glpi_users`.`realname`,
-                       `glpi_users`.`firstname`,
-                       `glpi_users`.`name`,
-                       `" . $this->getTable() . "`.`type`,
-                       `" . $this->getTable() . "`.`users_id`,
-                       `" . $this->getTable() . "`.`date_mod`,
-                       `" . $this->getTable() . "`.`plugin_resources_resources_id`
-          FROM " . $this->getTable() . "
-          LEFT JOIN `glpi_users` ON (`" . $this->getTable() . "`.`users_id` = `glpi_users`.`id`)
-          WHERE `" . $this->getTable() . "`.`plugin_resources_resources_id` = " . Toolbox::cleanInteger($resources_id) . "
-          ORDER BY `" . $this->getTable() . "`.`date_mod` DESC
-          LIMIT " . intval($start) . "," . intval($_SESSION['glpilist_limit']);
-
-        $result = $DB->doQuery($query);
-        if ($DB->numrows($result)) {
-            while ($data = $DB->fetchAssoc($result)) {
-                $output[$data['id']] = $data;
-            }
-        }
-
-        return $output;
-    }
 
     /**
      * Function get the Status

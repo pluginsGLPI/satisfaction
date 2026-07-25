@@ -1,0 +1,64 @@
+{# -------------------------------------------------------------------------
+ # satisfaction plugin for GLPI
+ # Copyright (C) 2018-2026 by the satisfaction Development Team.
+ # https://github.com/pluginsGLPI/satisfaction
+ # @license GPLv2+
+ # ------------------------------------------------------------------------- #}
+<form name="form" method="post" action="{{ target }}" enctype="multipart/form-data">
+   <input type="hidden" name="_glpi_csrf_token" value="{{ csrf_token() }}">
+   <input type="hidden" name="survey_id" value="{{ survey_id }}">
+   <div class="spaced" id="tabsbody">
+      <table class="tab_cadre_fixe" id="mainformtable">
+         <tbody>
+            <tr class="headerRow">
+               <th colspan="3">
+                  {% if is_edit %}{{ __('Edit') }}{% else %}{{ __('Add') }}{% endif %} {{ __('Translation') }}
+               </th>
+            </tr>
+            <tr class="headerRow">
+               <th>{{ __('Language') }}</th>
+               <th>{{ __('Question') }}</th>
+               <th>{{ __('Value') }}</th>
+            </tr>
+            {% if is_edit %}
+               <tr>
+                  <td width="10%" style="text-align:center;">
+                     <input type="hidden" name="action" value="EDIT">
+                     <input type="hidden" name="language" value="{{ language_value }}">
+                     <input type="hidden" name="id" value="{{ translation_id }}">
+                     <input type="hidden" name="question_id" value="{{ question_id }}">
+                     {{ language_name }}
+                  </td>
+                  <td width="45%" style="text-align:center;">{{ question_name }}</td>
+                  <td width="45%" style="text-align:center;">
+                     <textarea name="value" cols="50" rows="4"
+                               class="form-control">{{ value }}</textarea>
+                  </td>
+               </tr>
+               <tr>
+                  <td class="center" colspan="3">
+                     <button type="submit" name="update" class="btn btn-primary">{{ _x('button', 'Save') }}</button>
+                  </td>
+               </tr>
+            {% else %}
+               <tr>
+                  <td width="10%" style="text-align:center;">
+                     <input type="hidden" name="action" value="NEW">
+                     {{ language_dropdown|raw }}
+                     {{ language_ajax|raw }}
+                  </td>
+                  <td width="30%" style="text-align:center;">{{ question_dropdown|raw }}</td>
+                  <td width="60%" style="text-align:center;">
+                     <textarea name="value" cols="50" rows="4" class="form-control"></textarea>
+                  </td>
+               </tr>
+               <tr>
+                  <td class="center" colspan="3">
+                     <button type="submit" name="update" class="btn btn-primary">{{ _x('button', 'Add') }}</button>
+                  </td>
+               </tr>
+            {% endif %}
+         </tbody>
+      </table>
+   </div>
+</form>

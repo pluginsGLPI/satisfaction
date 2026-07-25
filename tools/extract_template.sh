@@ -6,7 +6,7 @@ find . -name '*.php' > php_files.list
 # Extraction avec xgettext
 xgettext --files-from=php_files.list \
   --copyright-holder='Satisfaction Development Team' \
-  --package-name='Satisfaction - Accounts plugin' \
+  --package-name='Satisfaction plugin' \
   -o locales/glpi.pot \
   -L PHP \
   --add-comments=TRANS \

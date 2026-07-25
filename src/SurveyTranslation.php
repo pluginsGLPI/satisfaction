@@ -33,6 +33,8 @@ use Ajax;
 use CommonDBChild;
 use CommonGLPI;
 use Dropdown;
+use Glpi\Application\View\TemplateRenderer;
+use Glpi\Exception\Http\NotFoundHttpException;
 use Html;
 use Log;
 use Session;
@@ -153,17 +155,17 @@ class SurveyTranslation extends CommonDBChild
 
         $rand    = mt_rand();
         $canedit = $item->can($item->getID(), UPDATE);
-        $target = PLUGINSATISFACTION_WEBDIR."/ajax/surveytranslation.form.php";
+        $target  = PLUGINSATISFACTION_WEBDIR . "/ajax/surveytranslation.form.php";
 
+        $add_script = '';
         if ($canedit) {
-            echo "<div id='viewtranslation" . $item->getID() . "$rand'></div>\n";
-
-            echo "<script type='text/javascript' >\n";
+            ob_start();
+            echo "<script type='text/javascript'>\n";
             echo "function addTranslation" . $item->getID() . "$rand() {\n";
             $params = [
-            'id' => -1,
-            'survey_id' => $item->getID(),
-            'action' => 'GET'
+                'id'        => -1,
+                'survey_id' => $item->getID(),
+                'action'    => 'GET',
             ];
             Ajax::updateItemJsCode(
                 "viewtranslation" . $item->getID() . "$rand",
@@ -172,97 +174,85 @@ class SurveyTranslation extends CommonDBChild
             );
             echo "};";
             echo "</script>\n";
-            echo "<div class='center'>".
-             "<a class='submit btn btn-primary' href='javascript:addTranslation".
-             $item->getID()."$rand();'>". __('Add a new translation').
-             "</a></div><br>";
+            $add_script = ob_get_clean();
         }
 
+        $rows      = [];
+        $ma_top    = '';
+        $ma_bottom = '';
+        $checkall  = '';
         if (count($items)) {
-           // ** MASS ACTION **
-           // TODO Remove edit action
             if ($canedit) {
-                Html::openMassiveActionsForm('mass_satisfaction'.$rand);
-                $massiveactionparams = ['item' => __CLASS__, 'container' => 'mass_satisfaction'.$rand];
+                ob_start();
+                Html::openMassiveActionsForm('mass_satisfaction' . $rand);
+                $massiveactionparams = ['item' => __CLASS__, 'container' => 'mass_satisfaction' . $rand];
                 Html::showMassiveActions($massiveactionparams);
+                $ma_top   = ob_get_clean();
+                $checkall = Html::getCheckAllAsCheckbox('mass' . __CLASS__ . $rand);
             }
-           // ** MASS ACTION **
 
-            echo "<div class='center'>";
-            echo "<table class='tab_cadre_fixehov'><tr class='tab_bg_2'>";
-
-           // ** HEADER **
-            echo "<th colspan='4'>".__("List of translations")."</th></tr><tr>";
-            if ($canedit) {
-                echo "<th width='10'>";
-                echo Html::getCheckAllAsCheckbox('mass'.__CLASS__.$rand);
-                echo "</th>";
-            }
-            echo "<th>".__("Language")."</th>";
-            echo "<th>".__("Question")."</th>";
-            echo "<th>".__("Value")."</th></tr>";
-           // ** HEADER **
-
-           // ** ROWS **
             foreach ($items as $data) {
-                $tdAttributes = '';
+                $edit_script = '';
                 if ($canedit) {
-                    $tdAttributes =
-                    "style='cursor:pointer;text-align:center;' ".
-                    //"onClick='viewEditTranslation".$data['itemtype'].$data['id']."$rand();'";
-                    "onClick='viewEditTranslation".$data['id']."$rand();'";
-                }
-                echo "<tr class='tab_bg_1'>";
-
-               // ** MASS ACTION **
-                if ($canedit) {
-                    echo "<td class='center'>";
-                    Html::showMassiveActionCheckBox(__CLASS__, $data["id"]);
-                    echo "</td>";
-                }
-               // ** MASS ACTION **
-
-                echo "<td $tdAttributes>";
-                if ($canedit) {
-                    echo "\n<script type='text/javascript' >\n";
-                    echo "function viewEditTranslation".$data['id']."$rand() {\n";
+                    ob_start();
+                    echo "<script type='text/javascript'>\n";
+                    echo "function viewEditTranslation" . $data['id'] . "$rand() {\n";
                     $params = [
-                    'id' => $data["id"],
-                    'survey_id' => $item->getID(),
-                    'action' => 'GET'
+                        'id'        => $data["id"],
+                        'survey_id' => $item->getID(),
+                        'action'    => 'GET',
                     ];
                     Ajax::updateItemJsCode(
                         "viewtranslation" . $item->getID() . "$rand",
-                        PLUGINSATISFACTION_WEBDIR."/ajax/surveytranslation.form.php",
+                        $target,
                         $params
                     );
                     echo "};";
                     echo "</script>\n";
+                    $edit_script = ob_get_clean();
                 }
-                echo Dropdown::getLanguageName($data['language']);
-                echo "</td>";
+
+                $checkbox = '';
+                if ($canedit) {
+                    ob_start();
+                    Html::showMassiveActionCheckBox(__CLASS__, $data["id"]);
+                    $checkbox = ob_get_clean();
+                }
 
                 $surveyQuestion = new SurveyQuestion();
                 $surveyQuestion->getFromDB($data['glpi_plugin_satisfaction_surveyquestions_id']);
 
-                echo "<td $tdAttributes>".$surveyQuestion->getName()."</td>";
-                echo "<td $tdAttributes>".$data['value']."</td>";
-                echo "</tr>";
+                $rows[] = [
+                    'edit'        => $canedit,
+                    'onclick'     => "viewEditTranslation" . $data['id'] . "$rand();",
+                    'checkbox'    => $checkbox,
+                    'edit_script' => $edit_script,
+                    'language'    => Dropdown::getLanguageName($data['language']),
+                    'question'    => $surveyQuestion->getName(),
+                    'value'       => $data['value'],
+                ];
             }
-           // ** ROWS **
-            echo "</table>";
-            echo "</div>";
-           // ** MASS ACTION **
+
             if ($canedit) {
+                ob_start();
                 $massiveactionparams['ontop'] = false;
                 Html::showMassiveActions($massiveactionparams);
                 Html::closeForm();
+                $ma_bottom = ob_get_clean();
             }
-           // ** MASS ACTION **
-        } else {
-            echo "<table class='tab_cadre_fixe'><tr class='tab_bg_2'>";
-            echo "<th class='b'>" . __("No translation has been added yet", "satisfaction")."</th></tr></table>";
         }
+
+        TemplateRenderer::getInstance()->display('@satisfaction/surveytranslation_list.html.twig', [
+            'can_edit'     => $canedit,
+            'container_id' => "viewtranslation" . $item->getID() . $rand,
+            'add_script'   => $add_script,
+            'add_onclick'  => "addTranslation" . $item->getID() . "$rand();",
+            'checkall'     => $checkall,
+            'ma_top'       => $ma_top,
+            'ma_bottom'    => $ma_bottom,
+            'rows'         => $rows,
+        ]);
+
         return true;
     }
 
@@ -281,95 +271,60 @@ class SurveyTranslation extends CommonDBChild
             $item->check(-1, CREATE);
         }
 
-        $tdBaseStyle="style='text-align:center;'";
-        $rand = mt_rand();
-        echo $this->getFormHeader($options['id'], $surveyId);
+        $data = [
+            'target'    => PLUGINSATISFACTION_WEBDIR . "/front/surveytranslation.form.php",
+            'survey_id' => $surveyId,
+            'is_edit'   => ($options['id'] > 0),
+        ];
 
-        echo "<tr>";
-       // Edit Translation
         if ($options['id'] > 0) {
-            echo Html::hidden('action', ['value' => 'EDIT']);
             $surveyTranslationData = SurveyTranslationDAO::getSurveyTranslationByID($options['id']);
+
+            // Integrity/anti-IDOR: the requested translation must belong to the survey
+            // whose READ right/entity has already been validated above.
+            if (
+                $surveyTranslationData === null
+                || (int) $surveyTranslationData['plugin_satisfaction_surveys_id'] !== $surveyId
+            ) {
+                throw new NotFoundHttpException();
+            }
 
             $surveyQuestion = new SurveyQuestion();
             $surveyQuestion->getFromDB($surveyTranslationData['glpi_plugin_satisfaction_surveyquestions_id']);
 
-           // Language
-            echo "<td width='10%' $tdBaseStyle>";
-            echo Html::hidden('language', ['value' => $surveyTranslationData['language']]);
-            echo Html::hidden('id', ['value' => $options['id']]);
-            echo Html::hidden('question_id', ['value' => $surveyQuestion->getID()]);
-
-            echo Dropdown::getLanguageName($surveyTranslationData['language']);
-            echo "</td>";
-           // Question
-            echo "<td width='45%' $tdBaseStyle>".$surveyQuestion->getName()."</td>";
-           // Value
-            echo "<td width='45%' $tdBaseStyle>";
-            echo Html::textarea([
-                                'name'    => 'value',
-                                'value'    => $surveyTranslationData['value'],
-                                'cols'    => '50',
-                                'rows'    => '4',
-                                'display' => false,
-                             ]); //style='position:relative; width:90%; height:60px'
-            echo "</td>";
-            echo "</tr>";
-
-           // Save button
-            echo "<tr><td class='center' colspan='3'>\n";
-            echo Html::submit(_x('button', 'Save'), ['name' => 'update', 'class' => 'btn btn-primary']);
-            echo "</tr>";
-        } else { // New translation
-            echo Html::hidden('action', ['value' =>'NEW']);
-
-           // Language
-            echo "<td width='10%' $tdBaseStyle>";
-            $rand   = Dropdown::showLanguages(
+            $data['language_value'] = $surveyTranslationData['language'];
+            $data['translation_id'] = $options['id'];
+            $data['question_id']    = $surveyQuestion->getID();
+            $data['language_name']  = Dropdown::getLanguageName($surveyTranslationData['language']);
+            $data['question_name']  = $surveyQuestion->getName();
+            $data['value']          = $surveyTranslationData['value'];
+        } else {
+            ob_start();
+            $rand = Dropdown::showLanguages(
                 "language",
                 ['display_none' => true, 'value' => $_SESSION['glpilanguage']]
             );
+            $data['language_dropdown'] = ob_get_clean();
 
             $params = [
-             'language' => '__VALUE__',
-             'itemtype' => get_class($item),
-             'items_id' => $item->getID()
+                'language' => '__VALUE__',
+                'itemtype' => get_class($item),
+                'items_id' => $item->getID(),
             ];
 
+            ob_start();
             Ajax::updateItemOnSelectEvent(
                 "dropdown_language$rand",
                 "span_fields",
-                $CFG_GLPI["root_doc"]."/ajax/updateTranslationFields.php",
+                $CFG_GLPI["root_doc"] . "/ajax/updateTranslationFields.php",
                 $params
             );
+            $data['language_ajax'] = ob_get_clean();
 
-            echo "</td>";
-
-           // Question
-            echo "<td width='30%' $tdBaseStyle>".$this->getQuestionDropdown($surveyId)."</td>";
-
-           // Value
-
-            echo "<td width='60%' $tdBaseStyle>";
-            echo Html::textarea([
-                                'name'    => 'value',
-                                'cols'    => '50',
-                                'rows'    => '4',
-                                'display' => false,
-                             ]); //style='position:relative; width:90%; height:60px'
-            echo "</td>";
-
-            echo "</tr>";
-
-           // Add button
-            echo "<tr><td class='center' colspan='3'>\n";
-            echo Html::submit(_x('button', 'Add'), ['name' => 'update', 'class' => 'btn btn-primary']);
-            echo "</tr>";
+            $data['question_dropdown'] = $this->getQuestionDropdown($surveyId);
         }
 
-       // Close for Form
-        echo "</table></div>";
-        echo Html::closeForm(false);
+        TemplateRenderer::getInstance()->display('@satisfaction/surveytranslation_form.html.twig', $data);
     }
 
     public function getQuestionDropdown($surveyId)
@@ -393,37 +348,25 @@ class SurveyTranslation extends CommonDBChild
         return Dropdown::showFromArray($params['name'], $temp, $params);
     }
 
-    public function getFormHeader($translationID, $surveyID)
-    {
-
-        global $CFG_GLPI;
-        $target = PLUGINSATISFACTION_WEBDIR."/front/surveytranslation.form.php";
-
-        $result = "<form name='form' method='post' action='$target' enctype='multipart/form-data'>";
-        $result.= Html::hidden('survey_id', ['value' =>$surveyID]);
-        $result.= "<div class='spaced' id='tabsbody'>";
-        $result.= "<table class='tab_cadre_fixe' id='mainformtable'>";
-        $result.= "<tbody>";
-
-       // First Title Line
-        $result.= "<tr class='headerRow'><th colspan='3'>";
-        $result.= $translationID > 0 ? __("Edit") : __("Add") ;
-        $result.= " ".__("Translation");
-        $result.= "</th></tr>";
-
-       // Second title line
-        $result.= "<tr class='headerRow'>";
-        $result.= "<th>".__("Language")."</th>";
-        $result.= "<th>".__("Question")."</th>";
-        $result.= "<th>".__("Value")."</th></tr>";
-        $result.= "</tr>";
-
-        return $result;
-    }
-
     public function newSurveyTranslation($options)
     {
         global $CFG_GLPI;
+
+        // Integrity/anti-IDOR: the question must belong to the survey whose UPDATE
+        // right/entity has already been validated by the controller.
+        $question = new SurveyQuestion();
+        if (
+            !$question->getFromDB((int) $options['question_id'])
+            || (int) $question->fields['plugin_satisfaction_surveys_id'] !== (int) $options['survey_id']
+        ) {
+            Session::addMessageAfterRedirect(
+                __("Translation creation failed", "satisfaction"),
+                true,
+                ERROR
+            );
+            return;
+        }
+
         $crit = [
          'plugin_satisfaction_surveys_id' => $options['survey_id'],
          'glpi_plugin_satisfaction_surveyquestions_id' => $options['question_id'],
@@ -488,6 +431,17 @@ class SurveyTranslation extends CommonDBChild
         // Translation ready to update
         else {
             $surveyTranslationData = SurveyTranslationDAO::getSurveyTranslationByID($options['id']);
+
+            // Integrity/anti-IDOR: the targeted translation must belong to the survey
+            // whose UPDATE right/entity has already been validated by the controller.
+            if ((int) $surveyTranslationData['plugin_satisfaction_surveys_id'] !== (int) $options['survey_id']) {
+                Session::addMessageAfterRedirect(
+                    __("The translation you want to edit does not exist.", "satisfaction"),
+                    true,
+                    WARNING
+                );
+                return;
+            }
 
             SurveyTranslationDAO::editSurveyTranslation($options['id'], $options['value']);
 

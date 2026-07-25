@@ -1,0 +1,52 @@
+{# -------------------------------------------------------------------------
+ # satisfaction plugin for GLPI
+ # Copyright (C) 2018-2026 by the satisfaction Development Team.
+ # https://github.com/pluginsGLPI/satisfaction
+ # @license GPLv2+
+ # ------------------------------------------------------------------------- #}
+{% if answers_exist %}
+   <span class="text-danger fw-bold">
+      {{ __('You cannot edit the questions when answers exists for this survey. Disable this survey and create a new one !', 'satisfaction') }}
+   </span>
+{% endif %}
+
+<div id="{{ container_id }}"></div>
+
+{% if can_add %}
+   {{ add_script|raw }}
+   <div class="center">
+      <a href="javascript:{{ add_onclick }}">{{ __('Add a question', 'satisfaction') }}</a>
+   </div>
+   <br>
+{% endif %}
+
+{% if rows is empty %}
+   <table class="tab_cadre_fixe">
+      <tr class="tab_bg_2">
+         <th class="b">{{ __('No questions for this survey', 'satisfaction') }}</th>
+      </tr>
+   </table>
+{% else %}
+   {{ ma_top|raw }}
+   <table class="tab_cadre_fixehov">
+      <tr>
+         {% if can_purge %}
+            <th width="10">{{ checkall|raw }}</th>
+         {% endif %}
+         <th>{{ type_name }}</th>
+         <th>{{ __('Type') }}</th>
+      </tr>
+      {% for row in rows %}
+         {{ row.edit_script|raw }}
+         <tr class="tab_bg_2"
+             {% if row.edit %}style="cursor:pointer" onclick="{{ row.edit_onclick }}" id="{{ row.row_id }}"{% endif %}>
+            {% if can_purge %}
+               <td width="10">{{ row.checkbox|raw }}</td>
+            {% endif %}
+            <td class="left">{{ row.name|nl2br }}</td>
+            <td class="left">{{ row.type }}</td>
+         </tr>
+      {% endfor %}
+   </table>
+   {{ ma_bottom|raw }}
+{% endif %}

@@ -1,0 +1,43 @@
+{# -------------------------------------------------------------------------
+ # satisfaction plugin for GLPI
+ # Copyright (C) 2018-2026 by the satisfaction Development Team.
+ # https://github.com/pluginsGLPI/satisfaction
+ # @license GPLv2+
+ # ------------------------------------------------------------------------- #}
+{% if total_number == 0 %}
+   <div class="center">
+      <table class="tab_cadre_fixe">
+         <tr class="tab_bg_1">
+            <th>{{ __('No result of the survey', 'satisfaction') }}</th>
+         </tr>
+      </table>
+   </div>
+   <br>
+{% else %}
+   <div class="center">
+      <table class="tab_cadre_fixehov">
+         <tr class="tab_bg_1">
+            <th>{{ __('ID') }}</th>
+            <th>{{ __('Ticket') }}</th>
+            {% for question in questions %}
+               <th>{{ question|nl2br }}</th>
+            {% endfor %}
+            <th>{{ __('Satisfaction with the resolution of the ticket', 'satisfaction') }}</th>
+            <th>{{ __('Comments') }}</th>
+            <th>{{ __('Response date to the satisfaction survey') }}</th>
+         </tr>
+         {% for row in rows %}
+            <tr class="tab_bg_1">
+               <td>{{ row.tickets_id }}</td>
+               <td>{{ row.ticket_link|raw }}</td>
+               {% for answer in row.answers %}
+                  <td>{{ answer|raw }}</td>
+               {% endfor %}
+               <td>{{ row.satisfaction }}</td>
+               <td>{{ row.comment }}</td>
+               <td>{{ row.date }}</td>
+            </tr>
+         {% endfor %}
+      </table>
+   </div>
+{% endif %}

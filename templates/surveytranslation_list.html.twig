@@ -1,0 +1,49 @@
+{# -------------------------------------------------------------------------
+ # satisfaction plugin for GLPI
+ # Copyright (C) 2018-2026 by the satisfaction Development Team.
+ # https://github.com/pluginsGLPI/satisfaction
+ # @license GPLv2+
+ # ------------------------------------------------------------------------- #}
+{% if can_edit %}
+   <div id="{{ container_id }}"></div>
+   {{ add_script|raw }}
+   <div class="center">
+      <a class="submit btn btn-primary" href="javascript:{{ add_onclick }}">
+         {{ __('Add a new translation') }}
+      </a>
+   </div>
+   <br>
+{% endif %}
+
+{% if rows is not empty %}
+   {{ ma_top|raw }}
+   <div class="center">
+      <table class="tab_cadre_fixehov">
+         <tr class="tab_bg_2">
+            <th colspan="4">{{ __('List of translations') }}</th>
+         </tr>
+         <tr>
+            {% if can_edit %}<th width="10">{{ checkall|raw }}</th>{% endif %}
+            <th>{{ __('Language') }}</th>
+            <th>{{ __('Question') }}</th>
+            <th>{{ __('Value') }}</th>
+         </tr>
+         {% for row in rows %}
+            {{ row.edit_script|raw }}
+            <tr class="tab_bg_1">
+               {% if can_edit %}<td class="center">{{ row.checkbox|raw }}</td>{% endif %}
+               <td{% if can_edit %} style="cursor:pointer;text-align:center;" onclick="{{ row.onclick }}"{% endif %}>{{ row.language }}</td>
+               <td{% if can_edit %} style="cursor:pointer;text-align:center;" onclick="{{ row.onclick }}"{% endif %}>{{ row.question }}</td>
+               <td{% if can_edit %} style="cursor:pointer;text-align:center;" onclick="{{ row.onclick }}"{% endif %}>{{ row.value }}</td>
+            </tr>
+         {% endfor %}
+      </table>
+   </div>
+   {{ ma_bottom|raw }}
+{% else %}
+   <table class="tab_cadre_fixe">
+      <tr class="tab_bg_2">
+         <th class="b">{{ __('No translation has been added yet', 'satisfaction') }}</th>
+      </tr>
+   </table>
+{% endif %}

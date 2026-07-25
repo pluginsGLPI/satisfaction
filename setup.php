@@ -47,7 +47,7 @@ define('PLUGIN_SATISFACTION_MIN_GLPI', '11.0');
 // Maximum GLPI version, exclusive
 define('PLUGIN_SATISFACTION_MAX_GLPI', '12.0');
 global $CFG_GLPI;
-define("PLUGINSATISFACTION_WEBDIR", $CFG_GLPI['root_doc'] . '/plugins/satisfaction');
+define("PLUGINSATISFACTION_WEBDIR", $CFG_GLPI['root_doc'] . Plugin::getPhpDir('satisfaction', false));
 
 function plugin_init_satisfaction()
 {

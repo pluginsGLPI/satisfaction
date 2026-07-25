@@ -34,6 +34,7 @@ use CommonDBChild;
 use CommonGLPI;
 use DbUtils;
 use Dropdown;
+use Glpi\Application\View\TemplateRenderer;
 use Html;
 use Session;
 use Toolbox;
@@ -148,18 +149,21 @@ class SurveyQuestion extends CommonDBChild
         $canpurge = Session::haveRight(self::$rightname, PURGE);
 
         //check if answer exists to forbid edition
-        $answer       = new SurveyAnswer();
-        $found_answer = $answer->find([self::$items_id => $survey->fields['id']]);
-        if (count($found_answer) > 0) {
-            echo "<span style='font-weight:bold; color:red'>" . __('You cannot edit the questions when answers exists for this survey. Disable this survey and create a new one !', 'satisfaction') . "</span>";
+        $answer        = new SurveyAnswer();
+        $found_answer  = $answer->find([self::$items_id => $survey->fields['id']]);
+        $answers_exist = count($found_answer) > 0;
+        if ($answers_exist) {
             $canedit  = false;
             $canadd   = false;
             $canpurge = false;
         }
 
-        echo "<div id='viewquestion" . $sID . "$rand_survey'></div>\n";
+        // Add-question ajax action
+        $add_script  = '';
+        $add_onclick = "viewAddQuestion$sID$rand_survey();";
         if ($canadd) {
-            echo "<script type='text/javascript' >\n";
+            ob_start();
+            echo "<script type='text/javascript'>\n";
             echo "function viewAddQuestion$sID$rand_survey() {\n";
             $params = ['type'          => __CLASS__,
                 'parenttype'    => Survey::class,
@@ -172,47 +176,55 @@ class SurveyQuestion extends CommonDBChild
             );
             echo "};";
             echo "</script>\n";
-            echo "<div class='center'>"
-              . "<a href='javascript:viewAddQuestion$sID$rand_survey();'>";
-            echo __('Add a question', 'satisfaction') . "</a></div><br>\n";
+            $add_script = ob_get_clean();
         }
 
         // Display existing questions
         $questions = $squestions_obj->find([self::$items_id => $sID], 'id');
-        if (count($questions) == 0) {
-            echo "<table class='tab_cadre_fixe'><tr class='tab_bg_2'>";
-            echo "<th class='b'>" . __('No questions for this survey', 'satisfaction') . "</th>";
-            echo "</tr></table>";
-        } else {
+
+        $rows      = [];
+        $ma_top    = '';
+        $ma_bottom = '';
+        $checkall  = '';
+        if (count($questions) > 0) {
             $rand = mt_rand();
             if ($canpurge) {
-                //TODO : Detect delete to update history
+                ob_start();
                 Html::openMassiveActionsForm('mass' . __CLASS__ . $rand);
                 $massiveactionparams = ['item' => __CLASS__, 'container' => 'mass' . __CLASS__ . $rand];
                 Html::showMassiveActions($massiveactionparams);
+                $ma_top   = ob_get_clean();
+                $checkall = Html::getCheckAllAsCheckbox('mass' . __CLASS__ . $rand);
             }
-
-            echo "<table class='tab_cadre_fixehov'>";
-            echo "<tr>";
-            if ($canpurge) {
-                echo "<th width='10'>" . Html::getCheckAllAsCheckbox('mass' . __CLASS__ . $rand) . "</th>";
-            }
-            echo "<th>" . self::getTypeName(2) . "</th>";
-            echo "<th>" . __('Type') . "</th></tr>";
 
             foreach ($questions as $question) {
                 if ($squestions_obj->getFromDB($question['id'])) {
-                    $squestions_obj->showOne($canedit, $canpurge, $rand_survey);
+                    $rows[] = $squestions_obj->getListRow($canedit, $canpurge, $rand_survey);
                 }
             }
-            echo "</table>";
 
             if ($canpurge) {
+                ob_start();
                 $paramsma['ontop'] = false;
                 Html::showMassiveActions($paramsma);
                 Html::closeForm();
+                $ma_bottom = ob_get_clean();
             }
         }
+
+        TemplateRenderer::getInstance()->display('@satisfaction/surveyquestion_list.html.twig', [
+            'answers_exist' => $answers_exist,
+            'container_id'  => "viewquestion$sID$rand_survey",
+            'can_add'       => $canadd,
+            'can_purge'     => $canpurge,
+            'add_script'    => $add_script,
+            'add_onclick'   => $add_onclick,
+            'type_name'     => self::getTypeName(2),
+            'checkall'      => $checkall,
+            'ma_top'        => $ma_top,
+            'ma_bottom'     => $ma_bottom,
+            'rows'          => $rows,
+        ]);
     }
 
     /**
@@ -240,41 +252,11 @@ class SurveyQuestion extends CommonDBChild
             return false;
         }
 
-        echo "<form name='form' method='post' action='" . Toolbox::getItemTypeFormURL(self::getType()) . "'>";
-
-        echo "<div class='center'><table class='tab_cadre_fixe'>";
-        echo "<tr><th colspan='4'>" . __('Add a question', 'satisfaction') . "</th></tr>";
-
-        echo "<tr class='tab_bg_1'>";
-        echo "<td>" . self::getTypeName(1) . "&nbsp;:</td>";
-        echo "<td>";
-        echo Html::textarea([
-            'name'    => 'name',
-            'value'    => $surveyquestion->fields["name"],
-            'cols'    => '50',
-            'rows'    => '4',
-            'display' => false,
-        ]);
-        echo "</td>";
-        echo Html::hidden(self::$items_id, ['value' => $surveyquestion->fields[self::$items_id]]);
-        echo "</td>";
-        echo "<td rowspan='2'>" . __('Comments') . "</td>";
-        echo "<td rowspan='2'>";
-        echo Html::textarea([
-            'name'    => 'comment',
-            'value'    => $surveyquestion->fields["comment"],
-            'cols'    => '60',
-            'rows'    => '6',
-            'display' => false,
-        ]);
-        echo "</td></tr>";
-
-        echo "<tr class='tab_bg_1'>";
-        echo "<td>" . __('Type') . "</td>";
-        echo "<td>";
         $array = self::getQuestionTypeList();
+        ob_start();
         Dropdown::showFromArray('type', $array, ['value'     => $surveyquestion->fields['type'],
             'on_change' => "plugin_satisfaction_loadtype(this.value, \"" . self::NOTE . "\");"]);
+        $type_dropdown = ob_get_clean();
 
         $script = "function plugin_satisfaction_loadtype(val, note){";
         $script .= "if(val == note) {
@@ -283,22 +265,14 @@ class SurveyQuestion extends CommonDBChild
                   $('#show_note').hide();
                }";
         $script .= "};";
+        $type_script = Html::scriptBlock($script);
 
-        echo Html::scriptBlock($script);
-        $style = ($surveyquestion->fields['type'] == self::NOTE) ? "" : "style='display: none '";
-        echo "</td>";
-        echo "</tr>";
-
-        echo "<tr class='tab_bg_1' id='show_note' $style>";
-        echo "<td>";
-        echo __('Note on', 'satisfaction');
-        echo "</td>";
-        echo "<td>";
+        ob_start();
         Dropdown::showNumber('number', ['max'   => 10,
             'min'   => 2,
             'value' => $surveyquestion->fields['number'],
             'on_change' => "plugin_satisfaction_load_defaultvalue(\"" . PLUGINSATISFACTION_WEBDIR . "\", this.value);"]);
-        echo "</td>";
+        $number_dropdown = ob_get_clean();
 
         if (!empty($surveyquestion->fields['number'])) {
             $max_default_value = $surveyquestion->fields['number'];
@@ -306,79 +280,83 @@ class SurveyQuestion extends CommonDBChild
             $max_default_value = 2;
         }
 
-        echo "<td>";
-        echo __('Default value');
-        echo "</td>";
-        echo "<td id='default_value'>";
+        ob_start();
         Dropdown::showNumber('default_value', ['max'   => $max_default_value,
             'min'   => 1,
             'value' => $surveyquestion->fields['default_value']]);
+        $default_value_dropdown = ob_get_clean();
 
-        echo "</td>";
-        echo "</tr>";
+        $is_new = ($ID <= 0);
 
-        echo "<tr>";
-        echo "<td class='tab_bg_2 center' colspan='4'>";
-        if ($ID <= 0) {
-            echo Html::hidden(self::$items_id, ['value' => $survey->getField('id')]);
-            echo Html::submit(_sx('button', 'Add'), ['name' => 'add', 'class' => 'btn btn-primary']);
-        } else {
-            echo Html::hidden('id', ['value' => $ID]);
-            echo Html::submit(_sx('button', 'Save'), ['name' => 'update', 'class' => 'btn btn-primary']);
-        }
-        echo "</td>";
-        echo "</tr>";
-        echo "</table>";
-
-        Html::closeForm();
+        TemplateRenderer::getInstance()->display('@satisfaction/surveyquestion_form.html.twig', [
+            'item_form_url'          => Toolbox::getItemTypeFormURL(self::getType()),
+            'type_name'              => self::getTypeName(1),
+            'items_id_field'         => self::$items_id,
+            'items_id_value'         => $surveyquestion->fields[self::$items_id],
+            'name_value'             => $surveyquestion->fields["name"],
+            'comment_value'          => $surveyquestion->fields["comment"],
+            'type_dropdown'          => $type_dropdown,
+            'type_script'            => $type_script,
+            'number_dropdown'        => $number_dropdown,
+            'default_value_dropdown' => $default_value_dropdown,
+            'show_note'              => ($surveyquestion->fields['type'] == self::NOTE),
+            'is_new'                 => $is_new,
+            'item_id'                => (int) $ID,
+            'parent_id'              => $is_new && isset($survey) ? (int) $survey->getField('id') : 0,
+        ]);
     }
 
     /**
-     * Display line with name & type
+     * Build the data of a single question row for the list template.
      *
-     * @param $canedit
-     * @param $rand
+     * @param bool $canedit
+     * @param bool $canpurge
+     * @param int  $rand
+     *
+     * @return array
      */
-    public function showOne($canedit, $canpurge, $rand)
+    public function getListRow($canedit, $canpurge, $rand)
     {
         global $CFG_GLPI;
 
-        $style = '';
-        if ($canedit) {
-            $style = "style='cursor:pointer' onClick=\"viewEditQuestion"
-                  . $this->fields[self::$items_id]
-                  . $this->fields['id'] . "$rand();\""
-                  . " id='viewquestion" . $this->fields[self::$items_id] . $this->fields["id"] . "$rand'";
-        }
-        echo "<tr class='tab_bg_2' $style>";
+        $items_id = $this->fields[self::$items_id];
+        $id       = $this->fields["id"];
 
+        $checkbox = '';
         if ($canpurge) {
-            echo "<td width='10'>";
-            Html::showMassiveActionCheckBox(__CLASS__, $this->fields["id"]);
-            echo "</td>";
+            ob_start();
+            Html::showMassiveActionCheckBox(__CLASS__, $id);
+            $checkbox = ob_get_clean();
         }
 
+        $edit_script = '';
         if ($canedit) {
-            echo "\n<script type='text/javascript' >\n";
-            echo "function viewEditQuestion" . $this->fields[self::$items_id] . $this->fields["id"] . "$rand() {\n";
+            ob_start();
+            echo "<script type='text/javascript'>\n";
+            echo "function viewEditQuestion" . $items_id . $id . "$rand() {\n";
             $params = ['type'          => __CLASS__,
                 'parenttype'    => self::$itemtype,
-                self::$items_id => $this->fields[self::$items_id],
-                'id'            => $this->fields["id"]];
+                self::$items_id => $items_id,
+                'id'            => $id];
             Ajax::updateItemJsCode(
-                "viewquestion" . $this->fields[self::$items_id] . "$rand",
+                "viewquestion" . $items_id . "$rand",
                 $CFG_GLPI["root_doc"] . "/ajax/viewsubitem.php",
                 $params
             );
             echo "};";
             echo "</script>\n";
+            $edit_script = ob_get_clean();
         }
 
-        $name = $this->fields["name"];
-
-        echo "<td class='left'>" . nl2br(htmlspecialchars($name, ENT_QUOTES)) . "</td>";
-        echo "<td class='left'>" . self::getQuestionType($this->fields["type"]) . "</td>";
-        echo "</tr>";
+        return [
+            'edit'         => $canedit,
+            'edit_onclick' => "viewEditQuestion" . $items_id . $id . "$rand();",
+            'row_id'       => "viewquestion" . $items_id . $id . $rand,
+            'checkbox'     => $checkbox,
+            'edit_script'  => $edit_script,
+            'name'         => $this->fields["name"],
+            'type'         => self::getQuestionType($this->fields["type"]),
+        ];
     }
 
     /**

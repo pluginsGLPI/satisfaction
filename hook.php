@@ -196,7 +196,8 @@ function plugin_satisfaction_uninstall()
 
     NotificationTargetTicket::uninstall();
 
-    CronTask::Register(Reminder::class, Reminder::CRON_TASK_NAME, DAY_TIMESTAMP);
+    // Remove the plugin cron task instead of (re)registering it on uninstall
+    CronTask::unregister('satisfaction');
 
     return true;
 }

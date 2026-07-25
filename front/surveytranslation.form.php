@@ -28,14 +28,18 @@
  */
 
 use Glpi\Exception\Http\NotFoundHttpException;
+use GlpiPlugin\Satisfaction\Survey;
 use GlpiPlugin\Satisfaction\SurveyTranslation;
 
 Session::checkLoginUser();
-Session::checkRight('plugin_satisfaction', UPDATE);
 
 if (!isset($_POST['survey_id']) || !isset($_POST['action'])) {
     throw new NotFoundHttpException();
 }
+
+// Enforce existence, entity scoping and UPDATE right on the targeted survey (anti-IDOR)
+$survey = new Survey();
+$survey->check((int) $_POST['survey_id'], UPDATE);
 
 $redirection = PLUGINSATISFACTION_WEBDIR."/front/survey.form.php?id=";
 $translation = new SurveyTranslation();

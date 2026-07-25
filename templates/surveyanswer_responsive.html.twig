@@ -1,0 +1,13 @@
+{# -------------------------------------------------------------------------
+ # satisfaction plugin for GLPI
+ # Copyright (C) 2018-2026 by the satisfaction Development Team.
+ # https://github.com/pluginsGLPI/satisfaction
+ # @license GPLv2+
+ # ------------------------------------------------------------------------- #}
+{{ hidden_survey_id|raw }}
+{% for question in questions %}
+   <div class="form-row">
+      <div class="form-group col-md-11">{{ question.name|nl2br }}</div>
+      <div class="form-group col-md-11">{{ question.answer|raw }}</div>
+   </div>
+{% endfor %}

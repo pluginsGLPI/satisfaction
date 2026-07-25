@@ -1,0 +1,66 @@
+{# -------------------------------------------------------------------------
+ # satisfaction plugin for GLPI
+ # Copyright (C) 2018-2026 by the satisfaction Development Team.
+ # https://github.com/pluginsGLPI/satisfaction
+ # @license GPLv2+
+ # ------------------------------------------------------------------------- #}
+<form name="form" method="post" action="{{ item_form_url }}">
+   <div class="center">
+      <table class="tab_cadre_fixe">
+         <tr>
+            <th colspan="4">
+               {% if predefined %}
+                  {{ __('Choose a predefined reminder', 'satisfaction') }}
+               {% else %}
+                  {{ __('Add a reminder', 'satisfaction') }}
+               {% endif %}
+            </th>
+         </tr>
+         {% if predefined %}
+            <tr class="tab_bg_1">
+               <td>{{ __('Predefined Reminders', 'satisfaction') }}</td>
+               <td>{{ preset_dropdown|raw }}</td>
+            </tr>
+         {% else %}
+            <tr class="tab_bg_1">
+               <td>{{ col_name }}</td>
+               <td>
+                  <textarea name="name" cols="50" rows="4"
+                            class="form-control">{{ name_value }}</textarea>
+                  <input type="hidden" name="{{ items_id_field }}" value="{{ items_id_value }}">
+               </td>
+               <td rowspan="2">{{ col_comment }}</td>
+               <td rowspan="2">
+                  <textarea name="comment" cols="60" rows="6"
+                            class="form-control">{{ comment_value }}</textarea>
+               </td>
+            </tr>
+            <tr class="tab_bg_1">
+               <td>{{ col_duration_type }}</td>
+               <td>{{ duration_type_dropdown|raw }}</td>
+            </tr>
+            <tr class="tab_bg_1">
+               <td>{{ col_duration }}</td>
+               <td colspan="3">{{ duration_dropdown|raw }}</td>
+            </tr>
+            <tr class="tab_bg_1">
+               <td>{{ col_is_active }}</td>
+               <td>{{ is_active_dropdown|raw }}</td>
+               <td colspan="2"></td>
+            </tr>
+         {% endif %}
+         <tr>
+            <td class="tab_bg_2 center" colspan="4">
+               <input type="hidden" name="_glpi_csrf_token" value="{{ csrf_token() }}">
+               {% if is_new %}
+                  <input type="hidden" name="{{ items_id_field }}" value="{{ parent_id }}">
+                  <button type="submit" name="add" class="btn btn-primary">{{ _x('button', 'Add') }}</button>
+               {% else %}
+                  <input type="hidden" name="id" value="{{ item_id }}">
+                  <button type="submit" name="update" class="btn btn-primary">{{ _x('button', 'Save') }}</button>
+               {% endif %}
+            </td>
+         </tr>
+      </table>
+   </div>
+</form>

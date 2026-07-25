@@ -31,6 +31,7 @@ namespace GlpiPlugin\Satisfaction;
 
 use CommonDBTM;
 use DbUtils;
+use Glpi\Application\View\TemplateRenderer;
 use Dropdown;
 use Entity;
 use Html;
@@ -229,30 +230,16 @@ class Survey extends CommonDBTM
         $this->initForm($ID, $options);
         $this->showFormHeader($options);
 
-        echo "<tr class='tab_bg_1'>";
-        echo "<td>" . __('Name') . "</td>";
-        echo "<td>";
-        echo Html::input('name', ['value' => $this->fields['name'], 'size' => 40]);
-        echo "</td>";
-        echo "<td>" . __('Comments') . "</td>";
-        echo "<td>";
-        echo Html::textarea([
-            'name'    => 'comment',
-            'value'    => $this->fields["comment"],
-            'cols'    => '60',
-            'rows'    => '6',
-            'display' => false,
-        ]);
-        echo "</td></tr>";
-
-        echo "<tr class='tab_bg_1'>";
-        echo "<td>" . __('Active') . "</td>";
-        echo "<td>";
+        ob_start();
         Dropdown::showYesNo("is_active", $this->fields["is_active"]);
-        echo "</td><td colspan='2'></td></tr>";
+        $yesno_active = ob_get_clean();
+
+        TemplateRenderer::getInstance()->display('@satisfaction/survey.html.twig', [
+            'item'         => $this,
+            'yesno_active' => $yesno_active,
+        ]);
 
         $this->showFormButtons($options);
-        Html::closeForm();
 
         return true;
     }
@@ -413,12 +400,15 @@ class Survey extends CommonDBTM
                         }
                     }
                 }
+                ob_start();
                 if ($entity_assign) {
                     Entity::dropdown();
                 }
-                echo "<br><br>" . Html::submit(
-                    _x('button', 'Duplicate'),
-                    ['name' => 'massiveaction', 'class' => 'btn btn-primary']
+                $entity_dropdown = ob_get_clean();
+
+                TemplateRenderer::getInstance()->display(
+                    '@satisfaction/massiveaction_duplicate.html.twig',
+                    ['entity_dropdown' => $entity_dropdown]
                 );
                 return true;
         }
@@ -469,6 +459,12 @@ class Survey extends CommonDBTM
     public function duplicateSurvey($ID, $entities_id)
     {
 
+        // Anti-IDOR: the target entity must be within the user's accessible scope
+        // (the dropdown is client-side only and can be bypassed by a forged request).
+        if (!Session::haveAccessToEntity((int) $entities_id)) {
+            return false;
+        }
+
         //duplicate survey
         $survey = new self();
         $survey->getFromDB($ID);
@@ -491,7 +487,7 @@ class Survey extends CommonDBTM
         //find and duplicate questions
         $question_obj  = new SurveyQuestion();
         $questions = $question_obj->find(['plugin_satisfaction_surveys_id' => $ID]);
-        $questions = $questions;
+
         foreach ($questions as $question) {
             $question['plugin_satisfaction_surveys_id'] = $newID;
             $question_id = $question['id'];
@@ -505,7 +501,7 @@ class Survey extends CommonDBTM
                 'plugin_satisfaction_surveys_id' => $ID,
                 'glpi_plugin_satisfaction_surveyquestions_id' => $question_id,
             ]);
-            $translations = $translations;
+
             foreach ($translations as $translation) {
                 $translation_obj->newSurveyTranslation([
                     'survey_id' => $newID,

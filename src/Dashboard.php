@@ -31,6 +31,7 @@ namespace GlpiPlugin\Satisfaction;
 
 use AllowDynamicProperties;
 use CommonGLPI;
+use DbUtils;
 use Dropdown;
 use Glpi\DBAL\QueryExpression;
 use GlpiPlugin\Mydashboard\Helper;
@@ -38,6 +39,7 @@ use GlpiPlugin\Mydashboard\Html as MydashboardHtml;
 use GlpiPlugin\Mydashboard\Menu;
 use GlpiPlugin\Mydashboard\Widget;
 use Html;
+use Ticket;
 use TicketSatisfaction;
 
 /**
@@ -226,51 +228,73 @@ class Dashboard extends CommonGLPI
             $numberSurveyAnswered = 0;
             $globalSatisfaction = 0;
 
+            // Restrict aggregates to the active entity: satisfaction rows are scoped
+            // through their parent ticket's entity (GLPI does not scope queries by itself).
+            $sat_table    = TicketSatisfaction::getTable();
+            $ticket_table = Ticket::getTable();
+            $entity_join  = [
+                'LEFT JOIN' => [
+                    $ticket_table => [
+                        'ON' => [
+                            $ticket_table => 'id',
+                            $sat_table    => 'tickets_id',
+                        ],
+                    ],
+                ],
+            ];
+            $entity_where = (new DbUtils())->getEntitiesRestrictCriteria($ticket_table, '', '', true);
+
             $date_where = [];
             if (!empty($opt['begin'])) {
-                $date_where[] = ['date_begin' => ['>=', new QueryExpression('DATE(' . $DB->quoteValue($opt['begin']) . ')')]];
+                $date_where[] = [$sat_table . '.date_begin' => ['>=', new QueryExpression('DATE(' . $DB->quoteValue($opt['begin']) . ')')]];
             }
             if (!empty($opt['end'])) {
-                $date_where[] = ['date_begin' => ['<', new QueryExpression('DATE(' . $DB->quoteValue($opt['end']) . ')')]];
+                $date_where[] = [$sat_table . '.date_begin' => ['<', new QueryExpression('DATE(' . $DB->quoteValue($opt['end']) . ')')]];
             }
+            $base_where = array_merge($date_where, $entity_where);
 
             // Number of satisfaction surveys
             $row = $DB->request([
                 'COUNT' => 'nb',
-                'FROM'  => TicketSatisfaction::getTable(),
-                'WHERE' => $date_where,
+                'FROM'  => $sat_table,
+                'LEFT JOIN' => $entity_join['LEFT JOIN'],
+                'WHERE' => $base_where,
             ])->current();
             $numberOfSurveys = $row ? (int) $row['nb'] : 0;
 
             // Number of concerned tickets
             $row = $DB->request([
-                'SELECT' => ['COUNT DISTINCT' => 'tickets_id AS nb'],
-                'FROM'   => TicketSatisfaction::getTable(),
-                'WHERE'  => $date_where,
+                'SELECT' => ['COUNT DISTINCT' => $sat_table . '.tickets_id AS nb'],
+                'FROM'   => $sat_table,
+                'LEFT JOIN' => $entity_join['LEFT JOIN'],
+                'WHERE'  => $base_where,
             ])->current();
             $numberOfImpactedTickets = $row ? (int) $row['nb'] : 0;
 
             // Surveys not answered
             $row = $DB->request([
                 'COUNT' => 'nb',
-                'FROM'  => TicketSatisfaction::getTable(),
-                'WHERE' => array_merge($date_where, ['date_answered' => null]),
+                'FROM'  => $sat_table,
+                'LEFT JOIN' => $entity_join['LEFT JOIN'],
+                'WHERE' => array_merge($base_where, [$sat_table . '.date_answered' => null]),
             ])->current();
             $numberSurveyNotAnswered = $row ? (int) $row['nb'] : 0;
 
             // Surveys answered
             $row = $DB->request([
-                'SELECT' => ['COUNT DISTINCT' => 'tickets_id AS nb'],
-                'FROM'   => TicketSatisfaction::getTable(),
-                'WHERE'  => array_merge($date_where, ['NOT' => ['date_answered' => null]]),
+                'SELECT' => ['COUNT DISTINCT' => $sat_table . '.tickets_id AS nb'],
+                'FROM'   => $sat_table,
+                'LEFT JOIN' => $entity_join['LEFT JOIN'],
+                'WHERE'  => array_merge($base_where, ['NOT' => [$sat_table . '.date_answered' => null]]),
             ])->current();
             $numberSurveyAnswered = $row ? (int) $row['nb'] : 0;
 
             // Global satisfaction
             $row = $DB->request([
-                'SELECT' => [new QueryExpression('AVG(satisfaction) AS nb')],
-                'FROM'   => TicketSatisfaction::getTable(),
-                'WHERE'  => array_merge($date_where, ['NOT' => ['date_answered' => null]]),
+                'SELECT' => [new QueryExpression('AVG(' . $DB->quoteName($sat_table . '.satisfaction') . ') AS nb')],
+                'FROM'   => $sat_table,
+                'LEFT JOIN' => $entity_join['LEFT JOIN'],
+                'WHERE'  => array_merge($base_where, ['NOT' => [$sat_table . '.date_answered' => null]]),
             ])->current();
             $globalSatisfaction = round($row ? (float) $row['nb'] : 0, 1);
 

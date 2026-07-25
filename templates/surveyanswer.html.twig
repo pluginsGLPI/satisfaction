@@ -1,0 +1,20 @@
+{# -------------------------------------------------------------------------
+ # satisfaction plugin for GLPI
+ # Copyright (C) 2018-2026 by the satisfaction Development Team.
+ # https://github.com/pluginsGLPI/satisfaction
+ # @license GPLv2+
+ # ------------------------------------------------------------------------- #}
+{{ hidden_survey_id|raw }}
+<div{% if preview %} class="spaced" id="tabsbody"{% endif %}>
+   <table class="tab_cadre_fixe">
+      <tbody>
+         {% for question in questions %}
+            <tr>
+               <td class="w-50">{{ question.name|nl2br }}</td>
+               <td>{{ question.answer|raw }}</td>
+            </tr>
+         {% endfor %}
+      </tbody>
+   </table>
+</div>
+{{ table_script|raw }}

@@ -1,7 +1,5 @@
-<?php
-
-/*
- -------------------------------------------------------------------------
+{#
+-------------------------------------------------------------------------
  satisfaction plugin for GLPI
  Copyright (C) 2018-2026 by the satisfaction Development Team.
 
@@ -24,23 +22,18 @@
 
  You should have received a copy of the GNU General Public License
  along with satisfaction. If not, see <http://www.gnu.org/licenses/>.
- --------------------------------------------------------------------------
- */
+-------------------------------------------------------------------------
+#}
 
-use Glpi\Exception\Http\AccessDeniedHttpException;
-use GlpiPlugin\Satisfaction\Menu;
-use GlpiPlugin\Satisfaction\Survey;
+<div class="spaced">
+    <form method="post" action="{{ 'Profile'|itemtype_form_path }}">
+        {% do profile.displayRightsChoiceMatrix(rights, {'title': title}) %}
 
-// Perform all access controls before emitting any output
-$satisfaction = new Survey();
-$satisfaction->checkGlobal(READ);
+        <div class="center">
+            <input type="hidden" name="id" value="{{ id }}">
+            {{ call('Html::submit', [_x('button', 'Save'), {'name': 'update'}])|raw }}
+        </div>
 
-if (!$satisfaction->canView()) {
-    throw new AccessDeniedHttpException();
-}
-
-Html::header(Survey::getTypeName(2), '', "admin", Menu::class);
-
-Search::show(Survey::class);
-
-Html::footer();
+        <input type="hidden" name="_glpi_csrf_token" value="{{ csrf_token() }}">
+    </form>
+</div>

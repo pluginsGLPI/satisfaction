@@ -28,9 +28,10 @@
  */
 
 use Glpi\Exception\Http\NotFoundHttpException;
+use GlpiPlugin\Satisfaction\Survey;
 use GlpiPlugin\Satisfaction\SurveyTranslation;
 
-Session::checkRight('plugin_satisfaction', UPDATE);
+Session::checkLoginUser();
 
 if (!isset($_POST['survey_id']) || !isset($_POST['action'])) {
         throw new NotFoundHttpException();
@@ -45,14 +46,18 @@ switch ($_POST['action']) {
     case 'GET':
         header("Content-Type: text/html; charset=UTF-8");
         Html::header_nocache();
-        Session::checkLoginUser();
+        // showSurveyTranslationForm enforces the right/entity check on the targeted survey
         $translation->showSurveyTranslationForm($_POST);
         break;
     case 'NEW':
+        // Enforce existence, entity scoping and UPDATE right on the targeted survey (anti-IDOR)
+        (new Survey())->check((int) $_POST['survey_id'], UPDATE);
         $translation->newSurveyTranslation($_POST);
         Html::redirect($redirection.$_POST['survey_id']);
         break;
     case 'EDIT':
+        // Enforce existence, entity scoping and UPDATE right on the targeted survey (anti-IDOR)
+        (new Survey())->check((int) $_POST['survey_id'], UPDATE);
         $translation->editSurveyTranslation($_POST);
         Html::redirect($redirection.$_POST['survey_id']);
         break;
