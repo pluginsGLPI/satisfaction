@@ -159,22 +159,23 @@ class SurveyTranslation extends CommonDBChild
 
         $add_script = '';
         if ($canedit) {
-            ob_start();
-            echo "<script type='text/javascript'>\n";
-            echo "function addTranslation" . $item->getID() . "$rand() {\n";
+            // Emit the JS via Html::scriptBlock() (framework primitive) instead of
+            // a raw echoed <script>; interpolated ids are numeric (survey id + rand).
             $params = [
                 'id'        => -1,
                 'survey_id' => $item->getID(),
                 'action'    => 'GET',
             ];
-            Ajax::updateItemJsCode(
+            $js  = "function addTranslation" . $item->getID() . "$rand() {\n";
+            $js .= Ajax::updateItemJsCode(
                 "viewtranslation" . $item->getID() . "$rand",
                 $target,
-                $params
+                $params,
+                "",
+                false
             );
-            echo "};";
-            echo "</script>\n";
-            $add_script = ob_get_clean();
+            $js .= "};";
+            $add_script = Html::scriptBlock($js);
         }
 
         $rows      = [];
@@ -194,22 +195,23 @@ class SurveyTranslation extends CommonDBChild
             foreach ($items as $data) {
                 $edit_script = '';
                 if ($canedit) {
-                    ob_start();
-                    echo "<script type='text/javascript'>\n";
-                    echo "function viewEditTranslation" . $data['id'] . "$rand() {\n";
+                    // Emit the JS via Html::scriptBlock() (framework primitive) instead
+                    // of a raw echoed <script>; interpolated ids are numeric.
                     $params = [
                         'id'        => $data["id"],
                         'survey_id' => $item->getID(),
                         'action'    => 'GET',
                     ];
-                    Ajax::updateItemJsCode(
+                    $js  = "function viewEditTranslation" . $data['id'] . "$rand() {\n";
+                    $js .= Ajax::updateItemJsCode(
                         "viewtranslation" . $item->getID() . "$rand",
                         $target,
-                        $params
+                        $params,
+                        "",
+                        false
                     );
-                    echo "};";
-                    echo "</script>\n";
-                    $edit_script = ob_get_clean();
+                    $js .= "};";
+                    $edit_script = Html::scriptBlock($js);
                 }
 
                 $checkbox = '';

@@ -162,21 +162,22 @@ class SurveyQuestion extends CommonDBChild
         $add_script  = '';
         $add_onclick = "viewAddQuestion$sID$rand_survey();";
         if ($canadd) {
-            ob_start();
-            echo "<script type='text/javascript'>\n";
-            echo "function viewAddQuestion$sID$rand_survey() {\n";
+            // Emit the JS via Html::scriptBlock() (framework primitive) instead of
+            // a raw echoed <script>; interpolated ids are numeric (survey id + rand).
             $params = ['type'          => __CLASS__,
                 'parenttype'    => Survey::class,
                 self::$items_id => $sID,
                 'id'            => -1];
-            Ajax::updateItemJsCode(
+            $js  = "function viewAddQuestion$sID$rand_survey() {\n";
+            $js .= Ajax::updateItemJsCode(
                 "viewquestion$sID$rand_survey",
                 $CFG_GLPI["root_doc"] . "/ajax/viewsubitem.php",
-                $params
+                $params,
+                "",
+                false
             );
-            echo "};";
-            echo "</script>\n";
-            $add_script = ob_get_clean();
+            $js .= "};";
+            $add_script = Html::scriptBlock($js);
         }
 
         // Display existing questions
@@ -331,21 +332,22 @@ class SurveyQuestion extends CommonDBChild
 
         $edit_script = '';
         if ($canedit) {
-            ob_start();
-            echo "<script type='text/javascript'>\n";
-            echo "function viewEditQuestion" . $items_id . $id . "$rand() {\n";
+            // Emit the JS via Html::scriptBlock() (framework primitive) instead of
+            // a raw echoed <script>; interpolated ids are numeric (item/question id + rand).
             $params = ['type'          => __CLASS__,
                 'parenttype'    => self::$itemtype,
                 self::$items_id => $items_id,
                 'id'            => $id];
-            Ajax::updateItemJsCode(
+            $js  = "function viewEditQuestion" . $items_id . $id . "$rand() {\n";
+            $js .= Ajax::updateItemJsCode(
                 "viewquestion" . $items_id . "$rand",
                 $CFG_GLPI["root_doc"] . "/ajax/viewsubitem.php",
-                $params
+                $params,
+                "",
+                false
             );
-            echo "};";
-            echo "</script>\n";
-            $edit_script = ob_get_clean();
+            $js .= "};";
+            $edit_script = Html::scriptBlock($js);
         }
 
         return [

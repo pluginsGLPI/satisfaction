@@ -154,26 +154,27 @@ class SurveyReminder extends CommonDBChild
         // Add reminder / predefined reminder ajax actions
         $add_scripts = '';
         if ($canadd) {
-            ob_start();
-            echo "<script type='text/javascript'>\n";
-
-            // Add reminder ajax action
-            echo "function viewAddReminder$sID$rand_survey() {\n";
+            // Emit the JS through Html::scriptBlock() (the framework primitive)
+            // instead of echoing a raw <script> tag from the class. Every value
+            // interpolated below is numeric (survey id + mt_rand); no user-supplied
+            // data reaches the generated code.
             $params = [
                 'type'          => __CLASS__,
                 'parenttype'    => Survey::class,
                 self::$items_id => $sID,
                 'id'            => -1,
             ];
-            Ajax::updateItemJsCode(
+            $js  = "function viewAddReminder$sID$rand_survey() {\n";
+            $js .= Ajax::updateItemJsCode(
                 "viewreminder$sID$rand_survey",
                 $CFG_GLPI["root_doc"] . "/ajax/viewsubitem.php",
-                $params
+                $params,
+                "",
+                false
             );
-            echo "};";
+            $js .= "};";
 
             // Add predefined reminder ajax action
-            echo "function viewAddPredefinedReminder$sID$rand_survey() {\n";
             $params = [
                 'type'                                => __CLASS__,
                 'parenttype'                          => Survey::class,
@@ -181,15 +182,17 @@ class SurveyReminder extends CommonDBChild
                 'id'                                  => -1,
                 self::PREDEFINED_REMINDER_OPTION_NAME => 1,
             ];
-            Ajax::updateItemJsCode(
+            $js .= "function viewAddPredefinedReminder$sID$rand_survey() {\n";
+            $js .= Ajax::updateItemJsCode(
                 "viewreminder$sID$rand_survey",
                 PLUGINSATISFACTION_WEBDIR . "/ajax/viewsubitem_reminder.php",
-                $params
+                $params,
+                "",
+                false
             );
-            echo "};";
+            $js .= "};";
 
-            echo "</script>\n";
-            $add_scripts = ob_get_clean();
+            $add_scripts = Html::scriptBlock($js);
         }
 
         ob_start();
@@ -347,21 +350,21 @@ class SurveyReminder extends CommonDBChild
 
         $edit_script = '';
         if ($canedit) {
-            ob_start();
-            echo "<script type='text/javascript'>\n";
-            echo "function viewEditReminder" . $items_id . $id . "$rand() {\n";
+            // Framework-emitted inline JS (numeric ids only); see showForReminder().
             $params = ['type'          => __CLASS__,
                 'parenttype'    => self::$itemtype,
                 self::$items_id => $items_id,
                 'id'            => $id];
-            Ajax::updateItemJsCode(
+            $js  = "function viewEditReminder" . $items_id . $id . "$rand() {\n";
+            $js .= Ajax::updateItemJsCode(
                 "viewreminder" . $items_id . "$rand",
                 $CFG_GLPI["root_doc"] . "/ajax/viewsubitem.php",
-                $params
+                $params,
+                "",
+                false
             );
-            echo "};";
-            echo "</script>\n";
-            $edit_script = ob_get_clean();
+            $js .= "};";
+            $edit_script = Html::scriptBlock($js);
         }
 
         return [
@@ -510,7 +513,13 @@ class SurveyReminder extends CommonDBChild
      */
     public function prepareInputForAdd($input)
     {
+        // Scope the uniqueness check to the parent survey. SurveyReminder is a
+        // CommonDBChild, so find() adds no entity restriction on its own: without
+        // this the lookup would span every survey of every entity and could leak a
+        // reminder name belonging to another entity's survey in the error message.
+        $survey_id = (int) ($input[self::$items_id] ?? 0);
         $crit = [
+            self::$items_id            => $survey_id,
             self::COLUMN_DURATION_TYPE => $input[self::COLUMN_DURATION_TYPE],
             self::COLUMN_DURATION      => $input[self::COLUMN_DURATION],
         ];
@@ -540,7 +549,12 @@ class SurveyReminder extends CommonDBChild
      */
     public function prepareInputForUpdate($input)
     {
+        // Same rationale as prepareInputForAdd: bound the lookup to the parent
+        // survey so an "identical reminder" match can never surface a name from
+        // another entity's survey (fall back to the loaded record's parent id).
+        $survey_id = (int) ($input[self::$items_id] ?? $this->fields[self::$items_id] ?? 0);
         $crit = [
+            self::$items_id            => $survey_id,
             self::COLUMN_DURATION_TYPE => $input[self::COLUMN_DURATION_TYPE],
             self::COLUMN_DURATION      => $input[self::COLUMN_DURATION],
             self::COLUMN_IS_ACTIVE     => $input[self::COLUMN_IS_ACTIVE],
