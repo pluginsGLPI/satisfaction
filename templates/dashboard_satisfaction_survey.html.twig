@@ -1,0 +1,32 @@
+{# -------------------------------------------------------------------------
+ # satisfaction plugin for GLPI
+ # Copyright (C) 2018-2026 by the satisfaction Development Team.
+ # https://github.com/pluginsGLPI/satisfaction
+ # @license GPLv2+
+ # ------------------------------------------------------------------------- #}
+{% if not has_survey %}
+   <div class="center">
+      <br><br>
+      <h4>{{ __('There are no survey for current entity', 'satisfaction') }}</h4>
+   </div>
+{% else %}
+   {{ rateit_css|raw }}
+   <div class="tickets-stats">
+      {% for element in elements %}
+         <div class="nb" style="color:{{ element.color }}">
+            <i style="color:{{ element.color }};font-size:34px" class="fa {{ element.icon }} fa-3x fa-border"></i>
+            <h3>
+               <span class="counter count-number">{{ element.value }}</span>
+            </h3>
+            <p class="count-text">{{ element.title }}</p>
+         </div>
+      {% endfor %}
+      <div>
+         <h3 style="color:grey">
+            <span>{{ __('Global satisfaction', 'satisfaction') }}</span>
+         </h3>
+         <h3>{{ global_satisfaction }}</h3>
+         <div class="rateit" data-rateit-value="{{ global_satisfaction }}" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
+      </div>
+   </div>
+{% endif %}
