@@ -1,30 +1,30 @@
 <?php
 
-/*
- -------------------------------------------------------------------------
- satisfaction plugin for GLPI
- Copyright (C) 2018-2026 by the satisfaction Development Team.
-
- https://github.com/pluginsGLPI/satisfaction
- -------------------------------------------------------------------------
-
- LICENSE
-
- This file is part of satisfaction.
-
- satisfaction is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation; either version 2 of the License, or
- (at your option) any later version.
-
- satisfaction is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
-
- You should have received a copy of the GNU General Public License
- along with satisfaction. If not, see <http://www.gnu.org/licenses/>.
- --------------------------------------------------------------------------
+/**
+ * -------------------------------------------------------------------------
+ * satisfaction plugin for GLPI
+ * Copyright (C) 2018-2026 by the satisfaction Development Team.
+ *
+ * https://github.com/pluginsGLPI/satisfaction
+ * -------------------------------------------------------------------------
+ *
+ * LICENSE
+ *
+ * This file is part of satisfaction.
+ *
+ * satisfaction is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * satisfaction is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with satisfaction. If not, see <http://www.gnu.org/licenses/>.
+ * --------------------------------------------------------------------------
  */
 
 namespace GlpiPlugin\Satisfaction;
@@ -47,7 +47,6 @@ if (!defined('GLPI_ROOT')) {
  */
 class Reminder extends CommonDBTM
 {
-
     public static $rightname = "plugin_satisfaction";
     public $dohistory = true;
 
@@ -57,52 +56,52 @@ class Reminder extends CommonDBTM
     public const CRON_TASK_NAME = 'SatisfactionReminder';
 
 
-   /**
-    * Return the localized name of the current Type
-    * Should be overloaded in each new class
-    *
-    * @return string
-    **/
+    /**
+     * Return the localized name of the current Type
+     * Should be overloaded in each new class
+     *
+     * @return string
+     **/
     public static function getTypeName($nb = 0)
     {
         return _n('Satisfaction reminder', 'Satisfaction reminders', $nb, 'satisfaction');
     }
 
-   ////// CRON FUNCTIONS ///////
+    ////// CRON FUNCTIONS ///////
 
-   /**
-    * @param $name
-    *
-    * @return array
-    */
+    /**
+     * @param $name
+     *
+     * @return array
+     */
     public static function cronInfo($name)
     {
 
         switch ($name) {
             case self::CRON_TASK_NAME:
                 return ['description' => __('Send automaticaly survey reminders', 'satisfaction')];   // Optional
-            break;
+                break;
         }
         return [];
     }
 
     public static function deleteItem(Ticket $ticket)
     {
-        $reminder = new self;
+        $reminder = new self();
         if ($reminder->getFromDBByCrit(['tickets_id' => $ticket->fields['id']])) {
             $reminder->delete(['id' => $reminder->fields["id"]]);
         }
     }
 
-   /**
-    * Cron action
-    *
-    * @param  $task for log
-    *
-    * @global $CFG_GLPI
-    *
-    * @global $DB
-    */
+    /**
+     * Cron action
+     *
+     * @param  $task for log
+     *
+     * @global $CFG_GLPI
+     *
+     * @global $DB
+     */
     public static function cronSatisfactionReminder($task = null)
     {
 
@@ -119,14 +118,14 @@ class Reminder extends CommonDBTM
         return 1;
     }
 
-   /**
-    * @param $date_begin
-    * @param $date_answered
-    * @param $entities_id
-    *
-    * @return array
-    * @throws \GlpitestSQLError
-    */
+    /**
+     * @param $date_begin
+     * @param $date_answered
+     * @param $entities_id
+     *
+     * @return array
+     * @throws \GlpitestSQLError
+     */
     public static function getTicketSatisfaction($date_begin, $date_answered, $entities_id)
     {
         global $DB;
@@ -170,24 +169,24 @@ class Reminder extends CommonDBTM
         $surveys = $Survey->find(['is_active' => true]);
 
         foreach ($surveys as $survey) {
-           // Entity
+            // Entity
             $entityDBTM->getFromDB($survey['entities_id']);
 
-           // Don't get tickets satisfaction with date older than max_close_date
- //                           $max_close_date = date('Y-m-d', strtotime($entityDBTM->getField('max_closedate')));
+            // Don't get tickets satisfaction with date older than max_close_date
+            //                           $max_close_date = date('Y-m-d', strtotime($entityDBTM->getField('max_closedate')));
             $nb_days = $survey['reminders_days'];
             $dt             = date("Y-m-d");
-            $max_close_date = date('Y-m-d', strtotime("$dt - ".$nb_days." day"));
+            $max_close_date = date('Y-m-d', strtotime("$dt - " . $nb_days . " day"));
 
-           // Ticket Satisfaction
+            // Ticket Satisfaction
             $ticketSatisfactions = self::getTicketSatisfaction($max_close_date, null, $survey['entities_id']);
 
 
             foreach ($ticketSatisfactions as $k => $ticketSatisfaction) {
                 // Survey Reminders
                 $surveyReminderCrit = [
-                 'plugin_satisfaction_surveys_id' => $survey['id'],
-                 'is_active'                      => 1,
+                    'plugin_satisfaction_surveys_id' => $survey['id'],
+                    'is_active'                      => 1,
                 ];
                 $surveyReminders    = $SurveyReminder->find($surveyReminderCrit);
 
@@ -198,19 +197,19 @@ class Reminder extends CommonDBTM
                     $reminders = null;
                     $reminders = $Reminder->find([
                         'tickets_id' => $ticketSatisfaction['tickets_id'],
-                                                                   'type'       => $surveyReminder['id']]);
+                        'type'       => $surveyReminder['id']]);
 
                     if (count($reminders)) {
-                         continue;
+                        continue;
                     } else {
                         $lastSurveySendDate = date('Y-m-d', strtotime($ticketSatisfaction['date_begin']));
 
-                      // Date when glpi satisfaction was sended for the first time
+                        // Date when glpi satisfaction was sended for the first time
                         $reminders_to_send = $Reminder->find([
                             'tickets_id' => $ticketSatisfaction['tickets_id']]);
                         if (count($reminders_to_send)) {
-                              $reminder           = array_pop($reminders_to_send);
-                              $lastSurveySendDate = date('Y-m-d', strtotime($reminder['date']));
+                            $reminder           = array_pop($reminders_to_send);
+                            $lastSurveySendDate = date('Y-m-d', strtotime($reminder['date']));
                         }
 
                         $date = null;
@@ -224,24 +223,24 @@ class Reminder extends CommonDBTM
                                 break;
 
                             case SurveyReminder::DURATION_MONTH:
-                                 $add  = " +" . $surveyReminder[
-                                     SurveyReminder::COLUMN_DURATION] . " month";
-                                 $date = strtotime(date("Y-m-d", strtotime($lastSurveySendDate)) . $add);
-                                 $date = date('Y-m-d', $date);
+                                $add  = " +" . $surveyReminder[
+                                    SurveyReminder::COLUMN_DURATION] . " month";
+                                $date = strtotime(date("Y-m-d", strtotime($lastSurveySendDate)) . $add);
+                                $date = date('Y-m-d', $date);
                                 break;
                             default:
-                                  $date = null;
+                                $date = null;
                         }
 
                         if (!is_null($date)) {
                             $potentialReminderToSendDates[] = ["tickets_id" => $ticketSatisfaction['tickets_id'],
-                                                        "type"       => $surveyReminder['id'],
-                                                        "date"       => $date];
+                                "type"       => $surveyReminder['id'],
+                                "date"       => $date];
                         }
                     }
                 }
                 // Order dates
-                usort($potentialReminderToSendDates, function($a, $b) {
+                usort($potentialReminderToSendDates, function ($a, $b) {
                     return strtotime($a["date"]) - strtotime($b["date"]);
                 });
                 $dateNow = date("Y-m-d");
@@ -249,16 +248,16 @@ class Reminder extends CommonDBTM
                 if (isset($potentialReminderToSendDates[0])) {
                     $potentialTimestamp = strtotime($potentialReminderToSendDates[0]['date']);
                     $nowTimestamp       = strtotime($dateNow);
-                   //
+                    //
                     if ($potentialTimestamp <= $nowTimestamp) {
-                      // Send notification
+                        // Send notification
                         NotificationTargetTicket::sendReminder($ticketSatisfaction['tickets_id']);
                         $self = new self();
                         $self->add([
-                                'type'       => $potentialReminderToSendDates[0]['type'],
-                                'tickets_id' => $ticketSatisfaction['tickets_id'],
-                                'date'       => $dateNow
-                             ]);
+                            'type'       => $potentialReminderToSendDates[0]['type'],
+                            'tickets_id' => $ticketSatisfaction['tickets_id'],
+                            'date'       => $dateNow,
+                        ]);
                     }
                 }
             }

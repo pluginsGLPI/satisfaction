@@ -1,5 +1,32 @@
 <?php
 
+/**
+ * -------------------------------------------------------------------------
+ * satisfaction plugin for GLPI
+ * Copyright (C) 2018-2026 by the satisfaction Development Team.
+ *
+ * https://github.com/pluginsGLPI/satisfaction
+ * -------------------------------------------------------------------------
+ *
+ * LICENSE
+ *
+ * This file is part of satisfaction.
+ *
+ * satisfaction is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * satisfaction is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with satisfaction. If not, see <http://www.gnu.org/licenses/>.
+ * --------------------------------------------------------------------------
+ */
+
 /*
  -------------------------------------------------------------------------
  satisfaction plugin for GLPI
@@ -209,7 +236,7 @@ class SurveyAnswer extends CommonDBChild
         TemplateRenderer::getInstance()->display('@satisfaction/surveyanswer.html.twig', [
             'hidden_survey_id' => Html::hidden(
                 'plugin_satisfaction_surveys_id',
-                ['value' => $plugin_satisfaction_surveys_id]
+                ['value' => $plugin_satisfaction_surveys_id],
             ),
             'preview'          => $preview,
             'questions'        => $questions,
@@ -295,7 +322,7 @@ class SurveyAnswer extends CommonDBChild
         TemplateRenderer::getInstance()->display('@satisfaction/surveyanswer_responsive.html.twig', [
             'hidden_survey_id' => Html::hidden(
                 'plugin_satisfaction_surveys_id',
-                ['value' => $plugin_satisfaction_surveys_id]
+                ['value' => $plugin_satisfaction_surveys_id],
             ),
             'questions'        => $questions,
         ]);
@@ -408,11 +435,24 @@ class SurveyAnswer extends CommonDBChild
                 'answer' => $dbu->exportArrayToDB($ticketSatisfaction->input['answer'])];
             $surveyanswer->update($input);
         } else {
+            // IDOR hardening: the hidden plugin_satisfaction_surveys_id field marks a survey
+            // submission, but its value is client-controlled and must not be trusted. Recompute
+            // the authoritative survey from the ticket's own entity server-side, so a requester
+            // cannot attach their answer to a survey belonging to another entity.
             if (isset($ticketSatisfaction->input['plugin_satisfaction_surveys_id'])) {
-                $input = ['plugin_satisfaction_surveys_id' => $ticketSatisfaction->input[
-                 'plugin_satisfaction_surveys_id'],
+                $ticket = new Ticket();
+                if (!$ticket->getFromDB((int) $ticketSatisfaction->getField('tickets_id'))) {
+                    return;
+                }
+                $survey_id = Survey::getObjectForEntity($ticket->fields['entities_id']);
+                if ($survey_id === false) {
+                    return;
+                }
+
+                $input = ['plugin_satisfaction_surveys_id' => $survey_id,
                     'ticketsatisfactions_id'         => $ticketSatisfaction->getField('id'),
-                    'answer'                         => $dbu->exportArrayToDB($ticketSatisfaction->input['answer']
+                    'answer'                         => $dbu->exportArrayToDB(
+                        $ticketSatisfaction->input['answer'],
                     )];
 
                 $surveyanswer->add($input);

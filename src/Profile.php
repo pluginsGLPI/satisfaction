@@ -1,30 +1,30 @@
 <?php
 
-/*
- -------------------------------------------------------------------------
- satisfaction plugin for GLPI
- Copyright (C) 2018-2026 by the satisfaction Development Team.
-
- https://github.com/pluginsGLPI/satisfaction
- -------------------------------------------------------------------------
-
- LICENSE
-
- This file is part of satisfaction.
-
- satisfaction is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation; either version 2 of the License, or
- (at your option) any later version.
-
- satisfaction is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
-
- You should have received a copy of the GNU General Public License
- along with satisfaction. If not, see <http://www.gnu.org/licenses/>.
- --------------------------------------------------------------------------
+/**
+ * -------------------------------------------------------------------------
+ * satisfaction plugin for GLPI
+ * Copyright (C) 2018-2026 by the satisfaction Development Team.
+ *
+ * https://github.com/pluginsGLPI/satisfaction
+ * -------------------------------------------------------------------------
+ *
+ * LICENSE
+ *
+ * This file is part of satisfaction.
+ *
+ * satisfaction is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * satisfaction is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with satisfaction. If not, see <http://www.gnu.org/licenses/>.
+ * --------------------------------------------------------------------------
  */
 
 namespace GlpiPlugin\Satisfaction;
@@ -120,14 +120,14 @@ class Profile extends \Profile
         $dbu = new DbUtils();
         foreach ($rights as $right => $value) {
             if ($dbu->countElementsInTable(
-                    'glpi_profilerights',
-                    ["profiles_id" => $profiles_id, "name" => $right]
-                ) && $drop_existing) {
+                'glpi_profilerights',
+                ["profiles_id" => $profiles_id, "name" => $right],
+            ) && $drop_existing) {
                 $profileRight->deleteByCriteria(['profiles_id' => $profiles_id, 'name' => $right]);
             }
             if (!$dbu->countElementsInTable(
                 'glpi_profilerights',
-                ["profiles_id" => $profiles_id, "name" => $right]
+                ["profiles_id" => $profiles_id, "name" => $right],
             )) {
                 $myright['profiles_id'] = $profiles_id;
                 $myright['name'] = $right;
@@ -196,9 +196,9 @@ class Profile extends \Profile
         //Add new rights in glpi_profilerights table
         foreach ($profile->getAllRights(true) as $data) {
             if ($dbu->countElementsInTable(
-                    "glpi_profilerights",
-                    ["name" => $data['field']]
-                ) == 0) {
+                "glpi_profilerights",
+                ["name" => $data['field']],
+            ) == 0) {
                 ProfileRight::addProfileRights([$data['field']]);
             }
         }

@@ -1,5 +1,32 @@
 <?php
 
+/**
+ * -------------------------------------------------------------------------
+ * satisfaction plugin for GLPI
+ * Copyright (C) 2018-2026 by the satisfaction Development Team.
+ *
+ * https://github.com/pluginsGLPI/satisfaction
+ * -------------------------------------------------------------------------
+ *
+ * LICENSE
+ *
+ * This file is part of satisfaction.
+ *
+ * satisfaction is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * satisfaction is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with satisfaction. If not, see <http://www.gnu.org/licenses/>.
+ * --------------------------------------------------------------------------
+ */
+
 /*
  -------------------------------------------------------------------------
  satisfaction plugin for GLPI
@@ -50,7 +77,6 @@ if (!defined('GLPI_ROOT')) {
  **/
 class SurveyTranslation extends CommonDBChild
 {
-
     public static $itemtype = 'itemtype';
     public static $items_id = 'items_id';
     public $dohistory       = true;
@@ -61,9 +87,9 @@ class SurveyTranslation extends CommonDBChild
         return _n('Translation', 'Translations', $nb);
     }
 
-   /**
-    * @see CommonGLPI::getTabNameForItem()
-    **/
+    /**
+     * @see CommonGLPI::getTabNameForItem()
+     **/
     public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
     {
 
@@ -82,13 +108,13 @@ class SurveyTranslation extends CommonDBChild
         return "ti ti-language";
     }
 
-   /**
-    * Get the standard massive actions which are forbidden
-    *
-    * @since version 0.84
-    *
-    * @return array array of massive actions
-    **/
+    /**
+     * Get the standard massive actions which are forbidden
+     *
+     * @since version 0.84
+     *
+     * @return array array of massive actions
+     **/
     public function getForbiddenStandardMassiveAction()
     {
 
@@ -97,38 +123,38 @@ class SurveyTranslation extends CommonDBChild
         return $forbidden;
     }
 
-   /**
-    * Check if an item can be translated
-    * It be translated if translation if globally on and item is an instance of CommonDropdown
-    * or CommonTreeDropdown and if translation is enabled for this class
-    *
-    * @param $item
-    *
-    * @return true if item can be translated, false otherwise
-    **/
+    /**
+     * Check if an item can be translated
+     * It be translated if translation if globally on and item is an instance of CommonDropdown
+     * or CommonTreeDropdown and if translation is enabled for this class
+     *
+     * @param $item
+     *
+     * @return true if item can be translated, false otherwise
+     **/
     public static function canBeTranslated(CommonGLPI $item)
     {
         return $item instanceof Survey && $item->maybeTranslated();
     }
 
-   /**
-    * Return the number of translations for an item
-    *
-    * @param
-    *
-    * @return the number of translations for this item
-    **/
+    /**
+     * Return the number of translations for an item
+     *
+     * @param
+     *
+     * @return the number of translations for this item
+     **/
     public static function getNumberOfTranslationsForItem($item)
     {
         return SurveyTranslationDAO::countSurveyTranslationByCrit([
             "plugin_satisfaction_surveys_id" => $item->getID()]);
     }
 
-   /**
-    * @param $item            CommonGLPI object
-    * @param $tabnum          (default 1)
-    * @param $withtemplate    (default 0)
-    **/
+    /**
+     * @param $item            CommonGLPI object
+     * @param $tabnum          (default 1)
+     * @param $withtemplate    (default 0)
+     **/
     public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
     {
 
@@ -138,18 +164,18 @@ class SurveyTranslation extends CommonDBChild
         return true;
     }
 
-   /**
-    * Display all translated field for a dropdown
-    *
-    * @param $item a Dropdown item
-    *
-    * @return true;
-    **/
+    /**
+     * Display all translated field for a dropdown
+     *
+     * @param $item a Dropdown item
+     *
+     * @return true;
+     **/
     public static function showTranslations(Survey $item)
     {
         global $CFG_GLPI;
 
-       // Get all translation from database
+        // Get all translation from database
         $items = SurveyTranslationDAO::getSurveyTranslationByCrit([
             "plugin_satisfaction_surveys_id" => $item->getID()]);
 
@@ -172,7 +198,7 @@ class SurveyTranslation extends CommonDBChild
                 $target,
                 $params,
                 "",
-                false
+                false,
             );
             $js .= "};";
             $add_script = Html::scriptBlock($js);
@@ -208,7 +234,7 @@ class SurveyTranslation extends CommonDBChild
                         $target,
                         $params,
                         "",
-                        false
+                        false,
                     );
                     $js .= "};";
                     $edit_script = Html::scriptBlock($js);
@@ -269,7 +295,7 @@ class SurveyTranslation extends CommonDBChild
         if ($options['id'] > 0) {
             $item->check($surveyId, READ);
         } else {
-           // Create item
+            // Create item
             $item->check(-1, CREATE);
         }
 
@@ -304,7 +330,7 @@ class SurveyTranslation extends CommonDBChild
             ob_start();
             $rand = Dropdown::showLanguages(
                 "language",
-                ['display_none' => true, 'value' => $_SESSION['glpilanguage']]
+                ['display_none' => true, 'value' => $_SESSION['glpilanguage']],
             );
             $data['language_dropdown'] = ob_get_clean();
 
@@ -319,7 +345,7 @@ class SurveyTranslation extends CommonDBChild
                 "dropdown_language$rand",
                 "span_fields",
                 $CFG_GLPI["root_doc"] . "/ajax/updateTranslationFields.php",
-                $params
+                $params,
             );
             $data['language_ajax'] = ob_get_clean();
 
@@ -341,10 +367,10 @@ class SurveyTranslation extends CommonDBChild
         }
 
         $params = [
-         "name"=> 'question_id',
-         "display"=>false,
-         "width"=> '200px',
-         'display_emptychoice' => true
+            "name" => 'question_id',
+            "display" => false,
+            "width" => '200px',
+            'display_emptychoice' => true,
         ];
 
         return Dropdown::showFromArray($params['name'], $temp, $params);
@@ -364,49 +390,49 @@ class SurveyTranslation extends CommonDBChild
             Session::addMessageAfterRedirect(
                 __("Translation creation failed", "satisfaction"),
                 true,
-                ERROR
+                ERROR,
             );
             return;
         }
 
         $crit = [
-         'plugin_satisfaction_surveys_id' => $options['survey_id'],
-         'glpi_plugin_satisfaction_surveyquestions_id' => $options['question_id'],
-         'language' => $options['language']
+            'plugin_satisfaction_surveys_id' => $options['survey_id'],
+            'glpi_plugin_satisfaction_surveyquestions_id' => $options['question_id'],
+            'language' => $options['language'],
         ];
 
-       // Translation already exist
+        // Translation already exist
         if (SurveyTranslationDAO::countSurveyTranslationByCrit($crit)) {
             Session::addMessageAfterRedirect(
                 sprintf(__(
                     "An %s translation for this Question already exist.",
-                    "satisfaction"
+                    "satisfaction",
                 ), $CFG_GLPI['languages'][$options["language"]][0]),
                 true,
-                WARNING
+                WARNING,
             );
         } else {  // Translation ready to insert
             $newInsertId = SurveyTranslationDAO::newSurveyTranslation(
                 $options['survey_id'],
                 $options['question_id'],
                 $options['language'],
-                $options['value']
+                $options['value'],
             );
             if ($newInsertId != null) {
                 Session::addMessageAfterRedirect(__("Translation successfully created.", "satisfaction"), true, INFO);
 
                 if ($this->dohistory) {
                     $changes = [
-                     $newInsertId,
-                     '',
-                     $options['value']
+                        $newInsertId,
+                        '',
+                        $options['value'],
                     ];
                     Log::history(
                         $options['survey_id'],
                         Survey::class,
                         $changes,
                         $this->getType(),
-                        static::$log_history_add
+                        static::$log_history_add,
                     );
                 }
             } else {
@@ -419,7 +445,7 @@ class SurveyTranslation extends CommonDBChild
     {
         global $CFG_GLPI;
         $crit = [
-         'id' => $options['id']
+            'id' => $options['id'],
         ];
 
         // Translation doesn't exist
@@ -427,7 +453,7 @@ class SurveyTranslation extends CommonDBChild
             Session::addMessageAfterRedirect(
                 __("The translation you want to edit does not exist.", "satisfaction"),
                 true,
-                WARNING
+                WARNING,
             );
         }
         // Translation ready to update
@@ -440,7 +466,7 @@ class SurveyTranslation extends CommonDBChild
                 Session::addMessageAfterRedirect(
                     __("The translation you want to edit does not exist.", "satisfaction"),
                     true,
-                    WARNING
+                    WARNING,
                 );
                 return;
             }
@@ -451,16 +477,16 @@ class SurveyTranslation extends CommonDBChild
 
             if ($this->dohistory) {
                 $changes = [
-                $options['id'],
-                $surveyTranslationData['value'],
-                $options['value']
+                    $options['id'],
+                    $surveyTranslationData['value'],
+                    $options['value'],
                 ];
                 Log::history(
                     $options['survey_id'],
                     Survey::class,
                     $changes,
                     $this->getType(),
-                    static::$log_history_update
+                    static::$log_history_update,
                 );
             }
         }
@@ -469,9 +495,9 @@ class SurveyTranslation extends CommonDBChild
     public static function hasTranslation($surveyId, $questionId)
     {
         return SurveyTranslationDAO::countSurveyTranslationByCrit([
-         'plugin_satisfaction_surveys_id' => $surveyId,
-         'glpi_plugin_satisfaction_surveyquestions_id' => $questionId,
-         'language' => $_SESSION['glpilanguage']
+            'plugin_satisfaction_surveys_id' => $surveyId,
+            'glpi_plugin_satisfaction_surveyquestions_id' => $questionId,
+            'language' => $_SESSION['glpilanguage'],
         ]);
     }
 
@@ -479,9 +505,9 @@ class SurveyTranslation extends CommonDBChild
     {
 
         $crit = [
-         'plugin_satisfaction_surveys_id' => $surveyId,
-         'glpi_plugin_satisfaction_surveyquestions_id' => $questionId,
-         'language' => $_SESSION['glpilanguage']
+            'plugin_satisfaction_surveys_id' => $surveyId,
+            'glpi_plugin_satisfaction_surveyquestions_id' => $questionId,
+            'language' => $_SESSION['glpilanguage'],
         ];
 
         $translationList = SurveyTranslationDAO::getSurveyTranslationByCrit($crit);

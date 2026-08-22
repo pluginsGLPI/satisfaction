@@ -1,30 +1,30 @@
 <?php
 
-/*
- -------------------------------------------------------------------------
- satisfaction plugin for GLPI
- Copyright (C) 2018-2026 by the satisfaction Development Team.
-
- https://github.com/pluginsGLPI/satisfaction
- -------------------------------------------------------------------------
-
- LICENSE
-
- This file is part of satisfaction.
-
- satisfaction is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation; either version 2 of the License, or
- (at your option) any later version.
-
- satisfaction is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
-
- You should have received a copy of the GNU General Public License
- along with satisfaction. If not, see <http://www.gnu.org/licenses/>.
- --------------------------------------------------------------------------
+/**
+ * -------------------------------------------------------------------------
+ * satisfaction plugin for GLPI
+ * Copyright (C) 2018-2026 by the satisfaction Development Team.
+ *
+ * https://github.com/pluginsGLPI/satisfaction
+ * -------------------------------------------------------------------------
+ *
+ * LICENSE
+ *
+ * This file is part of satisfaction.
+ *
+ * satisfaction is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * satisfaction is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with satisfaction. If not, see <http://www.gnu.org/licenses/>.
+ * --------------------------------------------------------------------------
  */
 
 namespace GlpiPlugin\Satisfaction;
@@ -262,13 +262,13 @@ class Survey extends CommonDBTM
                             $this->getTable(),
                             'entities_id',
                             $input['entities_id'],
-                            true
+                            true,
                         );
             $found = $this->find($condition);
             if (count($found) > 0) {
                 Session::addMessageAfterRedirect(__(
                     'Error : only one survey is allowed by entity',
-                    'satisfaction'
+                    'satisfaction',
                 ), false, ERROR);
                 return false;
             }
@@ -297,13 +297,13 @@ class Survey extends CommonDBTM
                            $this->getTable(),
                            'entities_id',
                            $input['entities_id'],
-                           true
+                           true,
                        );
             $found = $this->find($condition);
             if (count($found) > 0) {
                 Session::addMessageAfterRedirect(__(
                     'Error : only one survey is allowed by entity',
-                    'satisfaction'
+                    'satisfaction',
                 ), false, ERROR);
                 return false;
             }
@@ -355,7 +355,7 @@ class Survey extends CommonDBTM
             ],
             'WHERE'     => array_merge(
                 ['survey.is_active' => 1],
-                $dbu->getEntitiesRestrictCriteria('survey', 'entities_id', $entities_id, true)
+                $dbu->getEntitiesRestrictCriteria('survey', 'entities_id', $entities_id, true),
             ),
             'ORDER'     => 'glpi_entities.level DESC',
             'LIMIT'     => 1,
@@ -408,7 +408,7 @@ class Survey extends CommonDBTM
 
                 TemplateRenderer::getInstance()->display(
                     '@satisfaction/massiveaction_duplicate.html.twig',
-                    ['entity_dropdown' => $entity_dropdown]
+                    ['entity_dropdown' => $entity_dropdown],
                 );
                 return true;
         }
@@ -472,7 +472,7 @@ class Survey extends CommonDBTM
         //Update fields of the new duplicate
         $survey->fields['name']        = sprintf(
             __('Copy of %s'),
-            $survey->fields['name']
+            $survey->fields['name'],
         );
         $survey->fields['is_active']   = 0;
         $survey->fields['entities_id'] = $entities_id;

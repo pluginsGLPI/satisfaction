@@ -1,30 +1,30 @@
 <?php
 
-/*
- -------------------------------------------------------------------------
- satisfaction plugin for GLPI
- Copyright (C) 2018-2026 by the satisfaction Development Team.
-
- https://github.com/pluginsGLPI/satisfaction
- -------------------------------------------------------------------------
-
- LICENSE
-
- This file is part of satisfaction.
-
- satisfaction is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation; either version 2 of the License, or
- (at your option) any later version.
-
- satisfaction is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
-
- You should have received a copy of the GNU General Public License
- along with satisfaction. If not, see <http://www.gnu.org/licenses/>.
- --------------------------------------------------------------------------
+/**
+ * -------------------------------------------------------------------------
+ * satisfaction plugin for GLPI
+ * Copyright (C) 2018-2026 by the satisfaction Development Team.
+ *
+ * https://github.com/pluginsGLPI/satisfaction
+ * -------------------------------------------------------------------------
+ *
+ * LICENSE
+ *
+ * This file is part of satisfaction.
+ *
+ * satisfaction is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * satisfaction is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with satisfaction. If not, see <http://www.gnu.org/licenses/>.
+ * --------------------------------------------------------------------------
  */
 
 namespace GlpiPlugin\Satisfaction;
@@ -170,7 +170,7 @@ class SurveyReminder extends CommonDBChild
                 $CFG_GLPI["root_doc"] . "/ajax/viewsubitem.php",
                 $params,
                 "",
-                false
+                false,
             );
             $js .= "};";
 
@@ -188,7 +188,7 @@ class SurveyReminder extends CommonDBChild
                 PLUGINSATISFACTION_WEBDIR . "/ajax/viewsubitem_reminder.php",
                 $params,
                 "",
-                false
+                false,
             );
             $js .= "};";
 
@@ -315,7 +315,7 @@ class SurveyReminder extends CommonDBChild
                 'items_id_value'         => $surveyReminder->fields[self::$items_id],
                 'duration_type_dropdown' => self::getDurationDropdown(
                     self::COLUMN_DURATION_TYPE,
-                    $surveyReminder->fields[self::COLUMN_DURATION_TYPE]
+                    $surveyReminder->fields[self::COLUMN_DURATION_TYPE],
                 ),
                 'duration_dropdown'      => $duration_dropdown,
                 'is_active_dropdown'     => $is_active_dropdown,
@@ -361,7 +361,7 @@ class SurveyReminder extends CommonDBChild
                 $CFG_GLPI["root_doc"] . "/ajax/viewsubitem.php",
                 $params,
                 "",
-                false
+                false,
             );
             $js .= "};";
             $edit_script = Html::scriptBlock($js);
@@ -401,7 +401,7 @@ class SurveyReminder extends CommonDBChild
             self::ACTIVE_OFF => __('No'),
             self::ACTIVE_ON  => __('Yes'),
         ];
-        return $titles[$id];
+        return $titles[$id] ?? '';
     }
 
     public function getDurationTitles($id = null)
@@ -415,13 +415,12 @@ class SurveyReminder extends CommonDBChild
         if (is_null($id)) {
             return $titles;
         } else {
-            return $titles[$id];
+            return $titles[$id] ?? '';
         }
     }
 
     public function getPresetReminderTitles($id = null)
     {
-        $yolo = 2;
 
         $titles = [
             self::PREDEFINED_1_WEEK  => __('One Week', 'satisfaction'),
@@ -432,7 +431,7 @@ class SurveyReminder extends CommonDBChild
         if (is_null($id)) {
             return $titles;
         } else {
-            return $titles[$id];
+            return $titles[$id] ?? '';
         }
     }
 
@@ -446,7 +445,7 @@ class SurveyReminder extends CommonDBChild
             self::COLUMN_IS_ACTIVE     => __("Active"),
         ];
 
-        return $titles[$id];
+        return $titles[$id] ?? '';
     }
 
     public function getDurationDropdown($name, $defaultValue)
@@ -478,7 +477,7 @@ class SurveyReminder extends CommonDBChild
         switch (intval($postValues[self::PREDEFINED_REMINDER_OPTION_NAME])) {
             case self::PREDEFINED_1_WEEK:
                 $postValues[self::COLUMN_NAME]          = $namePrefix . " " . self::getPresetReminderTitles(
-                    self::PREDEFINED_1_WEEK
+                    self::PREDEFINED_1_WEEK,
                 );
                 $postValues[self::COLUMN_COMMENT]       = $comment;
                 $postValues[self::COLUMN_DURATION_TYPE] = self::DURATION_DAY;
@@ -486,7 +485,7 @@ class SurveyReminder extends CommonDBChild
                 break;
             case self::PREDEFINED_2_WEEK:
                 $postValues[self::COLUMN_NAME]          = $namePrefix . " " . self::getPresetReminderTitles(
-                    self::PREDEFINED_2_WEEK
+                    self::PREDEFINED_2_WEEK,
                 );
                 $postValues[self::COLUMN_COMMENT]       = $comment;
                 $postValues[self::COLUMN_DURATION_TYPE] = self::DURATION_DAY;
@@ -494,7 +493,7 @@ class SurveyReminder extends CommonDBChild
                 break;
             case self::PREDEFINED_1_MONTH:
                 $postValues[self::COLUMN_NAME]          = $namePrefix . " " . self::getPresetReminderTitles(
-                    self::PREDEFINED_1_MONTH
+                    self::PREDEFINED_1_MONTH,
                 );
                 $postValues[self::COLUMN_COMMENT]       = $comment;
                 $postValues[self::COLUMN_DURATION_TYPE] = self::DURATION_MONTH;
@@ -531,7 +530,7 @@ class SurveyReminder extends CommonDBChild
 
             $errorMessage = __(
                 'You already have a reminder with the same duration type and duration named : %s',
-                'satisfaction'
+                'satisfaction',
             );
 
             Session::addMessageAfterRedirect(sprintf($errorMessage, $item['name']), false, ERROR);
