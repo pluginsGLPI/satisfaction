@@ -27,33 +27,6 @@
  * --------------------------------------------------------------------------
  */
 
-/*
- -------------------------------------------------------------------------
- satisfaction plugin for GLPI
- Copyright (C) 2018-2026 by the satisfaction Development Team.
-
- https://github.com/pluginsGLPI/satisfaction
- -------------------------------------------------------------------------
-
- LICENSE
-
- This file is part of satisfaction.
-
- satisfaction is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation; either version 2 of the License, or
- (at your option) any later version.
-
- satisfaction is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
-
- You should have received a copy of the GNU General Public License
- along with satisfaction. If not, see <http://www.gnu.org/licenses/>.
- --------------------------------------------------------------------------
- */
-
 namespace GlpiPlugin\Satisfaction;
 
 use CommonDBChild;
@@ -89,7 +62,6 @@ class SurveyAnswer extends CommonDBChild
         return _n('Answer', 'Answers', $nb, 'satisfaction');
     }
 
-
     /**
      * Get Tab Name used for itemtype
      *
@@ -115,7 +87,6 @@ class SurveyAnswer extends CommonDBChild
 
         return '';
     }
-
 
     /**
      * show Tab content
@@ -243,7 +214,6 @@ class SurveyAnswer extends CommonDBChild
             'table_script'     => $table_script,
         ]);
     }
-
 
     /**
      * Print survey
@@ -427,7 +397,6 @@ class SurveyAnswer extends CommonDBChild
     public static function preUpdateSatisfaction(TicketSatisfaction $ticketSatisfaction)
     {
 
-
         $surveyanswer = new self();
         $dbu          = new DbUtils();
         if ($surveyanswer->getFromDBByCrit(["ticketsatisfactions_id" => $ticketSatisfaction->getField('id')])) {
@@ -459,7 +428,6 @@ class SurveyAnswer extends CommonDBChild
             }
         }
     }
-
 
     /**
      * Displaying questions in GLPI's ticket satisfaction
