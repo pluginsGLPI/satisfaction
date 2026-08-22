@@ -27,33 +27,6 @@
  * --------------------------------------------------------------------------
  */
 
-/*
- -------------------------------------------------------------------------
- satisfaction plugin for GLPI
- Copyright (C) 2018-2026 by the satisfaction Development Team.
-
- https://github.com/pluginsGLPI/satisfaction
- -------------------------------------------------------------------------
-
- LICENSE
-
- This file is part of satisfaction.
-
- satisfaction is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation; either version 2 of the License, or
- (at your option) any later version.
-
- satisfaction is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
-
- You should have received a copy of the GNU General Public License
- along with satisfaction. If not, see <http://www.gnu.org/licenses/>.
- --------------------------------------------------------------------------
- */
-
 /**
  * Init the hooks of the plugins -Needed
  */
@@ -67,7 +40,7 @@ use GlpiPlugin\Satisfaction\Profile;
 use GlpiPlugin\Satisfaction\Reminder;
 use GlpiPlugin\Satisfaction\SurveyAnswer;
 
-define("PLUGIN_SATISFACTION_VERSION", "1.7.4");
+define("PLUGIN_SATISFACTION_VERSION", "1.7.5");
 
 // Minimal GLPI version, inclusive
 define('PLUGIN_SATISFACTION_MIN_GLPI', '11.0');
@@ -97,7 +70,6 @@ function plugin_init_satisfaction()
 
             $PLUGIN_HOOKS[Hooks::PRE_ITEM_UPDATE]['satisfaction'][TicketSatisfaction::class] = [
                 SurveyAnswer::class, 'preUpdateSatisfaction'];
-
 
             $PLUGIN_HOOKS[Hooks::ITEM_DELETE]['satisfaction'] = ['Ticket' => [Reminder::class, 'deleteItem']];
 
