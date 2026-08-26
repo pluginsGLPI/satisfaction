@@ -467,7 +467,23 @@ class Survey extends CommonDBTM
 
         //duplicate survey
         $survey = new self();
-        $survey->getFromDB($ID);
+        if (!$survey->getFromDB($ID)) {
+            return false;
+        }
+
+        // Anti-IDOR: validate access to the SOURCE survey's own entity before copying
+        // it. MassiveAction populates $remainings straight from $_POST['items'] without
+        // a per-item can() check, so without this a request forged with a survey id from
+        // another entity would copy that survey (its questions and translations) into the
+        // caller's entity — a cross-entity read bypass. Mirror the target-entity check
+        // above and pass the recursive flag so a recursive survey declared in a parent
+        // entity stays duplicable from a child.
+        if (!Session::haveAccessToEntity(
+            (int) $survey->fields['entities_id'],
+            (bool) $survey->fields['is_recursive']
+        )) {
+            return false;
+        }
 
         //Update fields of the new duplicate
         $survey->fields['name']        = sprintf(
