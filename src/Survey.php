@@ -480,7 +480,7 @@ class Survey extends CommonDBTM
         // entity stays duplicable from a child.
         if (!Session::haveAccessToEntity(
             (int) $survey->fields['entities_id'],
-            (bool) $survey->fields['is_recursive']
+            (bool) $survey->fields['is_recursive'],
         )) {
             return false;
         }
