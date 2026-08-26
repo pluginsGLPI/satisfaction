@@ -454,7 +454,7 @@ class Survey extends CommonDBTM
      *
      * @since version 0.85
      *
-     * @return true if all ok
+     * @return bool true if all ok, false otherwise
      **/
     public function duplicateSurvey($ID, $entities_id)
     {

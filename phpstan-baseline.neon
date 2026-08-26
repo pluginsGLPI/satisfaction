@@ -163,12 +163,6 @@ parameters:
 			path: src/Reminder.php
 
 		-
-			message: '#^Method GlpiPlugin\\Satisfaction\\Survey\:\:duplicateSurvey\(\) should return true but returns false\.$#'
-			identifier: return.type
-			count: 3
-			path: src/Survey.php
-
-		-
 			message: '#^Method GlpiPlugin\\Satisfaction\\Survey\:\:prepareInputForAdd\(\) should return false but returns array\<string, mixed\>\.$#'
 			identifier: return.type
 			count: 1
