@@ -38,11 +38,6 @@ use Glpi\Exception\Http\NotFoundHttpException;
 use Html;
 use Log;
 use Session;
-use Toolbox;
-
-if (!defined('GLPI_ROOT')) {
-    die("Sorry. You can't access this file directly");
-}
 
 /**
  * SurveyTranslation Class
@@ -259,7 +254,7 @@ class SurveyTranslation extends CommonDBChild
     public function showSurveyTranslationForm($options)
     {
         global $CFG_GLPI;
-        $surveyId = Toolbox::cleanInteger($options['survey_id']);
+        $surveyId = (int) $options['survey_id'];
 
         $item = new Survey();
         $item->getFromDB($surveyId);
@@ -267,8 +262,9 @@ class SurveyTranslation extends CommonDBChild
         if ($options['id'] > 0) {
             $item->check($surveyId, READ);
         } else {
-            // Create item
-            $item->check(-1, CREATE);
+            // Adding a translation updates the posted survey: check it (existence,
+            // entity and right), as the NEW action does.
+            $item->check($surveyId, UPDATE);
         }
 
         $data = [
@@ -354,9 +350,12 @@ class SurveyTranslation extends CommonDBChild
 
         // Integrity/anti-IDOR: the question must belong to the survey whose UPDATE
         // right/entity has already been validated by the controller.
+        // The language is also checked against the known GLPI languages.
         $question = new SurveyQuestion();
         if (
-            !$question->getFromDB((int) $options['question_id'])
+            !is_string($options['language'] ?? null)
+            || !isset($CFG_GLPI['languages'][$options['language']])
+            || !$question->getFromDB((int) $options['question_id'])
             || (int) $question->fields['plugin_satisfaction_surveys_id'] !== (int) $options['survey_id']
         ) {
             Session::addMessageAfterRedirect(

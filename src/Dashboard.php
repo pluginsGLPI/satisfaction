@@ -41,6 +41,7 @@ use GlpiPlugin\Mydashboard\Html as MydashboardHtml;
 use GlpiPlugin\Mydashboard\Menu;
 use GlpiPlugin\Mydashboard\Widget;
 use Html;
+use Session;
 use Ticket;
 use TicketSatisfaction;
 
@@ -175,6 +176,12 @@ class Dashboard extends CommonGLPI
      */
     public function getWidgetContentForItem($widgetId, $opt = [])
     {
+        // The widget exposes survey KPIs: enforce the plugin right here rather
+        // than relying on the third-party dashboard plugin.
+        if (!Session::haveRight(Survey::$rightname, READ)) {
+            return new MydashboardHtml();
+        }
+
         switch ($widgetId) {
             case $this->getType() . self::SATISFACTION_SURVEY:
                 return self::satisfactionSurvey($widgetId, $opt);
@@ -216,11 +223,8 @@ class Dashboard extends CommonGLPI
         $content = "";
 
         // Recover survey associed to current entity
-        $Survey = new Survey();
-        if (!$Survey->getFromDBByCrit([
-            'entities_id' => $_SESSION['glpiactive_entity'],
-            'is_active' => 1,
-        ])) {
+        // Honours recursive surveys declared in a parent entity
+        if (Survey::getObjectForEntity($_SESSION['glpiactive_entity']) === false) {
             $content = TemplateRenderer::getInstance()->render(
                 '@satisfaction/dashboard_satisfaction_survey.html.twig',
                 ['has_survey' => false],

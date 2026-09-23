@@ -36,10 +36,6 @@ use Glpi\DBAL\QueryExpression;
 use Ticket;
 use TicketSatisfaction;
 
-if (!defined('GLPI_ROOT')) {
-    die("Sorry. You can't access this file directly");
-}
-
 /**
  * Class Reminder
  *

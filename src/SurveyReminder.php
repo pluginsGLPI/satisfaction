@@ -34,13 +34,10 @@ use CommonDBChild;
 use CommonGLPI;
 use Dropdown;
 use Glpi\Application\View\TemplateRenderer;
+use Glpi\Exception\Http\NotFoundHttpException;
 use Html;
 use Session;
 use Toolbox;
-
-if (!defined('GLPI_ROOT')) {
-    die("Sorry. You can't access directly to this file");
-}
 
 class SurveyReminder extends CommonDBChild
 {
@@ -167,7 +164,7 @@ class SurveyReminder extends CommonDBChild
             $js  = "function viewAddReminder$sID$rand_survey() {\n";
             $js .= Ajax::updateItemJsCode(
                 "viewreminder$sID$rand_survey",
-                $CFG_GLPI["root_doc"] . "/ajax/viewsubitem.php",
+                PLUGINSATISFACTION_WEBDIR . "/ajax/viewsubitem_reminder.php",
                 $params,
                 "",
                 false,
@@ -266,15 +263,21 @@ class SurveyReminder extends CommonDBChild
             $survey = $options['parent'];
         }
 
+        // canView() is a global right only, and the core /ajax/viewsubitem.php
+        // reaches this form without any right check: check() resolves the parent
+        // survey and enforces its entity perimeter.
         $surveyReminder = new self();
-        if ($ID <= 0) {
-            $surveyReminder->getEmpty();
+        if ($ID > 0) {
+            $surveyReminder->check($ID, READ);
+            // Bind the reminder to the posted survey
+            if (isset($survey) && (int) $surveyReminder->fields[self::$items_id] !== (int) $survey->getID()) {
+                throw new NotFoundHttpException();
+            }
         } else {
-            $surveyReminder->getFromDB($ID);
-        }
-
-        if (!$surveyReminder->canView()) {
-            return false;
+            // The parent is resolved from the input (CommonDBChild)
+            $input = [self::$items_id => isset($survey) ? (int) $survey->getID() : 0];
+            $surveyReminder->getEmpty();
+            $surveyReminder->check(-1, CREATE, $input);
         }
 
         $displayPresetReminderForm = isset($options[self::PREDEFINED_REMINDER_OPTION_NAME])
@@ -358,7 +361,7 @@ class SurveyReminder extends CommonDBChild
             $js  = "function viewEditReminder" . $items_id . $id . "$rand() {\n";
             $js .= Ajax::updateItemJsCode(
                 "viewreminder" . $items_id . "$rand",
-                $CFG_GLPI["root_doc"] . "/ajax/viewsubitem.php",
+                PLUGINSATISFACTION_WEBDIR . "/ajax/viewsubitem_reminder.php",
                 $params,
                 "",
                 false,
@@ -512,6 +515,12 @@ class SurveyReminder extends CommonDBChild
      */
     public function prepareInputForAdd($input)
     {
+        // CommonDBChild checks the parent survey
+        $input = parent::prepareInputForAdd($input);
+        if ($input === false) {
+            return false;
+        }
+
         // Scope the uniqueness check to the parent survey. SurveyReminder is a
         // CommonDBChild, so find() adds no entity restriction on its own: without
         // this the lookup would span every survey of every entity and could leak a
@@ -533,7 +542,7 @@ class SurveyReminder extends CommonDBChild
                 'satisfaction',
             );
 
-            Session::addMessageAfterRedirect(sprintf($errorMessage, $item['name']), false, ERROR);
+            Session::addMessageAfterRedirect(sprintf($errorMessage, htmlescape($item['name'])), false, ERROR);
             return false;
         }
         return $input;
@@ -548,6 +557,12 @@ class SurveyReminder extends CommonDBChild
      */
     public function prepareInputForUpdate($input)
     {
+        // CommonDBChild requires CREATE on the new survey when the parent changes
+        $input = parent::prepareInputForUpdate($input);
+        if ($input === false) {
+            return false;
+        }
+
         // Same rationale as prepareInputForAdd: bound the lookup to the parent
         // survey so an "identical reminder" match can never surface a name from
         // another entity's survey (fall back to the loaded record's parent id).
@@ -568,7 +583,7 @@ class SurveyReminder extends CommonDBChild
 
             $errorMessage = __('There are nothing to save', 'satisfaction');
 
-            Session::addMessageAfterRedirect(sprintf($errorMessage, $item['name']), false, ERROR);
+            Session::addMessageAfterRedirect(sprintf($errorMessage, htmlescape($item['name'])), false, ERROR);
             return false;
         }
         return $input;

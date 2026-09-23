@@ -30,6 +30,7 @@
 use Glpi\Exception\Http\AccessDeniedHttpException;
 use Glpi\Exception\Http\NotFoundHttpException;
 use GlpiPlugin\Satisfaction\Survey;
+use GlpiPlugin\Satisfaction\SurveyQuestion;
 use GlpiPlugin\Satisfaction\SurveyReminder;
 
 header("Content-Type: text/html; charset=UTF-8");
@@ -44,8 +45,9 @@ if (!isset($_POST['parenttype'])) {
     throw new NotFoundHttpException();
 }
 
-$allowed_types = [SurveyReminder::class, Survey::class];
-if (!in_array($_POST['type'], $allowed_types, true) || !in_array($_POST['parenttype'], $allowed_types, true)) {
+// Survey sub-items only (reminders and questions), always attached to a survey
+$allowed_types = [SurveyReminder::class, SurveyQuestion::class];
+if (!in_array($_POST['type'], $allowed_types, true) || $_POST['parenttype'] !== Survey::class) {
     throw new NotFoundHttpException();
 }
 

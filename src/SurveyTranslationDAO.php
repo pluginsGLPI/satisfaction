@@ -29,10 +29,6 @@
 
 namespace GlpiPlugin\Satisfaction;
 
-if (!defined('GLPI_ROOT')) {
-    die("Sorry. You can't access this file directly");
-}
-
 class SurveyTranslationDAO
 {
     public static $tablename = "glpi_plugin_satisfaction_surveytranslations";

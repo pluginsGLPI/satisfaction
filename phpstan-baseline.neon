@@ -75,7 +75,7 @@ parameters:
 		-
 			message: '#^Instantiated class GlpiPlugin\\Mydashboard\\Html not found\.$#'
 			identifier: class.notFound
-			count: 1
+			count: 2
 			path: src/Dashboard.php
 
 		-
@@ -109,20 +109,8 @@ parameters:
 			path: src/NotificationMailing.php
 
 		-
-			message: '#^You should not use the `die` function\. It prevents the execution of post\-request/post\-command routines\.$#'
-			identifier: glpi.forbidExit
-			count: 1
-			path: src/NotificationMailing.php
-
-		-
 			message: '#^Parameter \#1 \$item of method NotificationTargetTicket\:\:getDataForObject\(\) expects CommonITILObject, CommonDBTM given\.$#'
 			identifier: argument.type
-			count: 1
-			path: src/NotificationTargetTicket.php
-
-		-
-			message: '#^You should not use the `die` function\. It prevents the execution of post\-request/post\-command routines\.$#'
-			identifier: glpi.forbidExit
 			count: 1
 			path: src/NotificationTargetTicket.php
 
@@ -139,12 +127,6 @@ parameters:
 			path: src/Profile.php
 
 		-
-			message: '#^You should not use the `die` function\. It prevents the execution of post\-request/post\-command routines\.$#'
-			identifier: glpi.forbidExit
-			count: 1
-			path: src/Profile.php
-
-		-
 			message: '#^PHPDoc tag @throws with type GlpitestSQLError is not subtype of Throwable$#'
 			identifier: throws.notThrowable
 			count: 1
@@ -157,12 +139,6 @@ parameters:
 			path: src/Reminder.php
 
 		-
-			message: '#^You should not use the `die` function\. It prevents the execution of post\-request/post\-command routines\.$#'
-			identifier: glpi.forbidExit
-			count: 1
-			path: src/Reminder.php
-
-		-
 			message: '#^Method GlpiPlugin\\Satisfaction\\Survey\:\:prepareInputForAdd\(\) should return false but returns array\<string, mixed\>\.$#'
 			identifier: return.type
 			count: 1
@@ -171,12 +147,6 @@ parameters:
 		-
 			message: '#^Method GlpiPlugin\\Satisfaction\\Survey\:\:prepareInputForUpdate\(\) should return false but returns array\<string, mixed\>\.$#'
 			identifier: return.type
-			count: 1
-			path: src/Survey.php
-
-		-
-			message: '#^You should not use the `die` function\. It prevents the execution of post\-request/post\-command routines\.$#'
-			identifier: glpi.forbidExit
 			count: 1
 			path: src/Survey.php
 
@@ -283,12 +253,6 @@ parameters:
 			path: src/SurveyQuestion.php
 
 		-
-			message: '#^You should not use the `die` function\. It prevents the execution of post\-request/post\-command routines\.$#'
-			identifier: glpi.forbidExit
-			count: 1
-			path: src/SurveyQuestion.php
-
-		-
 			message: '#^Method GlpiPlugin\\Satisfaction\\SurveyReminder\:\:showForm\(\) should return bool but return statement is missing\.$#'
 			identifier: return.missing
 			count: 1
@@ -309,12 +273,6 @@ parameters:
 		-
 			message: '#^Parameter \#1 \$survey of static method GlpiPlugin\\Satisfaction\\SurveyReminder\:\:showSurvey\(\) expects GlpiPlugin\\Satisfaction\\Survey, CommonGLPI given\.$#'
 			identifier: argument.type
-			count: 1
-			path: src/SurveyReminder.php
-
-		-
-			message: '#^You should not use the `die` function\. It prevents the execution of post\-request/post\-command routines\.$#'
-			identifier: glpi.forbidExit
 			count: 1
 			path: src/SurveyReminder.php
 
@@ -349,25 +307,7 @@ parameters:
 			path: src/SurveyTranslation.php
 
 		-
-			message: '#^Parameter \#1 \$ID of method CommonDBTM\:\:check\(\) expects int, string given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/SurveyTranslation.php
-
-		-
 			message: '#^Parameter \#1 \$item of static method GlpiPlugin\\Satisfaction\\SurveyTranslation\:\:showTranslations\(\) expects GlpiPlugin\\Satisfaction\\Survey, CommonGLPI given\.$#'
 			identifier: argument.type
 			count: 1
 			path: src/SurveyTranslation.php
-
-		-
-			message: '#^You should not use the `die` function\. It prevents the execution of post\-request/post\-command routines\.$#'
-			identifier: glpi.forbidExit
-			count: 1
-			path: src/SurveyTranslation.php
-
-		-
-			message: '#^You should not use the `die` function\. It prevents the execution of post\-request/post\-command routines\.$#'
-			identifier: glpi.forbidExit
-			count: 1
-			path: src/SurveyTranslationDAO.php

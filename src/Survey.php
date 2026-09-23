@@ -39,10 +39,6 @@ use Log;
 use MassiveAction;
 use Session;
 
-if (!defined('GLPI_ROOT')) {
-    die("Sorry. You can't access this file directly");
-}
-
 /**
  * Class Survey
  */
@@ -286,6 +282,20 @@ class Survey extends CommonDBTM
      **/
     public function prepareInputForUpdate($input)
     {
+        // check() only validated the current entity: moving the survey requires
+        // access to the target entity too.
+        if (
+            isset($input['entities_id'])
+            && (int) $input['entities_id'] !== (int) $this->fields['entities_id']
+            && !Session::haveAccessToEntity((int) $input['entities_id'])
+        ) {
+            Session::addMessageAfterRedirect(
+                __('You are not allowed to move the survey to this entity', 'satisfaction'),
+                false,
+                ERROR,
+            );
+            return false;
+        }
 
         //active external survey for entity
         if (($input['is_active'] ?? 0) == 1) {
@@ -296,7 +306,7 @@ class Survey extends CommonDBTM
                        + $dbu->getEntitiesRestrictCriteria(
                            $this->getTable(),
                            'entities_id',
-                           $input['entities_id'],
+                           $input['entities_id'] ?? $this->fields['entities_id'],
                            true,
                        );
             $found = $this->find($condition);

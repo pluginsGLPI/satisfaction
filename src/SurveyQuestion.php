@@ -35,13 +35,10 @@ use CommonGLPI;
 use DbUtils;
 use Dropdown;
 use Glpi\Application\View\TemplateRenderer;
+use Glpi\Exception\Http\NotFoundHttpException;
 use Html;
 use Session;
 use Toolbox;
-
-if (!defined('GLPI_ROOT')) {
-    die("Sorry. You can't access directly to this file");
-}
 
 /**
  * Class SurveyQuestion
@@ -171,7 +168,7 @@ class SurveyQuestion extends CommonDBChild
             $js  = "function viewAddQuestion$sID$rand_survey() {\n";
             $js .= Ajax::updateItemJsCode(
                 "viewquestion$sID$rand_survey",
-                $CFG_GLPI["root_doc"] . "/ajax/viewsubitem.php",
+                PLUGINSATISFACTION_WEBDIR . "/ajax/viewsubitem_reminder.php",
                 $params,
                 "",
                 false,
@@ -242,15 +239,21 @@ class SurveyQuestion extends CommonDBChild
             $survey = $options['parent'];
         }
 
+        // canView() is a global right only, and the core /ajax/viewsubitem.php
+        // reaches this form without any right check: check() resolves the parent
+        // survey and enforces its entity perimeter.
         $surveyquestion = new self();
-        if ($ID <= 0) {
-            $surveyquestion->getEmpty();
+        if ($ID > 0) {
+            $surveyquestion->check($ID, READ);
+            // Bind the question to the posted survey
+            if (isset($survey) && (int) $surveyquestion->fields[self::$items_id] !== (int) $survey->getID()) {
+                throw new NotFoundHttpException();
+            }
         } else {
-            $surveyquestion->getFromDB($ID);
-        }
-
-        if (!$surveyquestion->canView()) {
-            return false;
+            // The parent is resolved from the input (CommonDBChild)
+            $input = [self::$items_id => isset($survey) ? (int) $survey->getID() : 0];
+            $surveyquestion->getEmpty();
+            $surveyquestion->check(-1, CREATE, $input);
         }
 
         $array = self::getQuestionTypeList();
@@ -341,7 +344,7 @@ class SurveyQuestion extends CommonDBChild
             $js  = "function viewEditQuestion" . $items_id . $id . "$rand() {\n";
             $js .= Ajax::updateItemJsCode(
                 "viewquestion" . $items_id . "$rand",
-                $CFG_GLPI["root_doc"] . "/ajax/viewsubitem.php",
+                PLUGINSATISFACTION_WEBDIR . "/ajax/viewsubitem_reminder.php",
                 $params,
                 "",
                 false,

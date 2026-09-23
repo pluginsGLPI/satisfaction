@@ -119,11 +119,34 @@ class SurveyResult extends CommonDBChild
             $start = 0;
         }
 
+        // A recursive survey collects answers from every entity below it: only
+        // list the answers whose ticket is in the user's entity perimeter.
+        $dbu        = new DbUtils();
+        $answer_ids = [
+            'FROM'       => 'glpi_plugin_satisfaction_surveyanswers',
+            'INNER JOIN' => [
+                'glpi_ticketsatisfactions' => [
+                    'FKEY' => [
+                        'glpi_ticketsatisfactions'               => 'id',
+                        'glpi_plugin_satisfaction_surveyanswers' => 'ticketsatisfactions_id',
+                    ],
+                ],
+                'glpi_tickets' => [
+                    'FKEY' => [
+                        'glpi_tickets'             => 'id',
+                        'glpi_ticketsatisfactions' => 'tickets_id',
+                    ],
+                ],
+            ],
+            'WHERE'      => [
+                'glpi_plugin_satisfaction_surveyanswers.plugin_satisfaction_surveys_id' => $item->getID(),
+            ] + $dbu->getEntitiesRestrictCriteria('glpi_tickets', '', '', true),
+        ];
+
         // Total Number of events
-        $total_number = countElementsInTable(
-            "glpi_plugin_satisfaction_surveyanswers",
-            ['plugin_satisfaction_surveys_id' => $item->getID()],
-        );
+        $total_number = (int) $DB->request(
+            ['COUNT' => 'cpt'] + $answer_ids,
+        )->current()['cpt'];
 
         $questions = [];
         $rows      = [];
@@ -132,22 +155,19 @@ class SurveyResult extends CommonDBChild
             // Display the pager
             Html::printAjaxPager(self::getTypeName($total_number), $start, $total_number, '', true);
 
-            $squestion_obj = new SurveyQuestion();
-            foreach ($squestion_obj->find([
-                SurveyQuestion::$items_id => $item->getID()]) as $question) {
+            $squestion_obj    = new SurveyQuestion();
+            $survey_questions = $squestion_obj->find([
+                SurveyQuestion::$items_id => $item->getID()]);
+            foreach ($survey_questions as $question) {
                 $questions[] = $question['name'];
             }
 
-            $dbu               = new DbUtils();
             $obj_survey_answer = new SurveyAnswer();
 
             $query          = [
-                'FROM'  => 'glpi_plugin_satisfaction_surveyanswers',
-                'WHERE' => [
-                    'plugin_satisfaction_surveys_id' => $item->getID(),
-                ],
-                'ORDER' => 'id DESC',
-            ];
+                'SELECT' => 'glpi_plugin_satisfaction_surveyanswers.*',
+                'ORDER'  => 'glpi_plugin_satisfaction_surveyanswers.id DESC',
+            ] + $answer_ids;
             $query['START'] = (int) $start;
             $query['LIMIT'] = (int) $_SESSION['glpilist_limit'];
 
@@ -162,9 +182,12 @@ class SurveyResult extends CommonDBChild
 
                 $answers          = $dbu->importArrayFromDB($data['answer']);
                 $answers_rendered = [];
-                foreach ($answers as $questions_id => $answer) {
-                    $squestion_obj->getFromDB($questions_id);
-                    $answers_rendered[] = $obj_survey_answer->getAnswer($squestion_obj->fields, $answer);
+                // Render in the header order, only for questions of this survey:
+                // orphan keys are ignored and missing answers keep their column.
+                foreach ($survey_questions as $questions_id => $question) {
+                    $answers_rendered[] = isset($answers[$questions_id])
+                        ? $obj_survey_answer->getAnswer($question, $answers[$questions_id])
+                        : '';
                 }
 
                 $date_answered = "";

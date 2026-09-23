@@ -376,6 +376,10 @@ class SurveyAnswer extends CommonDBChild
      */
     public static function getAnswer($question, $value = 0)
     {
+        // Stored answers come from a JSON column: never render a nested value
+        if (!is_scalar($value)) {
+            return '';
+        }
 
         switch ($question['type']) {
             case SurveyQuestion::YESNO:
@@ -400,8 +404,14 @@ class SurveyAnswer extends CommonDBChild
         $surveyanswer = new self();
         $dbu          = new DbUtils();
         if ($surveyanswer->getFromDBByCrit(["ticketsatisfactions_id" => $ticketSatisfaction->getField('id')])) {
+            if (!isset($ticketSatisfaction->input['answer'])) {
+                return;
+            }
             $input = ['id'     => $surveyanswer->getID(),
-                'answer' => $dbu->exportArrayToDB($ticketSatisfaction->input['answer'])];
+                'answer' => $dbu->exportArrayToDB(self::sanitizeAnswers(
+                    (int) $surveyanswer->fields['plugin_satisfaction_surveys_id'],
+                    $ticketSatisfaction->input['answer'],
+                ))];
             $surveyanswer->update($input);
         } else {
             // IDOR hardening: the hidden plugin_satisfaction_surveys_id field marks a survey
@@ -421,12 +431,44 @@ class SurveyAnswer extends CommonDBChild
                 $input = ['plugin_satisfaction_surveys_id' => $survey_id,
                     'ticketsatisfactions_id'         => $ticketSatisfaction->getField('id'),
                     'answer'                         => $dbu->exportArrayToDB(
-                        $ticketSatisfaction->input['answer'],
+                        self::sanitizeAnswers((int) $survey_id, $ticketSatisfaction->input['answer'] ?? []),
                     )];
 
                 $surveyanswer->add($input);
             }
         }
+    }
+
+    /**
+     * Keep only scalar answers to the questions of the given survey,
+     * normalized according to the question type.
+     *
+     * @param int   $survey_id
+     * @param mixed $posted
+     *
+     * @return array<int, int|string>
+     */
+    private static function sanitizeAnswers(int $survey_id, $posted): array
+    {
+        if (!is_array($posted)) {
+            return [];
+        }
+
+        $clean     = [];
+        $questions = (new SurveyQuestion())->find([SurveyQuestion::$items_id => $survey_id]);
+        foreach ($questions as $question) {
+            $value = $posted[$question['id']] ?? null;
+            if (!is_scalar($value)) {
+                continue;
+            }
+            $clean[$question['id']] = match ($question['type']) {
+                SurveyQuestion::NOTE  => max(0, min((int) $question['number'], (int) $value)),
+                SurveyQuestion::YESNO => (int) (bool) $value,
+                default               => mb_substr((string) $value, 0, 65535),
+            };
+        }
+
+        return $clean;
     }
 
     /**
