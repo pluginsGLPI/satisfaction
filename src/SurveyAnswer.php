@@ -396,9 +396,13 @@ class SurveyAnswer extends CommonDBChild
     /**
      * Updates with answers
      *
+     * Plugged on ITEM_UPDATE (post-update), not PRE_ITEM_UPDATE: the core may still reject the
+     * satisfaction in prepareInputForUpdate() (mandatory comment, ...), and answers written
+     * before that point were kept for a survey that was never recorded.
+     *
      * @param TicketSatisfaction $ticketSatisfaction
      */
-    public static function preUpdateSatisfaction(TicketSatisfaction $ticketSatisfaction)
+    public static function postUpdateSatisfaction(TicketSatisfaction $ticketSatisfaction)
     {
 
         $surveyanswer = new self();

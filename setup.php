@@ -68,8 +68,8 @@ function plugin_init_satisfaction()
             $PLUGIN_HOOKS[Hooks::POST_ITEM_FORM]['satisfaction'] = [
                 SurveyAnswer::class, 'displaySatisfaction'];
 
-            $PLUGIN_HOOKS[Hooks::PRE_ITEM_UPDATE]['satisfaction'][TicketSatisfaction::class] = [
-                SurveyAnswer::class, 'preUpdateSatisfaction'];
+            $PLUGIN_HOOKS[Hooks::ITEM_UPDATE]['satisfaction'][TicketSatisfaction::class] = [
+                SurveyAnswer::class, 'postUpdateSatisfaction'];
 
             $PLUGIN_HOOKS[Hooks::ITEM_DELETE]['satisfaction'] = ['Ticket' => [Reminder::class, 'deleteItem']];
 
