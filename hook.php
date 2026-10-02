@@ -197,7 +197,9 @@ function plugin_satisfaction_uninstall()
     NotificationTargetTicket::uninstall();
 
     // Remove the plugin cron task instead of (re)registering it on uninstall
-    CronTask::unregister('satisfaction');
+    // Deleted by its exact itemtype: CronTask::unregister()'s LIKE pattern does not match the
+    // backslashes of a namespaced itemtype, so the task stayed listed in the automatic actions.
+    $DB->delete('glpi_crontasks', ['itemtype' => Reminder::class]);
 
     return true;
 }
