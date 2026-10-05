@@ -41,7 +41,7 @@ use GlpiPlugin\Satisfaction\Reminder;
 use GlpiPlugin\Satisfaction\SurveyAnswer;
 use GlpiPlugin\Satisfaction\Survey;
 
-define("PLUGIN_SATISFACTION_VERSION", "1.7.8");
+define("PLUGIN_SATISFACTION_VERSION", "1.8.0");
 
 // Minimal GLPI version, inclusive
 define('PLUGIN_SATISFACTION_MIN_GLPI', '11.0.99');
