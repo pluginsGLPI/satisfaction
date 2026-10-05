@@ -41,7 +41,7 @@ use Ticket;
  */
 class NotificationMailing extends CommonDBTM
 {
-    public static $rightname = 'plugin_satisfaction';
+    public static string $rightname = 'plugin_satisfaction';
 
     /**
      * Return the localized name of the current Type

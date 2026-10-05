@@ -81,6 +81,12 @@ class NotificationTargetTicket extends NotificationTarget
 
     public function getDataForObject(CommonDBTM $item, array $options, $simple = false)
     {
+        // The survey reminder is only raised on tickets (sendReminder()), and the core target
+        // now types its parameter as Ticket (GLPI 12): anything else has no data to provide
+        if (!$item instanceof Ticket) {
+            return [];
+        }
+
         $notification_target_ticket = new \NotificationTargetTicket();
         $data = $notification_target_ticket->getDataForObject($item, $options, $simple);
         return $data;

@@ -37,7 +37,7 @@ use Session;
  */
 class Menu extends CommonGLPI
 {
-    public static $rightname = 'plugin_satisfaction';
+    public static string $rightname = 'plugin_satisfaction';
 
     /**
      * @return string
@@ -55,7 +55,7 @@ class Menu extends CommonGLPI
 
         $menu = [];
 
-        if (Session::haveRight('plugin_satisfaction', READ)) {
+        if (Session::haveRight(Survey::$rightname, READ)) {
             $menu['title']           = self::getMenuName();
             $menu['page']            = PLUGINSATISFACTION_WEBDIR . "/front/survey.php";
             $menu['links']['search'] = Survey::getSearchURL(false);

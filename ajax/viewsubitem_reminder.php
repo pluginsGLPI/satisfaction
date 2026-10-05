@@ -36,7 +36,7 @@ use GlpiPlugin\Satisfaction\SurveyReminder;
 header("Content-Type: text/html; charset=UTF-8");
 Html::header_nocache();
 
-Session::checkRight('plugin_satisfaction', UPDATE);
+Session::checkRight(Survey::$rightname, UPDATE);
 
 if (!isset($_POST['type'])) {
     throw new NotFoundHttpException();

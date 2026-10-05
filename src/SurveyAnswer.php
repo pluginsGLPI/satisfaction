@@ -44,12 +44,12 @@ use TicketSatisfaction;
  */
 class SurveyAnswer extends CommonDBChild
 {
-    public static $rightname = "plugin_satisfaction";
-    public $dohistory = true;
+    public static string $rightname = "plugin_satisfaction";
+    public bool $dohistory = true;
 
     // From CommonDBChild
-    public static $itemtype = Survey::class;
-    public static $items_id = 'plugin_satisfaction_surveys_id';
+    public static string $itemtype = Survey::class;
+    public static string $items_id = 'plugin_satisfaction_surveys_id';
 
     /**
      * Return the localized name of the current Type
@@ -80,8 +80,6 @@ class SurveyAnswer extends CommonDBChild
 
         // can exists for template
         if ($item->getType() == Survey::class) {
-            echo Html::css('/lib/jquery.rateit.css');
-            Html::requireJs('rateit');
             return self::createTabEntry(__('Preview', 'satisfaction'));
         }
 
@@ -344,26 +342,15 @@ class SurveyAnswer extends CommonDBChild
 
         $questions_id = (int) $question['id'];
         $number       = (int) $question['number'];
-        $value        = (int) $value;
 
-        $js = "$(function() {"
-            . "$('#stars_$questions_id').rateit({value: $value,"
-            . " min: 0,"
-            . " max: $number,"
-            . " step: 1,"
-            . " backingfld: '#satisfaction_data_$questions_id',"
-            . " ispreset: true,"
-            . " resetable: false});"
-            . "});";
-
-        ob_start();
-        TemplateRenderer::getInstance()->display('@satisfaction/surveyanswer_star.html.twig', [
-            'questions_id' => $questions_id,
-            'number'       => $number,
-            'value'        => $value,
-            'star_script'  => Html::scriptBlock($js),
+        // jquery.rateit was removed from GLPI 12: use the core star rating component, as the
+        // core ticket satisfaction does. It keeps posting the value as answer[<question id>].
+        return TemplateRenderer::getInstance()->render('components/form/rating.html.twig', [
+            'field_id'   => 'satisfaction_data_' . $questions_id,
+            'field_name' => 'answer[' . $questions_id . ']',
+            'max'        => $number,
+            'value'      => max(0, min((int) $value, $number)),
         ]);
-        return ob_get_clean();
     }
 
     /**

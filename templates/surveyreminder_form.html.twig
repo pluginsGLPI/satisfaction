@@ -72,7 +72,6 @@
          {% endif %}
          <tr>
             <td class="tab_bg_2 center" colspan="4">
-               <input type="hidden" name="_glpi_csrf_token" value="{{ csrf_token() }}">
                {% if is_new %}
                   <input type="hidden" name="{{ items_id_field }}" value="{{ parent_id }}">
                   <button type="submit" name="add" class="btn btn-primary">{{ _x('button', 'Add') }}</button>

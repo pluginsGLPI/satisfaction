@@ -40,7 +40,6 @@ use GlpiPlugin\Mydashboard\Helper;
 use GlpiPlugin\Mydashboard\Html as MydashboardHtml;
 use GlpiPlugin\Mydashboard\Menu;
 use GlpiPlugin\Mydashboard\Widget;
-use Html;
 use Session;
 use Ticket;
 use TicketSatisfaction;
@@ -307,10 +306,6 @@ class Dashboard extends CommonGLPI
             ])->current();
             $globalSatisfaction = round($row ? (float) $row['nb'] : 0, 1);
 
-            // Register the rateit JS asset (script registration stays in PHP); the
-            // rateit CSS <link> and the whole widget body are produced by Twig.
-            Html::requireJs('rateit');
-
             $elements = [
                 [
                     'color' => 'grey',
@@ -342,9 +337,16 @@ class Dashboard extends CommonGLPI
                 '@satisfaction/dashboard_satisfaction_survey.html.twig',
                 [
                     'has_survey'          => true,
-                    'rateit_css'          => Html::css('public/lib/jquery.rateit.css'),
                     'elements'            => $elements,
                     'global_satisfaction' => $globalSatisfaction,
+                    // jquery.rateit was removed from GLPI 12: the core star rating component
+                    // renders the average, on the scale of the active entity (as the core does).
+                    // It only supports whole stars (a decimal value breaks its range() loop), so
+                    // the exact average stays in the label above and the stars are rounded.
+                    'global_stars'        => TicketSatisfaction::displaySatisfaction(
+                        (int) round($globalSatisfaction),
+                        $_SESSION['glpiactive_entity'],
+                    ),
                 ],
             );
 

@@ -39,13 +39,14 @@ use GlpiPlugin\Satisfaction\NotificationTargetTicket;
 use GlpiPlugin\Satisfaction\Profile;
 use GlpiPlugin\Satisfaction\Reminder;
 use GlpiPlugin\Satisfaction\SurveyAnswer;
+use GlpiPlugin\Satisfaction\Survey;
 
 define("PLUGIN_SATISFACTION_VERSION", "1.7.8");
 
 // Minimal GLPI version, inclusive
-define('PLUGIN_SATISFACTION_MIN_GLPI', '11.0');
+define('PLUGIN_SATISFACTION_MIN_GLPI', '11.0.99');
 // Maximum GLPI version, exclusive
-define('PLUGIN_SATISFACTION_MAX_GLPI', '12.0');
+define('PLUGIN_SATISFACTION_MAX_GLPI', '12.0.99');
 global $CFG_GLPI;
 define("PLUGINSATISFACTION_WEBDIR", ($CFG_GLPI['root_doc'] ?? '') . Plugin::getPhpDir('satisfaction', false));
 
@@ -74,7 +75,7 @@ function plugin_init_satisfaction()
             $PLUGIN_HOOKS[Hooks::ITEM_DELETE]['satisfaction'] = ['Ticket' => [Reminder::class, 'deleteItem']];
 
             //current user must have config rights
-            if (Session::haveRight('plugin_satisfaction', READ)) {
+            if (Session::haveRight(Survey::$rightname, READ)) {
                 $config_page = 'front/survey.php';
                 $PLUGIN_HOOKS[Hooks::CONFIG_PAGE]['satisfaction'] = $config_page;
 

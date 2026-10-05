@@ -44,8 +44,8 @@ use Session;
  */
 class Survey extends CommonDBTM
 {
-    public static $rightname = "plugin_satisfaction";
-    public $dohistory = true;
+    public static string $rightname = "plugin_satisfaction";
+    public bool $dohistory = true;
 
     public $can_be_translated = true;
 

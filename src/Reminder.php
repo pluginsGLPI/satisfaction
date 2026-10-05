@@ -43,8 +43,8 @@ use TicketSatisfaction;
  */
 class Reminder extends CommonDBTM
 {
-    public static $rightname = "plugin_satisfaction";
-    public $dohistory = true;
+    public static string $rightname = "plugin_satisfaction";
+    public bool $dohistory = true;
 
     public static $itemtype = TicketSatisfaction::class;
     public static $items_id = 'ticketsatisfactions_id';

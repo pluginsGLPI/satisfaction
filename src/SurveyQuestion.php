@@ -45,12 +45,12 @@ use Toolbox;
  */
 class SurveyQuestion extends CommonDBChild
 {
-    public static $rightname = "plugin_satisfaction";
-    public $dohistory = true;
+    public static string $rightname = "plugin_satisfaction";
+    public bool $dohistory = true;
 
     // From CommonDBChild
-    public static $itemtype = Survey::class;
-    public static $items_id = 'plugin_satisfaction_surveys_id';
+    public static string $itemtype = Survey::class;
+    public static string $items_id = 'plugin_satisfaction_surveys_id';
 
     public const YESNO    = 'yesno';
     public const TEXTAREA = 'textarea';

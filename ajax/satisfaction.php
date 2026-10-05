@@ -26,8 +26,9 @@
  * along with satisfaction. If not, see <http://www.gnu.org/licenses/>.
  * --------------------------------------------------------------------------
  */
+use GlpiPlugin\Satisfaction\Survey;
 
-Session::checkRight('plugin_satisfaction', UPDATE);
+Session::checkRight(Survey::$rightname, UPDATE);
 
 if (isset($_POST['action_default_value'])) {
     Dropdown::showNumber('default_value', [

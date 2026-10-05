@@ -31,7 +31,6 @@
       <h4>{{ __('There are no survey for current entity', 'satisfaction') }}</h4>
    </div>
 {% else %}
-   {{ rateit_css|raw }}
    <div class="tickets-stats">
       {% for element in elements %}
          <div class="nb" style="color:{{ element.color }}">
@@ -47,7 +46,7 @@
             <span>{{ __('Global satisfaction', 'satisfaction') }}</span>
          </h3>
          <h3>{{ global_satisfaction }}</h3>
-         <div class="rateit" data-rateit-value="{{ global_satisfaction }}" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
+         {{ global_stars|raw }}
       </div>
    </div>
 {% endif %}
