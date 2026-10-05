@@ -35,6 +35,7 @@ use CommonGLPI;
 use Dropdown;
 use Glpi\Application\View\TemplateRenderer;
 use Glpi\Exception\Http\NotFoundHttpException;
+use Glpi\Locale\LanguageRegistry;
 use Html;
 use Log;
 use Session;
@@ -346,15 +347,13 @@ class SurveyTranslation extends CommonDBChild
 
     public function newSurveyTranslation($options)
     {
-        global $CFG_GLPI;
-
         // Integrity/anti-IDOR: the question must belong to the survey whose UPDATE
         // right/entity has already been validated by the controller.
         // The language is also checked against the known GLPI languages.
         $question = new SurveyQuestion();
         if (
             !is_string($options['language'] ?? null)
-            || !isset($CFG_GLPI['languages'][$options['language']])
+            || !LanguageRegistry::has($options['language'])
             || !$question->getFromDB((int) $options['question_id'])
             || (int) $question->fields['plugin_satisfaction_surveys_id'] !== (int) $options['survey_id']
         ) {
@@ -378,7 +377,7 @@ class SurveyTranslation extends CommonDBChild
                 sprintf(__(
                     "An %s translation for this Question already exist.",
                     "satisfaction",
-                ), $CFG_GLPI['languages'][$options["language"]][0]),
+                ), LanguageRegistry::get($options['language'])->native_name),
                 true,
                 WARNING,
             );
