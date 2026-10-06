@@ -38,7 +38,7 @@ class SurveyTranslationDAO
         global $DB;
 
         $rows = [];
-        foreach ($DB->request(self::$tablename, $crit) as $data) {
+        foreach ($DB->request(['FROM' => self::$tablename, 'WHERE' => $crit]) as $data) {
             $rows[] = $data;
         }
         return $rows;
