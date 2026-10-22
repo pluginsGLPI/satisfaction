@@ -3,7 +3,8 @@ name: "Automatically tag new version"
 on:
   push:
     branches:
-      - "master"
+      - "main"
+      - "**/bugfixes"
     paths:
       - "setup.php"
 
