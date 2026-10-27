@@ -47,7 +47,9 @@ define('PLUGIN_SATISFACTION_MIN_GLPI', '11.0');
 // Maximum GLPI version, exclusive
 define('PLUGIN_SATISFACTION_MAX_GLPI', '12.0');
 global $CFG_GLPI;
-define("PLUGINSATISFACTION_WEBDIR", ($CFG_GLPI['root_doc'] ?? '') . Plugin::getPhpDir('satisfaction', false));
+// Web path of the plugin: /plugins/<key> whatever the directory of the plugin (it may be
+// outside of GLPI_ROOT, e.g. GLPI_MARKETPLACE_DIR=/var/lib/glpi/marketplace)
+define("PLUGINSATISFACTION_WEBDIR", ($CFG_GLPI['root_doc'] ?? '') . '/plugins/satisfaction');
 
 function plugin_init_satisfaction()
 {
