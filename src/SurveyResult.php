@@ -121,6 +121,7 @@ class SurveyResult extends CommonDBChild
 
         // A recursive survey collects answers from every entity below it: only
         // list the answers whose ticket is in the user's entity perimeter.
+        // Tickets are never recursive (glpi_tickets has no is_recursive column, #67).
         $dbu        = new DbUtils();
         $answer_ids = [
             'FROM'       => 'glpi_plugin_satisfaction_surveyanswers',
@@ -140,7 +141,6 @@ class SurveyResult extends CommonDBChild
             ],
             'WHERE'      => [
                 'glpi_plugin_satisfaction_surveyanswers.plugin_satisfaction_surveys_id' => $item->getID(),
-            // Tickets are never recursive: glpi_tickets has no is_recursive column (#67).
             ] + $dbu->getEntitiesRestrictCriteria('glpi_tickets', '', '', false),
         ];
 
