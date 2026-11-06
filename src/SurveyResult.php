@@ -140,7 +140,8 @@ class SurveyResult extends CommonDBChild
             ],
             'WHERE'      => [
                 'glpi_plugin_satisfaction_surveyanswers.plugin_satisfaction_surveys_id' => $item->getID(),
-            ] + $dbu->getEntitiesRestrictCriteria('glpi_tickets', '', '', true),
+            // Tickets are never recursive: glpi_tickets has no is_recursive column (#67).
+            ] + $dbu->getEntitiesRestrictCriteria('glpi_tickets', '', '', false),
         ];
 
         // Total Number of events

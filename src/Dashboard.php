@@ -250,7 +250,8 @@ class Dashboard extends CommonGLPI
                     ],
                 ],
             ];
-            $entity_where = (new DbUtils())->getEntitiesRestrictCriteria($ticket_table, '', '', true);
+            // Tickets are never recursive: glpi_tickets has no is_recursive column (#67).
+            $entity_where = (new DbUtils())->getEntitiesRestrictCriteria($ticket_table, '', '', false);
 
             $date_where = [];
             if (!empty($opt['begin'])) {
